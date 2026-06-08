@@ -1119,7 +1119,7 @@ function redeemTablet(xp,min){
   k.xp-=xp; k.tablet+=min;
   k.dailyTablet[todayStr()]=(k.dailyTablet[todayStr()]||0)+min;
   state.records.unshift({time:Date.now(),kid,parent:'',cat:'平板兌換',
-    task:`兌換 ${min} 分鐘平板`,xp:-xp,note:`存入平板銀行 +${min} 分`,status:'done',type:'tablet'});
+    task:`兌換 ${min} 分鐘平板`,xp:-xp,min:min,note:`存入平板銀行 +${min} 分`,status:'done',type:'tablet'});
   save();
   toast(`📱 +${min} 分鐘存入平板銀行！`);
   renderAll();
@@ -1244,6 +1244,7 @@ function renderRecord(){
   if(!recs.length){box.innerHTML='<p class="muted">還沒有紀錄喔 📭</p>';return;}
   const icon={score:'⭐',apply:'🙋',redeem:'🎁',coopredeem:'🌈',reminder:'🌱',tablet:'📱',special:'🏆',big:'🎉'};
   box.innerHTML=recs.slice(0,150).map(r=>{
+    const idx=state.records.indexOf(r);
     const who=r.kid?KIDS[r.kid].name:'姊妹';
     const sub=[fmtTime(r.time), r.parent?('・'+r.parent):'', r.cat?('・'+r.cat):''].join('');
     const tagMap={pending:'待審核',approved:'已核准',rejected:'已拒絕',done:'完成'};
@@ -1253,6 +1254,7 @@ function renderRecord(){
         <div class="l1">${who}・${r.task}</div>
         <div class="l2">${sub}</div>
         ${r.note?`<div class="l2">💬 ${r.note}</div>`:''}
+        ${isUnlocked()?`<button class="btn gray sm" style="margin-top:6px;padding:5px 10px;font-size:12px;" onclick="reverseRecord(${idx})">↩︎ 撤銷這筆</button>`:''}
       </div>
       <div style="text-align:right;">
         ${r.xp!==0?`<div class="rxp ${r.xp>0?'plus':'minus'}">${r.xp>0?'+':''}${r.xp}</div>`:''}
@@ -1262,6 +1264,34 @@ function renderRecord(){
   }).join('');
 }
 function pickRecFilter(f){sel.recFilter=f;renderRecord();}
+// 撤銷一筆紀錄並還原相關 XP / 平板（需家長密碼）
+function reverseRecord(idx){
+  const r=state.records[idx]; if(!r) return;
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  if(!confirm('確定撤銷這筆紀錄？相關 XP 會一併還原。')) return;
+  const kid=r.kid;
+  switch(r.type){
+    case 'score': case 'special': case 'reminder':
+      addXp(kid, -r.xp, true); break;                 // 還原加分/扣分（含等級）
+    case 'apply':
+      if(r.status==='approved') addXp(kid, -r.xp, true); break;
+    case 'redeem':
+      addXp(kid, -r.xp, false); break;                // 退回兌換扣的 XP
+    case 'coopredeem':
+      state.coopXp += (-r.xp); break;                 // 退回姊妹合作池
+    case 'tablet':
+      if(r.min){                                      // 平板兌換：退 XP、扣回分鐘
+        addXp(kid, -r.xp, false);
+        const k=state.kids[kid];
+        k.tablet=Math.max(0, k.tablet - r.min);
+        const d=todayStr(new Date(r.time));
+        if(k.dailyTablet[d]) k.dailyTablet[d]=Math.max(0, k.dailyTablet[d]-r.min);
+      }
+      break;
+  }
+  state.records.splice(idx,1);
+  save(); toast('↩︎ 已撤銷該筆紀錄'); initPrevLevels(); renderAll();
+}
 
 /* ============ 渲染：報告 ============ */
 function renderReport(){
@@ -1558,6 +1588,7 @@ function updateLockUI(){
     b.style.opacity=locked?'0.5':'1';
   });
   renderPending(); // 申請頁的核准/拒絕鈕依鎖定狀態顯示
+  renderRecord();  // 紀錄頁的撤銷鈕依鎖定狀態顯示
 }
 function setPin(){
   const v=(document.getElementById('pinInput').value||'').trim();
