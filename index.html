@@ -425,6 +425,18 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
 
     <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🏆 新增特殊成就</h3>
+      <label class="fl">類別</label>
+      <select id="csCat"><option>學業</option><option>跆拳道</option><option>運動</option><option>品格</option></select>
+      <label class="fl">成就名稱</label>
+      <input type="text" id="csName" placeholder="例如：英文單字考滿分">
+      <label class="fl">XP</label>
+      <input type="number" id="csXp" value="100">
+      <button class="btn purple sm" style="margin-top:10px;width:100%;" onclick="addCustomSpecial()">新增特殊成就</button>
+      <p class="subnote" style="margin-top:6px;">跆拳道只會出現在惟甯/昕穎；運動只會出現在耀霆/予璇。</p>
+    </div>
+
+    <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">🗂️ 管理自訂任務 / 獎勵</h3>
       <p class="subnote">這裡只會列出你自己新增的項目，內建任務不會出現也不能刪。</p>
       <div id="customManage" style="margin-top:8px;"></div>
@@ -584,7 +596,11 @@ const SPECIAL_SPORT={
 // 依孩子組出特殊成就分類（運動類別會替換為跆拳道或運動）
 function specialFor(kid){
   const sp=sportCatOf(kid);
-  return { '學業':SPECIAL['學業'], [sp]:SPECIAL_SPORT[sp], '品格':SPECIAL['品格'] };
+  const base={ '學業':SPECIAL['學業'].slice(), [sp]:SPECIAL_SPORT[sp].slice(), '品格':SPECIAL['品格'].slice() };
+  for(const cat in (state.customSpecial||{})){
+    if(base[cat]) base[cat]=base[cat].concat(state.customSpecial[cat]);
+  }
+  return base;
 }
 
 const BADGES={
@@ -616,6 +632,7 @@ function normalize(s){
   s.customTasks=s.customTasks||{};
   s.customRewards=s.customRewards||{};
   s.usedBigRewards=s.usedBigRewards||[];
+  s.customSpecial=s.customSpecial||{};
   s.parentPin=s.parentPin||'';
   s.updatedAt=s.updatedAt||0;
   return s;
@@ -1355,7 +1372,15 @@ function renderCustomManage(){
         <button class="btn bad sm" onclick="delCustomReward('${esc(tier)}',${i})">🗑️ 刪除</button></div>`;
     }));
   }
-  box.innerHTML=html||'<p class="muted">目前沒有自訂任務或獎勵。</p>';
+  const scats=Object.keys(state.customSpecial).filter(c=>(state.customSpecial[c]||[]).length);
+  if(scats.length){
+    html+='<div style="font-weight:800;margin:12px 0 6px;">🏆 自訂特殊成就</div>';
+    scats.forEach(cat=>state.customSpecial[cat].forEach((t,i)=>{
+      html+=`<div class="rec"><div class="body"><div class="l1">${t.e||'🌟'} ${cat}・${t.n}</div><div class="l2">+${t.x} XP</div></div>
+        <button class="btn bad sm" onclick="delCustomSpecial('${esc(cat)}',${i})">🗑️ 刪除</button></div>`;
+    }));
+  }
+  box.innerHTML=html||'<p class="muted">目前沒有自訂任務、獎勵或特殊成就。</p>';
 }
 function delCustomTask(cat,i){
   if(!state.customTasks[cat]) return;
@@ -1380,6 +1405,23 @@ function addCustomReward(){
   state.customRewards[tier].push({n:name,x:xp,e:'🎁'});
   save();document.getElementById('crName').value='';
   toast('✅ 已新增自訂獎勵');renderShop();renderCustomManage();
+}
+function addCustomSpecial(){
+  const cat=document.getElementById('csCat').value;
+  const name=document.getElementById('csName').value.trim();
+  const xp=parseInt(document.getElementById('csXp').value);
+  if(!name||isNaN(xp)){toast('請填寫成就名稱與 XP');return;}
+  state.customSpecial[cat]=state.customSpecial[cat]||[];
+  state.customSpecial[cat].push({n:name,x:xp,e:'🌟'});
+  save();document.getElementById('csName').value='';
+  toast('✅ 已新增特殊成就');renderSpecial();renderCustomManage();
+}
+function delCustomSpecial(cat,i){
+  if(!state.customSpecial[cat]) return;
+  if(!confirm('確定刪除這個特殊成就？')) return;
+  state.customSpecial[cat].splice(i,1);
+  if(!state.customSpecial[cat].length) delete state.customSpecial[cat];
+  save();toast('已刪除特殊成就');renderCustomManage();renderSpecial();
 }
 function exportJSON(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
