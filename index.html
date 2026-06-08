@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>姊妹成長銀行 2.0 Pro｜惟甯・昕穎</title>
+<title>姊妹成長銀行 3.0｜惟甯・昕穎</title>
 <style>
 :root{
   --pink:#ff8fb1; --pink2:#ffd6e3; --purple:#a98cff; --purple2:#e6dbff;
@@ -172,6 +172,31 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .subnote{font-size:12px;color:var(--ink2);margin:4px 0 0;}
 .divider{height:1px;background:#f0eaf3;margin:14px 0;}
 
+/* 家庭約定 */
+.rulesbox{background:linear-gradient(135deg,#fff6ea,#fff);border:2px solid var(--sun2);}
+.ruleitem{font-size:13.5px;padding:6px 0;border-bottom:1px dashed #f0e6d6;}
+.ruleitem:last-child{border-bottom:none;}
+
+/* 今日快速任務面板 */
+.qkcard{margin-bottom:14px;}
+.qkhead{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.qkav{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 auto;}
+.qkname{font-weight:800;font-size:17px;}
+.qkprog{margin-left:auto;font-size:13px;font-weight:800;color:var(--purple);background:var(--purple2);padding:3px 12px;border-radius:20px;}
+.qkrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px dashed #f0eaf3;}
+.qkrow:last-child{border-bottom:none;}
+.qkrow .qkt{flex:1;font-size:14.5px;font-weight:600;}
+.qkrow .qkt small{color:var(--purple);font-weight:800;margin-left:4px;}
+.qkrow.done .qkt{color:var(--ink2);text-decoration:line-through;}
+.qkbtns{display:flex;gap:5px;flex:0 0 auto;}
+.qkb{border:none;border-radius:11px;padding:8px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;}
+.qkb.go{background:linear-gradient(135deg,#86ead0,#3fc9a3);color:#fff;}
+.qkb.wait{background:#fff0c9;color:#a5790a;}
+.qkb.no{background:#f0eaf3;color:#9a8aa5;}
+.qkstate{font-size:12px;font-weight:800;padding:6px 12px;border-radius:11px;white-space:nowrap;}
+.qkstate.done{background:#dff7ec;color:#1f9d6b;}
+.qkstate.wait{background:#fff0c9;color:#a5790a;}
+
 /* 孩子模式大顯示 */
 .meHero{border-radius:24px;padding:22px 16px;text-align:center;color:#fff;box-shadow:var(--shadow);margin-bottom:14px;}
 .meHero .av{font-size:64px;line-height:1;}
@@ -203,7 +228,7 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 
 <header class="app">
   <span class="deco d1">🌸</span><span class="deco d2">⭐</span><span class="deco d3">🦄</span>
-  <h1>🏦 姊妹成長銀行 2.0 Pro</h1>
+  <h1>🏦 姊妹成長銀行 3.0</h1>
   <p>惟甯・昕穎｜任務升級 × XP 經驗值 × 親子獎勵</p>
   <div id="syncStatus" style="font-size:11px;opacity:.9;margin-top:4px;">💾 本機模式（尚未連雲端）</div>
   <button id="lockBtn" onclick="toggleLock()" style="margin-top:8px;border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:800;background:rgba(255,255,255,.85);color:#7a4d8a;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12);">🔓 未設密碼</button>
@@ -214,6 +239,19 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   <!-- ========== 首頁 ========== -->
   <div class="page on" id="page-home">
     <div id="homeCards"></div>
+
+    <h2 class="sec"><span class="ic">⚡</span>今日快速任務</h2>
+    <div id="quickPanel"></div>
+
+    <div class="card rulesbox">
+      <h3 style="margin:0 0 8px;font-size:16px;">💛 家庭約定</h3>
+      <p style="font-size:14px;line-height:1.7;margin:0 0 10px;">「我們不是為了玩平板才努力，而是因為努力會讓自己變得更好。平板時間是努力後的獎勵，不是吵來的。」</p>
+      <div class="ruleitem">1. 完成今日核心任務，才能兌換平板時間。</div>
+      <div class="ruleitem">2. 平板時間每日最多 60 分鐘。</div>
+      <div class="ruleitem">3. 吵著要獎勵，當天不可兌換。</div>
+      <div class="ruleitem">4. 誠實回報，比拿到 XP 更重要。</div>
+      <div class="ruleitem">5. 姊妹合作，會比一個人努力得到更大的獎勵。</div>
+    </div>
 
     <div class="card" style="text-align:center;">
       <div class="muted">姊妹合作 XP 池 🤝</div>
@@ -293,8 +331,10 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <div class="pills" id="applyCat"></div>
       <label class="fl">🎯 我完成的任務</label>
       <div class="tasklist" id="applyTasks"></div>
-      <label class="fl">💬 我的心得</label>
-      <input type="text" id="applyNote" placeholder="例如：我今天有自己完成作業！">
+      <label class="fl">💬 我的成長小日記（可選填）</label>
+      <input type="text" id="applyR1" placeholder="① 我今天覺得自己很棒的地方是…">
+      <input type="text" id="applyR2" style="margin-top:8px;" placeholder="② 我今天遇到困難但我有努力的是…">
+      <input type="text" id="applyR3" style="margin-top:8px;" placeholder="③ 我明天想挑戰的是…">
       <button class="btn purple" style="margin-top:14px;" onclick="submitApply()">📨 送出申請</button>
     </div>
 
@@ -371,12 +411,24 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <label class="fl">👧 選擇孩子</label>
       <div class="pills" id="reportKid"></div>
       <div id="reportBox" style="margin-top:12px;"></div>
+      <button class="btn mint" style="margin-top:12px;" onclick="copyLineReport()">📋 複製全家本週報告到 LINE</button>
     </div>
   </div>
 
   <!-- ========== 設定 ========== -->
   <div class="page" id="page-setting">
-    <h2 class="sec"><span class="ic">⚙️</span>資料管理</h2>
+    <h2 class="sec"><span class="ic">⚙️</span>設定與資料管理</h2>
+
+    <div class="card" style="background:linear-gradient(135deg,#f3ecff,#fff);border:2px solid var(--purple2);">
+      <h3 style="margin:0 0 8px;font-size:15px;">👨‍👩‍👧‍👦 三種模式</h3>
+      <div style="font-size:13px;line-height:1.7;">
+        <div>🧒 <b>孩子模式</b>：看等級、今日任務、申請 XP、看平板與徽章。</div>
+        <div>👪 <b>父母模式</b>（家長密碼）：加分、審核、平板、特殊成就、報告。</div>
+        <div>🔐 <b>管理模式</b>（再次驗證）：雲端同步、匯入匯出、清除/重置資料。</div>
+      </div>
+      <div id="adminStatus" class="subnote" style="margin-top:8px;"></div>
+      <button class="btn purple sm" style="width:100%;margin-top:8px;" onclick="toggleAdmin()" id="adminBtn">🔐 解鎖管理模式</button>
+    </div>
 
     <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">🔒 家長密碼鎖</h3>
@@ -390,7 +442,7 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <p class="subnote" style="margin-top:8px;">設定後，加分 / 核准 / 兌換 / 設定等功能會上鎖；孩子仍可看排行、自己的等級並送出申請。標題下方按鈕可隨時上鎖／解鎖。</p>
     </div>
 
-    <div class="card">
+    <div class="card admin-only">
       <h3 style="margin:0 0 10px;font-size:15px;">☁️ 雲端同步（Google Sheet 後台）</h3>
       <p class="subnote">貼上 GAS 部署的「網頁應用程式網址」(.../exec)，每台裝置貼同一個網址就會共用同一份資料。</p>
       <label class="fl">GAS 網址</label>
@@ -442,7 +494,7 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <div id="customManage" style="margin-top:8px;"></div>
     </div>
 
-    <div class="card">
+    <div class="card admin-only">
       <h3 style="margin:0 0 10px;font-size:15px;">💾 備份與清除</h3>
       <div class="btnrow">
         <button class="btn sky sm" style="flex:1;" onclick="exportJSON()">📤 匯出 JSON</button>
@@ -500,6 +552,47 @@ function questsFor(kid){
     {cat:'姊妹互助',e:'🤝',n:'今天有跟大家友好合作'}
   ];
 }
+
+// 今日快速任務（爸媽一鍵完成）。耀霆/予璇用運動版
+const QUICK_TASKS={
+  weining:[
+    {n:'完成功課',x:30,cat:'讀書'},
+    {n:'閱讀 20 分鐘',x:20,cat:'讀書'},
+    {n:'整理書包',x:10,cat:'家事'},
+    {n:'跆拳道柔軟 10 分鐘',x:20,cat:'跆拳道'},
+    {n:'幫忙一件家事',x:15,cat:'家事'}
+  ],
+  xinying:[
+    {n:'完成功課',x:30,cat:'讀書'},
+    {n:'閱讀或注音練習',x:20,cat:'讀書'},
+    {n:'收玩具',x:10,cat:'家事'},
+    {n:'整理書包',x:10,cat:'家事'},
+    {n:'幫忙一件家事',x:15,cat:'家事'}
+  ],
+  yaoting:[
+    {n:'完成功課',x:30,cat:'讀書'},
+    {n:'閱讀 20 分鐘',x:20,cat:'讀書'},
+    {n:'整理書包',x:10,cat:'家事'},
+    {n:'運動 10 分鐘',x:20,cat:'運動'},
+    {n:'幫忙一件家事',x:15,cat:'家事'}
+  ],
+  yuxuan:[
+    {n:'完成功課',x:30,cat:'讀書'},
+    {n:'閱讀 20 分鐘',x:20,cat:'讀書'},
+    {n:'整理書包',x:10,cat:'家事'},
+    {n:'運動 10 分鐘',x:20,cat:'運動'},
+    {n:'幫忙一件家事',x:15,cat:'家事'}
+  ]
+};
+function quickListOf(kid){ return QUICK_TASKS[kid]||QUICK_TASKS.weining; }
+function quickStatusOf(kid){
+  const k=state.kids[kid]; k.quick=k.quick||{};
+  const d=todayStr(); if(!k.quick[d]) k.quick[d]=quickListOf(kid).map(()=>'');
+  // 長度不符（自訂變動）時補齊
+  while(k.quick[d].length<quickListOf(kid).length) k.quick[d].push('');
+  return k.quick[d];
+}
+function quickDoneOf(kid){ return quickStatusOf(kid).filter(s=>s==='done').length; }
 
 const LEVELS = [
   {lv:1,name:'小小新手',xp:0,ic:'🐣'},
@@ -565,32 +658,49 @@ const COOP_REWARDS=[
   {n:'一起吃點心',x:150,e:'🧁'},{n:'一起去公園玩',x:200,e:'🌳'}
 ];
 
+// 特殊成就：x=XP，tab=平板加碼分鐘，badge=徽章ID
 const SPECIAL={
   '學業':[
-    {n:'小考 90 分以上',x:100,e:'📝'},{n:'小考滿分',x:200,e:'💯',badge:'kaoman'},
-    {n:'段考單科 90 分以上',x:300,e:'📗'},{n:'段考單科滿分',x:500,e:'💯',badge:'duankaoman'},
-    {n:'段考總成績進步',x:300,e:'📈'},{n:'主動訂正考卷',x:100,e:'✍️'},
+    {n:'小考 90 分以上',x:100,e:'📝',badge:'xueli'},
+    {n:'小考滿分',x:200,e:'💯',tab:20,badge:'kaoman'},
+    {n:'段考單科 90 分以上',x:300,e:'📗',badge:'duankaogao'},
+    {n:'段考單科滿分',x:500,e:'🏆',tab:40,badge:'duankaoman'},
+    {n:'段考總成績進步',x:300,e:'📈',badge:'jinbu'},
+    {n:'主動訂正考卷',x:100,e:'✍️'},
     {n:'不會的題目願意問',x:80,e:'🙋'}
   ],
   '品格':[
-    {n:'主動幫媽媽做事',x:150,e:'💞'},{n:'主動照顧妹妹',x:150,e:'👭'},
-    {n:'姊妹吵架後主動和好',x:200,e:'🤝',badge:'sisters'},{n:'自己承認錯誤',x:200,e:'🌟'},
-    {n:'一週沒有拖延作業',x:500,e:'⏰',badge:'zilv'},{n:'一週沒有亂發脾氣',x:500,e:'😇',badge:'zilv'}
+    {n:'主動道歉',x:100,e:'🙇',badge:'daoqian'},
+    {n:'主動照顧妹妹',x:150,e:'💗',badge:'jiejie'},
+    {n:'姊妹合作完成任務',x:200,e:'👭',badge:'hezuo'},
+    {n:'一週沒有亂發脾氣',x:500,e:'😇',badge:'qingxu'},
+    {n:'主動幫媽媽做事',x:150,e:'💞'},
+    {n:'姊妹吵架後主動和好',x:200,e:'🤝',badge:'sisters'},
+    {n:'自己承認錯誤',x:200,e:'🌟'},
+    {n:'一週沒有拖延作業',x:500,e:'⏰',badge:'zilv'}
   ]
 };
 // 運動類特殊成就：跆拳道（惟甯/昕穎）、運動（耀霆/予璇）
 const SPECIAL_SPORT={
   '跆拳道':[
-    {n:'主動練習一週',x:300,e:'🥋'},{n:'晉級通過',x:500,e:'🎗️',badge:'jinji'},
-    {n:'比賽完成出場',x:300,e:'🏟️'},{n:'比賽獲得第三名',x:800,e:'🥉',badge:'medal'},
-    {n:'比賽獲得第二名',x:1000,e:'🥈',badge:'medal'},{n:'比賽獲得第一名',x:1500,e:'🥇',badge:'medal'},
-    {n:'比賽中沒有放棄',x:500,e:'🔥'},{n:'主動幫忙學弟妹',x:300,e:'🤗'}
+    {n:'比賽完成出場',x:300,e:'🏟️',tab:20,badge:'chusai'},
+    {n:'比賽獲得第三名',x:800,e:'🥉',tab:40,badge:'bronze'},
+    {n:'比賽獲得第二名',x:1000,e:'🥈',tab:60,badge:'silver'},
+    {n:'比賽獲得第一名',x:1500,e:'🥇',tab:90,badge:'gold'},
+    {n:'比賽中沒有放棄',x:500,e:'🔥',tab:30,badge:'buqi'},
+    {n:'主動練習一週',x:300,e:'🥋'},
+    {n:'晉級通過',x:500,e:'🎗️',badge:'jinji'},
+    {n:'主動幫忙學弟妹',x:300,e:'🤗'}
   ],
   '運動':[
-    {n:'主動運動一週',x:300,e:'🏃'},{n:'學會新動作／技巧',x:300,e:'⭐',badge:'jinji'},
-    {n:'參加運動比賽出場',x:300,e:'🏟️'},{n:'比賽獲得第三名',x:800,e:'🥉',badge:'medal'},
-    {n:'比賽獲得第二名',x:1000,e:'🥈',badge:'medal'},{n:'比賽獲得第一名',x:1500,e:'🥇',badge:'medal'},
-    {n:'比賽中沒有放棄',x:500,e:'🔥'},{n:'運動會表現優異',x:300,e:'🎽'}
+    {n:'參加運動比賽出場',x:300,e:'🏟️',tab:20,badge:'chusai'},
+    {n:'比賽獲得第三名',x:800,e:'🥉',tab:40,badge:'bronze'},
+    {n:'比賽獲得第二名',x:1000,e:'🥈',tab:60,badge:'silver'},
+    {n:'比賽獲得第一名',x:1500,e:'🥇',tab:90,badge:'gold'},
+    {n:'比賽中沒有放棄',x:500,e:'🔥',tab:30,badge:'buqi'},
+    {n:'主動運動一週',x:300,e:'🏃'},
+    {n:'學會新動作／技巧',x:300,e:'⭐',badge:'jinji'},
+    {n:'運動會表現優異',x:300,e:'🎽'}
   ]
 };
 // 依孩子組出特殊成就分類（運動類別會替換為跆拳道或運動）
@@ -604,12 +714,24 @@ function specialFor(kid){
 }
 
 const BADGES={
-  kaoman:{e:'💯',n:'小考滿分徽章'},
-  duankaoman:{e:'🏆',n:'段考滿分徽章'},
-  medal:{e:'🥇',n:'跆拳道獲獎徽章'},
-  jinji:{e:'🎗️',n:'晉級達人徽章'},
-  zilv:{e:'⏰',n:'自律達人徽章'},
-  sisters:{e:'👭',n:'姊妹合作徽章'}
+  xueli:{e:'📚',n:'努力學習'},
+  kaoman:{e:'💯',n:'小考滿分王'},
+  duankaogao:{e:'📗',n:'段考高手'},
+  duankaoman:{e:'🏆',n:'段考滿分王'},
+  jinbu:{e:'📈',n:'進步之星'},
+  chusai:{e:'🏟️',n:'勇敢出賽'},
+  bronze:{e:'🥉',n:'銅牌小戰士'},
+  silver:{e:'🥈',n:'銀牌高手'},
+  gold:{e:'🥇',n:'金牌冠軍'},
+  buqi:{e:'🔥',n:'永不放棄'},
+  daoqian:{e:'🙇',n:'勇敢承認'},
+  jiejie:{e:'💗',n:'暖心姊姊'},
+  hezuo:{e:'👭',n:'姊妹合作'},
+  qingxu:{e:'😇',n:'情緒管理小達人'},
+  jinji:{e:'🎗️',n:'晉級達人'},
+  zilv:{e:'⏰',n:'自律達人'},
+  sisters:{e:'🤝',n:'和好天使'},
+  medal:{e:'🥇',n:'跆拳道獲獎'}
 };
 
 const TABLET_OPTIONS=[
@@ -622,7 +744,7 @@ const DAILY_TABLET_CAP=60, BANK_CAP=180, CORE_TASK_NEED=3, DAILY_TASK_TARGET=5;
 const LS_KEY='sisterBank2pro';
 let state=load();
 
-function freshKid(){return {xp:0, lifetime:0, tablet:0, badges:[], dailyTablet:{}};}
+function freshKid(){return {xp:0, lifetime:0, tablet:0, badges:[], dailyTablet:{}, quick:{}};}
 function normalize(s){
   if(!s) s={};
   s.kids=s.kids||{};
@@ -828,7 +950,8 @@ function renderHome(){
     const kid=state.kids[k], info=KIDS[k];
     const L=levelOf(kid.lifetime);
     const tXp=todayXpOf(k), wXp=weekXpOf(k);
-    const tcount=todayTaskCountOf(k);
+    const qd=quickDoneOf(k), qt=quickListOf(k).length;
+    const streak=streakOf(k);
     const conv=tabletConvertibleOf(k);
     const core=coreDoneOf(k);
     const toHour=Math.max(0, findXpFor60(k));
@@ -848,14 +971,14 @@ function renderHome(){
         <span>${L.next?('距 '+L.next.name+' 還差 '+L.need+' XP'):'已達最高等級 💎'}</span>
       </div>
       <div class="statgrid">
-        <div class="stat"><b>${kid.xp}</b><span>可用 XP</span></div>
+        <div class="stat"><b>${qd} / ${qt}</b><span>今日任務</span></div>
         <div class="stat"><b>${tXp}</b><span>今日 XP</span></div>
-        <div class="stat"><b>${wXp}</b><span>本週 XP</span></div>
-        <div class="stat"><b>${tcount} / ${DAILY_TASK_TARGET}</b><span>今日任務</span></div>
+        <div class="stat"><b>🔥 ${streak} 天</b><span>連續完成</span></div>
         <div class="stat"><b>${conv} 分</b><span>今日可兌換平板</span></div>
         <div class="stat"><b>${kid.tablet} 分</b><span>平板銀行</span></div>
+        <div class="stat"><b>${kid.xp}</b><span>可用 XP</span></div>
         <div class="stat full">
-          <span class="muted" style="font-size:12px;">距 1 小時平板還差 <b style="color:var(--sky)">${toHour}</b> XP</span>
+          <span class="muted" style="font-size:12px;">距下一級還差 <b style="color:${info.c2}">${L.need}</b> XP　|　距 1 小時平板還差 <b style="color:var(--sky)">${toHour}</b> XP</span>
         </div>
       </div>
       <div style="margin-top:10px;text-align:center;">
@@ -865,6 +988,7 @@ function renderHome(){
     </div>`;
   }).join('');
   document.getElementById('coopXpHome').textContent=state.coopXp;
+  renderQuickPanel();
 }
 // 為了湊滿 60 分鐘平板，今日還差多少 XP（粗略：以今日可用XP對照）
 function findXpFor60(kid){
@@ -880,7 +1004,61 @@ function getUnlocks(kid){
   if(streakOf(kid)>=14) u.push('平板自由日 Plus');
   if(KIDS[kid].sister && bothStreak()>=7) u.push('姊妹共同平板日');
   if(weekXpOf(kid)>1500) u.push('假日平板加碼日');
+  if(KIDS[kid].sister && state.coopXp>=1000) u.push('家庭電影日');
+  if(state.kids[kid].lifetime>=1500) u.push('親子約會日');
   return u;
+}
+
+/* ============ 今日快速任務面板 ============ */
+function renderQuickPanel(){
+  const box=document.getElementById('quickPanel'); if(!box) return;
+  const order=SISTERS.concat(Object.keys(KIDS).filter(k=>!KIDS[k].sister));
+  box.innerHTML=order.map(k=>{
+    const info=KIDS[k], list=quickListOf(k), st=quickStatusOf(k);
+    const done=st.filter(s=>s==='done').length;
+    return `<div class="card qkcard">
+      <div class="qkhead">
+        <div class="qkav" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+        <div class="qkname">${info.name}</div>
+        <div class="qkprog">${done}/${list.length} 完成</div>
+      </div>
+      ${list.map((t,i)=>{
+        const s=st[i]; let right;
+        if(s==='done') right=`<span class="qkstate done">✅ 已完成</span>`;
+        else if(!isUnlocked()) right = s==='pending'
+            ? `<span class="qkstate wait">⏳ 待確認</span>`
+            : `<button class="qkb wait" onclick="setQuick('${k}',${i},'pending')">我完成了</button>`;
+        else right=`<div class="qkbtns">
+            <button class="qkb go" onclick="setQuick('${k}',${i},'done')">完成</button>
+            <button class="qkb wait" onclick="setQuick('${k}',${i},'pending')">待確認</button>
+            <button class="qkb no" onclick="setQuick('${k}',${i},'')">未完成</button></div>`;
+        return `<div class="qkrow ${s==='done'?'done':''}">
+          <div class="qkt">${t.n}<small>+${t.x}</small>${s==='pending'?' <span style="color:#a5790a;font-size:11px;">(待確認)</span>':''}</div>
+          ${right}</div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+function setQuick(kid,i,status){
+  const st=quickStatusOf(kid), prev=st[i], t=quickListOf(kid)[i];
+  if(status==='done'){
+    if(prev==='done') return;
+    if(!isUnlocked()){ if(!promptUnlock()) return; }
+    st[i]='done'; addXp(kid,t.x,true);
+    state.records.unshift({time:Date.now(),kid,parent:'家長',cat:t.cat,task:t.n,
+      xp:t.x,note:'今日快速任務',status:'approved',type:'score'});
+    save(); checkLevelUp(kid);
+    toast(`✅ ${KIDS[kid].name} 完成「${t.n}」 +${t.x} XP`);
+    renderAll(); return;
+  }
+  if(prev==='done'){                          // 取消已完成 → 還原 XP（需家長）
+    if(!isUnlocked()){ if(!promptUnlock()) return; }
+    addXp(kid,-t.x,true);
+    const ri=state.records.findIndex(r=>r.type==='score'&&r.kid===kid&&r.task===t.n&&
+      r.note==='今日快速任務'&&todayStr(new Date(r.time))===todayStr());
+    if(ri>=0) state.records.splice(ri,1);
+  }
+  st[i]=status; save(); initPrevLevels(); renderAll();
 }
 
 /* ============ 渲染：加分 ============ */
@@ -970,12 +1148,20 @@ function pickApplyCat(c){sel.applyCat=c;sel.applyTask=null;renderApply();}
 function pickApplyTask(n,x){sel.applyTask=n;sel.applyTaskXp=x;renderApply();}
 function submitApply(){
   if(!sel.applyTask){toast('請先選擇完成的任務');return;}
-  const note=document.getElementById('applyNote').value.trim();
+  const r1=document.getElementById('applyR1').value.trim();
+  const r2=document.getElementById('applyR2').value.trim();
+  const r3=document.getElementById('applyR3').value.trim();
+  const parts=[];
+  if(r1) parts.push('很棒：'+r1);
+  if(r2) parts.push('有努力：'+r2);
+  if(r3) parts.push('想挑戰：'+r3);
+  const note=parts.join('｜');
   state.records.unshift({time:Date.now(),kid:sel.applyKid,parent:'',cat:sel.applyCat,
     task:sel.applyTask,xp:sel.applyTaskXp,note,status:'pending',type:'apply'});
   save();
   toast('📨 申請已送出，等爸爸媽媽核准！');
-  document.getElementById('applyNote').value='';sel.applyTask=null;
+  document.getElementById('applyR1').value='';document.getElementById('applyR2').value='';
+  document.getElementById('applyR3').value='';sel.applyTask=null;
   renderAll();
 }
 function renderPending(){
@@ -1087,6 +1273,9 @@ function renderTablet(){
       ${core?'<span class="chip ok">✅ 已完成今日核心任務，可兌換平板</span>'
         :`<span class="chip no">需先完成今日核心任務（${tcount}/${CORE_TASK_NEED}）</span>`}
     </div>
+    ${(()=>{const nx=TABLET_OPTIONS.find(o=>o.xp>k.xp&&(redeemed+o.min)<=DAILY_TABLET_CAP);
+      return nx?`<div style="text-align:center;font-size:13px;margin-bottom:6px;" class="muted">距離「<b style="color:var(--sky)">${nx.min} 分鐘平板</b>」還差 <b style="color:var(--sky)">${nx.xp-k.xp}</b> XP</div>`
+        :(redeemed>=DAILY_TABLET_CAP?'<div style="text-align:center;font-size:13px;margin-bottom:6px;" class="muted">今日已達 60 分鐘兌換上限 🎉</div>':'');})()}
     <label class="fl">💱 用今日 XP 兌換平板時間</label>
     <div class="tasklist">
       ${TABLET_OPTIONS.map(o=>{
@@ -1146,9 +1335,10 @@ function renderBigRewards(){
     {id:'free7',n:'平板自由日',e:'🎉',cond:k=>streakOf(k)>=7,desc:'連續完成任務 7 天解鎖',kid:true},
     {id:'free14',n:'平板自由日 Plus',e:'🌟',cond:k=>streakOf(k)>=14,desc:'連續完成任務 14 天解鎖',kid:true},
     {id:'sister7',n:'姊妹共同平板日',e:'👭',cond:()=>bothStreak()>=7,desc:'兩姊妹共同完成任務 7 天解鎖',kid:false},
-    {id:'weekend',n:'假日平板加碼日',e:'☀️',cond:k=>weekXpOf(k)>1500,desc:'本週 XP 超過 1500 解鎖',kid:true}
+    {id:'movie',n:'家庭電影日',e:'🍿',cond:()=>state.coopXp>=1000,desc:'姊妹合作 XP 達 1000 解鎖',kid:false},
+    {id:'date1500',n:'親子約會日',e:'💕',cond:k=>state.kids[k].lifetime>=1500,desc:'個人累積 XP 達 1500 解鎖',kid:true}
   ];
-  let html='<p class="subnote">「解鎖一天平板時間管理權，當天可分段使用，由爸爸媽媽協助安排。」</p>';
+  let html='<p class="subnote">「解鎖一天平板時間管理權，當天可以分段使用，由爸爸媽媽協助安排。」</p>';
   defs.forEach(d=>{
     if(d.kid){
       Object.keys(KIDS).forEach(k=>{
@@ -1206,16 +1396,21 @@ function pickSpCat(c){sel.spCat=c;renderSpecial();}
 function awardSpecial(cat,i){
   const t=specialFor(sel.spKid)[cat][i], kid=sel.spKid, k=state.kids[kid];
   addXp(kid,t.x,true);
+  // 平板加碼：直接存入平板銀行（受 180 分上限）
+  let gotTab=0;
+  if(t.tab){ const before=k.tablet; k.tablet=Math.min(BANK_CAP,k.tablet+t.tab); gotTab=k.tablet-before; }
   state.records.unshift({time:Date.now(),kid,parent:sel.spParent,cat:'特殊成就-'+cat,
-    task:t.n,xp:t.x,note:'特殊成就獎勵',status:'approved',type:'special'});
+    task:t.n,xp:t.x,min:gotTab||undefined,note:gotTab?('特殊成就獎勵・平板加碼 +'+gotTab+' 分'):'特殊成就獎勵',
+    status:'approved',type:'special'});
   if(t.badge && !k.badges.includes(t.badge)) k.badges.push(t.badge);
   save();
   checkLevelUp(kid);
+  const tabMsg=gotTab?`，平板加碼 +${gotTab} 分鐘 📱`:'';
   if(t.badge){
     const b=BADGES[t.badge];
-    celebrate(b.e,'獲得'+b.n+'！',`${KIDS[kid].name} 完成「${t.n}」，+${t.x} XP！`);
+    celebrate(b.e,'獲得「'+b.n+'」徽章！',`${KIDS[kid].name} 完成「${t.n}」，+${t.x} XP${tabMsg}`);
   }else{
-    celebrate(t.e,'特殊成就達成！',`${KIDS[kid].name}「${t.n}」 +${t.x} XP`);
+    celebrate(t.e,'特殊成就達成！',`${KIDS[kid].name}「${t.n}」 +${t.x} XP${tabMsg}`);
   }
   renderAll();
 }
@@ -1272,7 +1467,9 @@ function reverseRecord(idx){
   const kid=r.kid;
   switch(r.type){
     case 'score': case 'special': case 'reminder':
-      addXp(kid, -r.xp, true); break;                 // 還原加分/扣分（含等級）
+      addXp(kid, -r.xp, true);                        // 還原加分/扣分（含等級）
+      if(r.type==='special' && r.min){ const kk=state.kids[kid]; kk.tablet=Math.max(0,kk.tablet-r.min); }
+      break;
     case 'apply':
       if(r.status==='approved') addXp(kid, -r.xp, true); break;
     case 'redeem':
@@ -1322,6 +1519,46 @@ function renderReport(){
   `;
 }
 function pickReportKid(k){sel.reportKid=k;renderReport();}
+function weekHighlight(kid){
+  const ws=thisWeekStart();
+  const cnt=earnRecordsOf(kid).filter(r=>weekKeyOf(r.time)===ws&&r.xp>0).length;
+  const wXp=weekXpOf(kid), streak=streakOf(kid);
+  if(wXp>=1500) return '本週超級閃耀，能量滿滿！';
+  if(streak>=5) return `連續努力 ${streak} 天，很有毅力！`;
+  if(cnt>=10) return `完成 ${cnt} 個任務，越來越自律。`;
+  if(cnt>0) return '每天都有努力的小腳步。';
+  return '新的一週，準備好出發囉！';
+}
+function buildLineReport(){
+  const ws=thisWeekStart(), L=['【姊妹成長銀行｜本週報告】',''];
+  Object.keys(KIDS).forEach(k=>{
+    const kid=state.kids[k];
+    const cnt=earnRecordsOf(k).filter(r=>weekKeyOf(r.time)===ws&&r.xp>0).length;
+    const badges=kid.badges.length?kid.badges.map(id=>(BADGES[id]?BADGES[id].n:id)).join('、'):'尚未獲得';
+    L.push(`${KIDS[k].name}本週表現：`);
+    L.push(`完成任務：${cnt} 個`);
+    L.push(`獲得 XP：${weekXpOf(k)}`);
+    L.push(`平板時間：累積 ${kid.tablet} 分鐘`);
+    L.push(`徽章：${badges}`);
+    L.push(`本週亮點：${weekHighlight(k)}`);
+    L.push('');
+  });
+  L.push('爸爸媽媽鼓勵：');
+  L.push('這週你們都有努力，最棒的是姊妹願意互相幫忙。下週我們繼續挑戰連續 7 天完成任務！');
+  return L.join('\n');
+}
+function copyLineReport(){
+  const txt=buildLineReport();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast('📋 已複製，貼到 LINE 即可'),()=>fallbackCopy(txt));
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea'); ta.value=txt;
+  ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+  try{document.execCommand('copy');toast('📋 已複製，貼到 LINE 即可');}catch(e){prompt('長按複製：',txt);}
+  document.body.removeChild(ta);
+}
 function parentCheer(kid,wXp,cnt,streak){
   const n=KIDS[kid].name;
   if(wXp>=1500) return `${n}，這一週你超級閃耀，累積了 ${wXp} XP！爸爸媽媽以你為榮 🌟`;
@@ -1364,6 +1601,7 @@ function fillSettingSelects(){
   const ph=document.getElementById('pinHint');
   if(ph) ph.textContent=getPin()?'✅ 已設定密碼（目前'+(isUnlocked()?'已解鎖':'已上鎖')+'）':'尚未設定密碼，目前所有人都能操作';
   renderCustomManage();
+  refreshAdminUI();
 }
 function saveGasUrl(){
   const u=document.getElementById('gasUrl').value.trim();
@@ -1589,6 +1827,7 @@ function updateLockUI(){
   });
   renderPending(); // 申請頁的核准/拒絕鈕依鎖定狀態顯示
   renderRecord();  // 紀錄頁的撤銷鈕依鎖定狀態顯示
+  renderQuickPanel(); // 快速任務鈕依鎖定狀態顯示
 }
 function setPin(){
   const v=(document.getElementById('pinInput').value||'').trim();
@@ -1599,7 +1838,26 @@ function setPin(){
 }
 function removePin(){
   if(!confirm('確定移除家長密碼？移除後所有功能將不再上鎖')) return;
-  state.parentPin=''; save(); sessionUnlocked=false; updateLockUI(); toast('已移除家長密碼');
+  state.parentPin=''; save(); sessionUnlocked=false; adminSession=false; updateLockUI(); refreshAdminUI(); toast('已移除家長密碼');
+}
+/* ===== 管理模式（資料相關高風險操作） ===== */
+let adminSession=false;
+function isAdmin(){ return adminSession || !getPin(); }
+function toggleAdmin(){
+  if(isAdmin() && getPin()){ adminSession=false; refreshAdminUI(); toast('🔒 已退出管理模式'); return; }
+  if(!getPin()){ refreshAdminUI(); return; }
+  const v=prompt('請輸入家長密碼以進入管理模式 🔐');
+  if(v===null) return;
+  if(String(v)===String(getPin())){ adminSession=true; refreshAdminUI(); toast('🔐 已進入管理模式'); }
+  else toast('密碼錯誤 😣');
+}
+function refreshAdminUI(){
+  const show=isAdmin();
+  document.querySelectorAll('.admin-only').forEach(el=>{ el.style.display=show?'':'none'; });
+  const st=document.getElementById('adminStatus');
+  if(st) st.textContent=show?'✅ 管理模式已開啟，可使用雲端同步與資料管理':'🔒 管理模式已鎖定（雲端 / 匯入匯出 / 清除 已隱藏）';
+  const btn=document.getElementById('adminBtn');
+  if(btn) btn.textContent=(show&&getPin())?'🔓 退出管理模式':(getPin()?'🔐 解鎖管理模式':'🔓 未設密碼（全部開放）');
 }
 
 /* ============ 導覽 ============ */
