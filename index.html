@@ -425,6 +425,12 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
 
     <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🗂️ 管理自訂任務 / 獎勵</h3>
+      <p class="subnote">這裡只會列出你自己新增的項目，內建任務不會出現也不能刪。</p>
+      <div id="customManage" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">💾 備份與清除</h3>
       <div class="btnrow">
         <button class="btn sky sm" style="flex:1;" onclick="exportJSON()">📤 匯出 JSON</button>
@@ -1310,6 +1316,7 @@ function fillSettingSelects(){
   if(hint) hint.textContent=cloud.url?'✅ 已設定雲端，多裝置會自動同步':'尚未設定，目前為本機模式';
   const ph=document.getElementById('pinHint');
   if(ph) ph.textContent=getPin()?'✅ 已設定密碼（目前'+(isUnlocked()?'已解鎖':'已上鎖')+'）':'尚未設定密碼，目前所有人都能操作';
+  renderCustomManage();
 }
 function saveGasUrl(){
   const u=document.getElementById('gasUrl').value.trim();
@@ -1326,7 +1333,43 @@ function addCustomTask(){
   state.customTasks[cat]=state.customTasks[cat]||[];
   state.customTasks[cat].push({n:name,x:xp});
   save();document.getElementById('ctName').value='';
-  toast('✅ 已新增自訂任務');renderScore();renderApply();
+  toast('✅ 已新增自訂任務');renderScore();renderApply();renderCustomManage();
+}
+// 列出並可刪除自訂任務 / 獎勵
+function renderCustomManage(){
+  const box=document.getElementById('customManage'); if(!box) return;
+  let html='';
+  const tcats=Object.keys(state.customTasks).filter(c=>(state.customTasks[c]||[]).length);
+  if(tcats.length){
+    html+='<div style="font-weight:800;margin:4px 0 6px;">📋 自訂任務</div>';
+    tcats.forEach(cat=>state.customTasks[cat].forEach((t,i)=>{
+      html+=`<div class="rec"><div class="body"><div class="l1">${CAT_ICON[cat]||'🎯'} ${cat}・${t.n}</div><div class="l2">+${t.x} XP</div></div>
+        <button class="btn bad sm" onclick="delCustomTask('${esc(cat)}',${i})">🗑️ 刪除</button></div>`;
+    }));
+  }
+  const rtiers=Object.keys(state.customRewards).filter(t=>(state.customRewards[t]||[]).length);
+  if(rtiers.length){
+    html+='<div style="font-weight:800;margin:12px 0 6px;">🎁 自訂獎勵</div>';
+    rtiers.forEach(tier=>state.customRewards[tier].forEach((r,i)=>{
+      html+=`<div class="rec"><div class="body"><div class="l1">${r.e||'🎁'} ${tier}・${r.n}</div><div class="l2">${r.x} XP</div></div>
+        <button class="btn bad sm" onclick="delCustomReward('${esc(tier)}',${i})">🗑️ 刪除</button></div>`;
+    }));
+  }
+  box.innerHTML=html||'<p class="muted">目前沒有自訂任務或獎勵。</p>';
+}
+function delCustomTask(cat,i){
+  if(!state.customTasks[cat]) return;
+  if(!confirm('確定刪除這個自訂任務？')) return;
+  state.customTasks[cat].splice(i,1);
+  if(!state.customTasks[cat].length) delete state.customTasks[cat];
+  save();toast('已刪除自訂任務');renderCustomManage();renderScore();renderApply();
+}
+function delCustomReward(tier,i){
+  if(!state.customRewards[tier]) return;
+  if(!confirm('確定刪除這個自訂獎勵？')) return;
+  state.customRewards[tier].splice(i,1);
+  if(!state.customRewards[tier].length) delete state.customRewards[tier];
+  save();toast('已刪除自訂獎勵');renderCustomManage();renderShop();
 }
 function addCustomReward(){
   const tier=document.getElementById('crTier').value;
@@ -1336,7 +1379,7 @@ function addCustomReward(){
   state.customRewards[tier]=state.customRewards[tier]||[];
   state.customRewards[tier].push({n:name,x:xp,e:'🎁'});
   save();document.getElementById('crName').value='';
-  toast('✅ 已新增自訂獎勵');renderShop();
+  toast('✅ 已新增自訂獎勵');renderShop();renderCustomManage();
 }
 function exportJSON(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
