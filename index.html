@@ -206,6 +206,7 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   <h1>🏦 姊妹成長銀行 2.0 Pro</h1>
   <p>惟甯・昕穎｜任務升級 × XP 經驗值 × 親子獎勵</p>
   <div id="syncStatus" style="font-size:11px;opacity:.9;margin-top:4px;">💾 本機模式（尚未連雲端）</div>
+  <button id="lockBtn" onclick="toggleLock()" style="margin-top:8px;border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:800;background:rgba(255,255,255,.85);color:#7a4d8a;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12);">🔓 未設密碼</button>
 </header>
 
 <div class="wrap">
@@ -376,6 +377,18 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   <!-- ========== 設定 ========== -->
   <div class="page" id="page-setting">
     <h2 class="sec"><span class="ic">⚙️</span>資料管理</h2>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🔒 家長密碼鎖</h3>
+      <p class="subnote" id="pinHint"></p>
+      <label class="fl">設定 / 更新密碼（建議 4 位數字）</label>
+      <input type="password" id="pinInput" inputmode="numeric" placeholder="輸入新密碼">
+      <div class="btnrow" style="margin-top:10px;">
+        <button class="btn purple sm" style="flex:1;" onclick="setPin()">💾 設定密碼</button>
+        <button class="btn gray sm" style="flex:1;" onclick="removePin()">移除密碼</button>
+      </div>
+      <p class="subnote" style="margin-top:8px;">設定後，加分 / 核准 / 兌換 / 設定等功能會上鎖；孩子仍可看排行、自己的等級並送出申請。標題下方按鈕可隨時上鎖／解鎖。</p>
+    </div>
 
     <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">☁️ 雲端同步（Google Sheet 後台）</h3>
@@ -597,6 +610,7 @@ function normalize(s){
   s.customTasks=s.customTasks||{};
   s.customRewards=s.customRewards||{};
   s.usedBigRewards=s.usedBigRewards||[];
+  s.parentPin=s.parentPin||'';
   s.updatedAt=s.updatedAt||0;
   return s;
 }
@@ -632,7 +646,7 @@ async function pullRemote(opts){
       if(data.state && serverAt>localAt){
         state=normalize(data.state);
         save(true);                 // 寫回本機快取，不再推送
-        initPrevLevels(); renderAll();
+        initPrevLevels(); renderAll(); updateLockUI(); fillSettingSelects();
         cloudStatus('☁️ 已同步（已更新到雲端最新）');
       }else if(localAt>serverAt && (opts.pushIfNewer || !data.state)){
         pushRemote();
@@ -952,10 +966,10 @@ function renderPending(){
       <div style="margin:4px 0;">${r.task} <span class="xp" style="color:var(--purple)">+${r.xp} XP</span></div>
       ${r.note?`<div class="muted">💬 「${r.note}」</div>`:''}
       <div class="muted" style="font-size:11px;">${fmtTime(r.time)}</div>
-      <div class="btnrow" style="margin-top:8px;">
+      ${isUnlocked()?`<div class="btnrow" style="margin-top:8px;">
         <button class="btn mint sm" style="flex:1;" onclick="approveApply(${idx})">✅ 核准</button>
         <button class="btn bad sm" style="flex:1;" onclick="rejectApply(${idx})">❌ 拒絕</button>
-      </div>
+      </div>`:`<div class="muted" style="text-align:center;margin-top:8px;">🔒 等爸爸媽媽解鎖後審核</div>`}
     </div>`;
   }).join('');
 }
@@ -1294,6 +1308,8 @@ function fillSettingSelects(){
   const gu=document.getElementById('gasUrl'); if(gu) gu.value=cloud.url;
   const hint=document.getElementById('cloudHint');
   if(hint) hint.textContent=cloud.url?'✅ 已設定雲端，多裝置會自動同步':'尚未設定，目前為本機模式';
+  const ph=document.getElementById('pinHint');
+  if(ph) ph.textContent=getPin()?'✅ 已設定密碼（目前'+(isUnlocked()?'已解鎖':'已上鎖')+'）':'尚未設定密碼，目前所有人都能操作';
 }
 function saveGasUrl(){
   const u=document.getElementById('gasUrl').value.trim();
@@ -1424,6 +1440,52 @@ function renderRank(){
 }
 function pickRankMode(m){sel.rankMode=m;renderRank();}
 
+/* ============ 家長密碼鎖 ============ */
+const PARENT_TABS=['score','shop','tablet','special','setting']; // 需要密碼的分頁
+let sessionUnlocked=false;   // 本次是否已用密碼解鎖
+let currentTab='home';
+function getPin(){ return state.parentPin||''; }
+function isUnlocked(){ return sessionUnlocked || !getPin(); }
+function promptUnlock(){
+  if(!getPin()) return true;
+  const v=prompt('請輸入家長密碼 🔒');
+  if(v===null) return false;
+  if(String(v)===String(getPin())){ sessionUnlocked=true; updateLockUI(); toast('🔓 已解鎖家長模式'); return true; }
+  toast('密碼錯誤 😣'); return false;
+}
+function toggleLock(){
+  if(!getPin()){ toast('請先到設定頁設定家長密碼'); switchTab('setting'); return; }
+  if(isUnlocked()){
+    sessionUnlocked=false; updateLockUI();
+    if(PARENT_TABS.includes(currentTab)) switchTab('home');
+    toast('🔒 已切換兒童模式');
+  }else{ promptUnlock(); }
+}
+function updateLockUI(){
+  const btn=document.getElementById('lockBtn');
+  if(btn){
+    if(!getPin()) btn.textContent='🔓 未設密碼（點我設定）';
+    else if(isUnlocked()) btn.textContent='🔓 家長模式・點我上鎖';
+    else btn.textContent='🔒 兒童模式・點我解鎖';
+  }
+  document.querySelectorAll('#tabbar button').forEach(b=>{
+    const locked=PARENT_TABS.includes(b.dataset.id) && !isUnlocked();
+    b.style.opacity=locked?'0.5':'1';
+  });
+  renderPending(); // 申請頁的核准/拒絕鈕依鎖定狀態顯示
+}
+function setPin(){
+  const v=(document.getElementById('pinInput').value||'').trim();
+  if(!v){ toast('請輸入密碼'); return; }
+  state.parentPin=v; save(); sessionUnlocked=true;
+  document.getElementById('pinInput').value='';
+  updateLockUI(); toast('✅ 已設定家長密碼');
+}
+function removePin(){
+  if(!confirm('確定移除家長密碼？移除後所有功能將不再上鎖')) return;
+  state.parentPin=''; save(); sessionUnlocked=false; updateLockUI(); toast('已移除家長密碼');
+}
+
 /* ============ 導覽 ============ */
 const TABS=[
   {id:'home',l:'首頁',ic:'🏠',render:renderHome},
@@ -1444,6 +1506,8 @@ function buildTabs(){
       <span class="ic">${t.ic}</span>${t.l}</button>`).join('');
 }
 function switchTab(id){
+  if(PARENT_TABS.includes(id) && !isUnlocked()){ if(!promptUnlock()) return; }
+  currentTab=id;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');
   document.querySelectorAll('#tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.id===id));
@@ -1465,6 +1529,7 @@ buildTabs();
 fillSettingSelects();
 initPrevLevels();
 renderAll();
+updateLockUI();
 
 // 雲端：啟動時拉取一次，並每 12 秒輪詢一次（其他裝置的變更會自動出現）
 if(cloud.url){ cloudStatus('☁️ 連線中…'); pullRemote({pushIfNewer:true}); }
