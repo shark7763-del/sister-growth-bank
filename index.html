@@ -471,6 +471,28 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
 
     <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🧑‍🤝‍🧑 新增角色</h3>
+      <p class="subnote">可以新增更多小朋友（例如表哥表妹、同住手足），新角色會自動有今日任務、商城、平板、徽章與排行榜。</p>
+      <label class="fl">名字</label>
+      <input type="text" id="nkName" placeholder="例如：小明">
+      <label class="fl">代表表情（貼一個 emoji）</label>
+      <input type="text" id="nkEmoji" value="🙂" maxlength="4" placeholder="🙂">
+      <label class="fl">主題配色</label>
+      <select id="nkTheme"></select>
+      <label class="fl">運動類別</label>
+      <select id="nkSport"><option>跆拳道</option><option>運動</option></select>
+      <label class="fl">是否列入「姊妹合作」獎勵</label>
+      <select id="nkSister"><option value="no">否（一般角色）</option><option value="yes">是（列入姊妹合作 / 共同獎勵）</option></select>
+      <button class="btn mint sm" style="margin-top:12px;width:100%;" onclick="addCustomKid()">➕ 新增角色</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🗂️ 管理角色</h3>
+      <p class="subnote">內建四位角色不可刪除；自訂角色刪除後，其 XP / 平板 / 徽章 / 紀錄會一併移除。</p>
+      <div id="kidManage" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">🗂️ 管理自訂任務 / 獎勵</h3>
       <p class="subnote">這裡只會列出你自己新增的項目，內建任務不會出現也不能刪。</p>
       <div id="customManage" style="margin-top:8px;"></div>
@@ -513,14 +535,32 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 
 <script>
 /* ============ 設定資料 ============ */
-const KIDS = {
+const BUILTIN_KIDS = {
   weining:{name:'惟甯', emoji:'🌸', c1:'#ffb3c9', c2:'#ff7aa5', sister:true, sport:'跆拳道'},
   xinying:{name:'昕穎', emoji:'🦋', c1:'#a9d6ff', c2:'#5bb0ff', sister:true, sport:'跆拳道'},
   yaoting:{name:'耀霆', emoji:'⚡', c1:'#9be7a8', c2:'#3fc96b', sister:false, sport:'運動'},
   yuxuan:{name:'予璇', emoji:'🌷', c1:'#ffc59e', c2:'#ff9a52', sister:false, sport:'運動'}
 };
-const SISTERS=['weining','xinying'];
+const KIDS = Object.assign({}, BUILTIN_KIDS);   // 執行期會併入自訂角色（state.customKids）
+let SISTERS=['weining','xinying'];
 const PARENTS = ['爸爸','媽媽'];
+// 新增角色可選的主題配色
+const KID_THEMES=[
+  {n:'粉紅',c1:'#ffb3c9',c2:'#ff7aa5'},
+  {n:'天藍',c1:'#a9d6ff',c2:'#5bb0ff'},
+  {n:'草綠',c1:'#9be7a8',c2:'#3fc96b'},
+  {n:'橘黃',c1:'#ffc59e',c2:'#ff9a52'},
+  {n:'葡萄紫',c1:'#c9b3ff',c2:'#8a6bff'},
+  {n:'薄荷綠',c1:'#9bead6',c2:'#3fc9a3'},
+  {n:'珊瑚紅',c1:'#ffb0a8',c2:'#ff6f80'},
+  {n:'金黃',c1:'#ffe08a',c2:'#ffc23d'}
+];
+// 把自訂角色併入 KIDS，並重新計算 SISTERS（姊妹清單）
+function syncKids(s){
+  Object.keys(KIDS).forEach(k=>{ if(!BUILTIN_KIDS[k]) delete KIDS[k]; });
+  Object.assign(KIDS, (s&&s.customKids)||{});
+  SISTERS=Object.keys(KIDS).filter(k=>KIDS[k].sister);
+}
 
 function sportCatOf(kid){ return (KIDS[kid]&&KIDS[kid].sport)||'跆拳道'; }
 
@@ -555,7 +595,18 @@ const QUICK_TASKS={
     {n:'幫忙一件家事',x:15,cat:'家事'}
   ]
 };
-function quickListOf(kid){ return QUICK_TASKS[kid]||QUICK_TASKS.weining; }
+function quickListOf(kid){
+  if(QUICK_TASKS[kid]) return QUICK_TASKS[kid];
+  // 自訂角色：依運動類別產生預設今日任務
+  const sp=sportCatOf(kid);
+  return [
+    {n:'完成功課',x:30,cat:'讀書'},
+    {n:'閱讀 20 分鐘',x:20,cat:'讀書'},
+    {n:'整理書包',x:10,cat:'家事'},
+    {n: sp==='運動'?'運動 10 分鐘':'跆拳道柔軟 10 分鐘', x:20, cat:sp},
+    {n:'幫忙一件家事',x:15,cat:'家事'}
+  ];
+}
 function quickStatusOf(kid){
   const k=state.kids[kid]; k.quick=k.quick||{};
   const d=todayStr(); if(!k.quick[d]) k.quick[d]=quickListOf(kid).map(()=>'');
@@ -736,6 +787,8 @@ function defaultChallenge(){
 function normalize(s){
   if(!s) s={};
   s.kids=s.kids||{};
+  s.customKids=s.customKids||{};
+  syncKids(s);                 // 先把自訂角色併入 KIDS / SISTERS
   for(const k in KIDS){ s.kids[k]=Object.assign(freshKid(), s.kids[k]||{}); }
   s.records=s.records||[];
   s.coopXp=s.coopXp||0;
@@ -934,6 +987,13 @@ const sel={scoreKid:'weining',scoreParent:'爸爸',scoreCat:'讀書',scoreTask:n
   spKid:'weining',spParent:'爸爸',spCat:'學業', badgeKid:'weining',
   reportKid:'weining', recFilter:'all', rankMode:'level'};
 
+// 角色被刪除時，把指向不存在角色的選擇器重設為第一位
+function ensureSel(){
+  const first=Object.keys(KIDS)[0];
+  ['scoreKid','remKid','applyKid','shopKid','tabletKid','spKid','badgeKid','reportKid'].forEach(s=>{
+    if(!KIDS[sel[s]]) sel[s]=first;
+  });
+}
 function kidPills(active,onclick){
   return Object.keys(KIDS).map(k=>{
     const sty=k===active?`style="color:#fff;border-color:transparent;background:linear-gradient(135deg,${KIDS[k].c1},${KIDS[k].c2})"`:'';
@@ -1750,6 +1810,9 @@ function genEncourage(){
 /* ============ 設定 / 資料管理 ============ */
 function fillSettingSelects(){
   document.getElementById('ctCat').innerHTML=['讀書','跆拳道','運動','家事','品格','姊妹互助'].map(c=>`<option>${c}</option>`).join('');
+  const nt=document.getElementById('nkTheme');
+  if(nt) nt.innerHTML=KID_THEMES.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
+  renderKidManage();
   const gu=document.getElementById('gasUrl'); if(gu) gu.value=cloud.url;
   const hint=document.getElementById('cloudHint');
   if(hint) hint.textContent=cloud.url?'✅ 已設定雲端，多裝置會自動同步':'尚未設定，目前為本機模式';
@@ -1844,6 +1907,49 @@ function delCustomSpecial(cat,i){
   state.customSpecial[cat].splice(i,1);
   if(!state.customSpecial[cat].length) delete state.customSpecial[cat];
   save();toast('已刪除特殊成就');renderCustomManage();renderSpecial();
+}
+/* ===== 角色管理 ===== */
+function renderKidManage(){
+  const box=document.getElementById('kidManage'); if(!box) return;
+  box.innerHTML=Object.keys(KIDS).map(k=>{
+    const info=KIDS[k], builtin=!!BUILTIN_KIDS[k];
+    return `<div class="rec" style="align-items:center;">
+      <div class="rico" style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,${info.c1},${info.c2});">${info.emoji}</div>
+      <div class="body">
+        <div class="l1">${info.name} ${info.sister?'<span class="tag done">姊妹</span>':''}</div>
+        <div class="l2">${info.sport}・${builtin?'內建角色':'自訂角色'}</div>
+      </div>
+      ${builtin?'<span class="muted" style="font-size:12px;">內建</span>'
+        :`<button class="btn bad sm" onclick="delCustomKid('${k}')">🗑️ 刪除</button>`}
+    </div>`;
+  }).join('');
+}
+function addCustomKid(){
+  const name=(document.getElementById('nkName').value||'').trim();
+  if(!name){toast('請輸入名字');return;}
+  const emoji=(document.getElementById('nkEmoji').value||'🙂').trim()||'🙂';
+  const th=KID_THEMES[parseInt(document.getElementById('nkTheme').value)||0]||KID_THEMES[0];
+  const sport=document.getElementById('nkSport').value;
+  const sister=document.getElementById('nkSister').value==='yes';
+  const id='kid'+Date.now();
+  state.customKids[id]={name,emoji,c1:th.c1,c2:th.c2,sister,sport};
+  normalize(state);          // 併入 KIDS、補上角色資料
+  save(); initPrevLevels();
+  document.getElementById('nkName').value='';
+  document.getElementById('nkEmoji').value='🙂';
+  renderAll(); fillSettingSelects();
+  toast('✅ 已新增角色：'+name);
+}
+function delCustomKid(id){
+  if(!state.customKids[id]){toast('內建角色不可刪除');return;}
+  if(!confirm('確定刪除角色「'+KIDS[id].name+'」？\n該角色的 XP / 平板 / 徽章 / 紀錄將一併移除！')) return;
+  delete state.customKids[id];
+  delete state.kids[id];
+  state.records=state.records.filter(r=>r.kid!==id);
+  normalize(state);          // 重新同步 KIDS / SISTERS
+  ensureSel(); initPrevLevels();
+  save(); renderAll(); fillSettingSelects();
+  toast('已刪除角色');
 }
 function exportJSON(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
@@ -2005,6 +2111,7 @@ function switchTab(id){
 
 /* ============ 全部渲染 ============ */
 function renderAll(){
+  ensureSel();
   renderHome();renderScore();renderApply();
   renderShop();renderTablet();
   renderSpecial();renderRank();renderTitles();
