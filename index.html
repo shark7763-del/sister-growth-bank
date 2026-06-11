@@ -98,6 +98,23 @@ textarea{min-height:60px;resize:vertical;}
 .taskbtn.on{border-color:var(--purple);background:#f6f1ff;}
 .taskbtn:active{transform:scale(.98);}
 
+/* 一頁式快速加分任務格 */
+.qcat{font-size:13px;font-weight:800;color:var(--ink2);margin:14px 2px 8px;display:flex;align-items:center;gap:6px;}
+.qcat:first-child{margin-top:6px;}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.qadd{border:2px solid #efe7f3;border-radius:16px;padding:12px 11px;background:#fff;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:5px;min-height:64px;justify-content:center;transition:transform .08s;}
+.qadd:active{transform:scale(.94);}
+.qadd .qn{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.25;}
+.qadd .qx{font-size:13px;font-weight:900;color:var(--mint);}
+.qadd.fav{border-color:#ffd166;background:linear-gradient(135deg,#fff8e1,#fff);}
+.qadd.sel{border-color:var(--purple);background:#f6f1ff;}
+.qadd.sel .qx{color:var(--purple);}
+.qadd.flash{animation:qflash .55s ease;}
+@keyframes qflash{0%{background:#c9f5e6;border-color:var(--mint);transform:scale(1.04);}100%{background:#fff;}}
+.flyxp{position:fixed;z-index:95;font-weight:900;font-size:20px;color:#2bbd8f;pointer-events:none;animation:flyup .9s ease-out forwards;text-shadow:0 2px 8px rgba(255,255,255,.9);}
+@keyframes flyup{0%{opacity:0;transform:translateY(8px) scale(.7);}20%{opacity:1;}100%{opacity:0;transform:translateY(-52px) scale(1.25);}}
+.searchbox{width:100%;border:2px solid #efe7f3;border-radius:14px;padding:12px 14px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit;}
+
 /* 商城 */
 .shopgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .shopitem{border:2px solid #efe7f3;border-radius:16px;padding:12px;text-align:center;background:#fff;}
@@ -236,18 +253,13 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     <h2 class="sec"><span class="ic">➕</span>父母快速加分</h2>
     <div class="lock-note child-lock-note" style="display:none;">🔒 加分功能需家長解鎖（點上方按鈕）</div>
     <div class="card parent-only">
-      <label class="fl">👧 選擇孩子</label>
+      <label class="fl">👧 幫誰加分</label>
       <div class="pills" id="scoreKid"></div>
       <label class="fl">👨‍👩‍👧 誰來加分</label>
       <div class="pills" id="scoreParent"></div>
-      <label class="fl">📚 任務類別</label>
-      <div class="pills" id="scoreCat"></div>
-      <label class="fl">🎯 選擇任務</label>
-      <div class="tasklist" id="scoreTasks"></div>
-      <label class="fl">📝 備註（可選填）</label>
-      <input type="text" id="scoreNote" placeholder="例如：今天主動完成，超棒！">
-      <div style="margin-top:14px;font-size:14px;text-align:center;" class="muted" id="scorePreview">請先選擇上面的任務 👆</div>
-      <button class="btn mint" style="margin-top:10px;" onclick="confirmScore()">✅ 確認加分</button>
+      <input type="text" id="scoreSearch" class="searchbox" style="margin-top:14px;" placeholder="🔍 搜尋任務（功課、閱讀、洗澡…）" oninput="renderScoreTasks()">
+      <div id="scoreTasksFlat" style="margin-top:4px;"></div>
+      <p class="subnote" style="text-align:center;margin-top:8px;font-weight:700;color:var(--mint);">👆 點任務就直接加分，10 秒搞定！</p>
     </div>
 
     <h2 class="sec"><span class="ic">🙋</span>孩子申請 XP</h2>
@@ -255,10 +267,9 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <p class="subnote">小朋友自己完成任務，送出申請給爸爸媽媽核准！</p>
       <label class="fl">👧 我是</label>
       <div class="pills" id="applyKid"></div>
-      <label class="fl">📚 任務類別</label>
-      <div class="pills" id="applyCat"></div>
-      <label class="fl">🎯 我完成的任務</label>
-      <div class="tasklist" id="applyTasks"></div>
+      <input type="text" id="applySearch" class="searchbox" style="margin-top:12px;" placeholder="🔍 找任務（功課、閱讀、收玩具…）" oninput="renderApplyTasks()">
+      <label class="fl">🎯 點一下我完成的任務</label>
+      <div id="applyTasksFlat"></div>
       <label class="fl">💬 我的成長小日記（可選填）</label>
       <input type="text" id="applyR1" placeholder="① 我今天覺得自己很棒的地方是…">
       <input type="text" id="applyR2" style="margin-top:8px;" placeholder="② 我今天遇到困難但我有努力的是…">
@@ -1192,16 +1203,7 @@ function renderScore(){
   document.getElementById('scoreKid').innerHTML=kidPills(sel.scoreKid,'pickScoreKid');
   document.getElementById('scoreParent').innerHTML=PARENTS.map(p=>
     `<button class="pill ${p===sel.scoreParent?'on par':''}" onclick="pickScoreParent('${p}')">${p==='爸爸'?'👨':'👩'} ${p}</button>`).join('');
-  const tasks=getTasks(sel.scoreKid);
-  if(!tasks[sel.scoreCat]) sel.scoreCat=Object.keys(tasks)[0];
-  document.getElementById('scoreCat').innerHTML=Object.keys(tasks).map(c=>
-    `<button class="pill ${c===sel.scoreCat?'on cat':''}" onclick="pickScoreCat('${c}')">${CAT_ICON[c]||'🎯'} ${c}</button>`).join('');
-  document.getElementById('scoreTasks').innerHTML=(tasks[sel.scoreCat]||[]).map((t,i)=>
-    `<button class="taskbtn ${sel.scoreTask===t.n?'on':''}" onclick="pickScoreTask('${esc(t.n)}',${t.x})">
-      <span>${t.n}</span><span class="xp">+${t.x} XP</span></button>`).join('');
-  const pv=document.getElementById('scorePreview');
-  if(sel.scoreTask){pv.innerHTML=`將為 <b>${KIDS[sel.scoreKid].name}</b> 加上 <b style="color:var(--mint)">${sel.scoreTaskXp} XP</b>（${sel.scoreParent}加分）`;}
-  else pv.textContent='請先選擇上面的任務 👆';
+  renderScoreTasks();
   document.getElementById('remKid').innerHTML=kidPills(sel.remKid,'pickRemKid');
   document.getElementById('remTasks').innerHTML=REMINDERS.map(t=>
     `<button class="taskbtn neg ${sel.remTask===t.n?'on':''}" onclick="pickRemTask('${esc(t.n)}',${t.x})">
@@ -1209,26 +1211,76 @@ function renderScore(){
   updateParentUI();
 }
 function esc(s){return String(s).replace(/'/g,"\\'");}
-function pickScoreKid(k){sel.scoreKid=k;sel.scoreTask=null;renderScore();}
+
+// 攤平此孩子所有可加分任務
+function flatTasks(kid){
+  const tasks=getTasks(kid), out=[];
+  Object.keys(tasks).forEach(cat=>{ (tasks[cat]||[]).forEach(t=>out.push({cat,n:t.n,x:t.x})); });
+  return out;
+}
+// 此孩子最常被加分的任務（取前 4）
+function favTasksFor(kid){
+  const cnt={};
+  state.records.forEach(r=>{
+    if(r.kid===kid && r.xp>0 && (r.type==='score'||r.type==='apply') && r.task) cnt[r.task]=(cnt[r.task]||0)+1;
+  });
+  const all=flatTasks(kid);
+  return Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])
+    .map(n=>all.find(t=>t.n===n)).filter(Boolean).slice(0,4);
+}
+function qaddBtn(cat,n,x,fav){
+  return `<button class="qadd ${fav?'fav':''}" onclick="quickScore('${esc(cat)}','${esc(n)}',${x},this)">
+    <span class="qn">${n}</span><span class="qx">+${x} XP</span></button>`;
+}
+function renderScoreTasks(){
+  const box=document.getElementById('scoreTasksFlat'); if(!box) return;
+  const kid=sel.scoreKid;
+  const q=(document.getElementById('scoreSearch')&&document.getElementById('scoreSearch').value||'').trim();
+  const tasks=getTasks(kid); let html='';
+  if(!q){
+    const favs=favTasksFor(kid);
+    if(favs.length){
+      html+=`<div class="qcat">⭐ 最近常用</div><div class="qgrid">`+
+        favs.map(t=>qaddBtn(t.cat,t.n,t.x,true)).join('')+`</div>`;
+    }
+  }
+  Object.keys(tasks).forEach(cat=>{
+    let list=tasks[cat]||[];
+    if(q) list=list.filter(t=>t.n.includes(q));
+    if(!list.length) return;
+    html+=`<div class="qcat">${CAT_ICON[cat]||'🎯'} ${cat}</div><div class="qgrid">`+
+      list.map(t=>qaddBtn(cat,t.n,t.x,false)).join('')+`</div>`;
+  });
+  if(!html) html=`<p class="muted" style="text-align:center;padding:16px;">找不到「${q}」相關任務，換個關鍵字試試 🙂</p>`;
+  box.innerHTML=html;
+}
+function flyXp(x,btn){
+  const f=document.createElement('div');
+  f.className='flyxp'; f.textContent='+'+x+' XP';
+  if(btn){ const r=btn.getBoundingClientRect(); f.style.left=(r.left+r.width/2-26)+'px'; f.style.top=(r.top-4)+'px'; }
+  else { f.style.left=(innerWidth/2-26)+'px'; f.style.top=(innerHeight/2)+'px'; }
+  document.body.appendChild(f); setTimeout(()=>f.remove(),950);
+}
+// 點任務 = 立即加分
+function quickScore(cat,n,x,btn){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  addXp(sel.scoreKid, x, true);
+  state.records.unshift({time:Date.now(),kid:sel.scoreKid,parent:sel.scoreParent,
+    cat,task:n,xp:x,note:'',status:'approved',type:'score'});
+  save();
+  checkLevelUp(sel.scoreKid);
+  if(btn){ btn.classList.remove('flash'); void btn.offsetWidth; btn.classList.add('flash'); }
+  flyXp(x,btn);
+  toast(`✅ ${sel.scoreParent}幫${KIDS[sel.scoreKid].name}加了 +${x} XP（${n}）`);
+  // 先播完按鈕閃光與飄分動畫，700ms 後再整體刷新（動畫 0.55s 已結束，搜尋框內容會保留）
+  clearTimeout(quickScore._t);
+  quickScore._t=setTimeout(()=>renderAll(),700);
+}
+function pickScoreKid(k){sel.scoreKid=k;renderScore();}
 function pickScoreParent(p){sel.scoreParent=p;renderScore();}
-function pickScoreCat(c){sel.scoreCat=c;sel.scoreTask=null;renderScore();}
-function pickScoreTask(n,x){sel.scoreTask=n;sel.scoreTaskXp=x;renderScore();}
 function pickRemKid(k){sel.remKid=k;renderScore();}
 function pickRemTask(n,x){sel.remTask=n;sel.remTaskXp=x;renderScore();}
 
-function confirmScore(){
-  if(!isUnlocked()){ if(!promptUnlock()) return; }
-  if(!sel.scoreTask){toast('請先選擇任務 🙏');return;}
-  const note=document.getElementById('scoreNote').value.trim();
-  addXp(sel.scoreKid, sel.scoreTaskXp, true);
-  state.records.unshift({time:Date.now(),kid:sel.scoreKid,parent:sel.scoreParent,
-    cat:sel.scoreCat,task:sel.scoreTask,xp:sel.scoreTaskXp,note,status:'approved',type:'score'});
-  save();
-  checkLevelUp(sel.scoreKid);
-  toast(`✅ ${KIDS[sel.scoreKid].name} +${sel.scoreTaskXp} XP！`);
-  document.getElementById('scoreNote').value='';sel.scoreTask=null;
-  renderAll();
-}
 function confirmReminder(){
   if(!isUnlocked()){ if(!promptUnlock()) return; }
   if(!sel.remTask){toast('請先選擇提醒項目');return;}
@@ -1260,18 +1312,26 @@ function checkLevelUp(kid){
 /* ============ 渲染：申請 ============ */
 function renderApply(){
   document.getElementById('applyKid').innerHTML=kidPills(sel.applyKid,'pickApplyKid');
-  const tasks=getTasks(sel.applyKid);
-  if(!tasks[sel.applyCat]) sel.applyCat=Object.keys(tasks)[0];
-  document.getElementById('applyCat').innerHTML=Object.keys(tasks).map(c=>
-    `<button class="pill ${c===sel.applyCat?'on cat':''}" onclick="pickApplyCat('${c}')">${CAT_ICON[c]||'🎯'} ${c}</button>`).join('');
-  document.getElementById('applyTasks').innerHTML=(tasks[sel.applyCat]||[]).map(t=>
-    `<button class="taskbtn ${sel.applyTask===t.n?'on':''}" onclick="pickApplyTask('${esc(t.n)}',${t.x})">
-      <span>${t.n}</span><span class="xp">+${t.x} XP</span></button>`).join('');
+  renderApplyTasks();
   renderPending();
 }
+function renderApplyTasks(){
+  const box=document.getElementById('applyTasksFlat'); if(!box) return;
+  const q=(document.getElementById('applySearch')&&document.getElementById('applySearch').value||'').trim();
+  const tasks=getTasks(sel.applyKid); let html='';
+  Object.keys(tasks).forEach(cat=>{
+    let list=tasks[cat]||[];
+    if(q) list=list.filter(t=>t.n.includes(q));
+    if(!list.length) return;
+    html+=`<div class="qcat">${CAT_ICON[cat]||'🎯'} ${cat}</div><div class="qgrid">`+
+      list.map(t=>`<button class="qadd ${sel.applyTask===t.n?'sel':''}" onclick="pickApplyTask('${esc(cat)}','${esc(t.n)}',${t.x})">
+        <span class="qn">${t.n}</span><span class="qx">+${t.x} XP</span></button>`).join('')+`</div>`;
+  });
+  if(!html) html=`<p class="muted" style="text-align:center;padding:14px;">找不到「${q}」😅 換個字試試</p>`;
+  box.innerHTML=html;
+}
 function pickApplyKid(k){sel.applyKid=k;sel.applyTask=null;renderApply();}
-function pickApplyCat(c){sel.applyCat=c;sel.applyTask=null;renderApply();}
-function pickApplyTask(n,x){sel.applyTask=n;sel.applyTaskXp=x;renderApply();}
+function pickApplyTask(cat,n,x){sel.applyCat=cat;sel.applyTask=n;sel.applyTaskXp=x;renderApplyTasks();}
 function submitApply(){
   if(!sel.applyTask){toast('請先選擇完成的任務');return;}
   const r1=document.getElementById('applyR1').value.trim();
