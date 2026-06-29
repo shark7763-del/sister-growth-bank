@@ -421,6 +421,167 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   .parentdash,.formgrid,.checkgrid{grid-template-columns:1fr;}
   .pdactions{flex-direction:column;}
 }
+
+/* ========================================================================
+   Sister World 我的世界 — Roblox 風成長世界
+   ===================================================================== */
+.sw-hero{position:relative;overflow:hidden;padding:0;border-radius:24px;
+  background:linear-gradient(180deg,#bfe9ff 0%,#dff4ff 42%,#eafff2 70%,#d8f5c8 100%);}
+.sw-sky{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.sw-cloud{position:absolute;font-size:30px;opacity:.85;animation:swDrift 26s linear infinite;}
+.sw-cloud.c2{top:38px;font-size:22px;opacity:.7;animation-duration:34s;animation-delay:-8s;}
+.sw-sun{position:absolute;top:10px;right:14px;font-size:34px;animation:swSpin 18s linear infinite;}
+@keyframes swDrift{0%{left:-18%}100%{left:118%}}
+@keyframes swSpin{100%{transform:rotate(360deg)}}
+.sw-herotop{position:relative;display:flex;align-items:center;gap:10px;padding:14px 14px 4px;}
+.sw-pin{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;background:rgba(255,255,255,.7);box-shadow:0 4px 10px rgba(0,0,0,.08);}
+.sw-htitle{font-weight:900;font-size:18px;color:#3a4a55;line-height:1.15;}
+.sw-hsub{font-size:11.5px;color:#5a6b75;font-weight:700;}
+.sw-stats{margin-left:auto;display:flex;gap:6px;}
+.sw-stat{background:rgba(255,255,255,.82);border-radius:13px;padding:5px 9px;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,.06);}
+.sw-stat b{display:block;font-size:15px;color:#3a4a55;line-height:1.1;}
+.sw-stat span{font-size:9.5px;color:#7a8a92;font-weight:700;}
+
+/* 舞台：角色＋房子＋寵物 */
+.sw-stage{position:relative;height:230px;margin:2px 0 0;}
+.sw-ground{position:absolute;left:0;right:0;bottom:0;height:46px;
+  background:linear-gradient(180deg,#9be08a,#76cf6a);border-top:3px solid #6bc05f;}
+.sw-ground::after{content:"";position:absolute;left:0;right:0;top:-6px;height:8px;
+  background:radial-gradient(circle at 12px 0,#8ad97a 6px,transparent 7px) repeat-x;background-size:24px 8px;}
+.sw-house-wrap{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);width:182px;}
+.sw-house-wrap svg{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 8px rgba(80,90,110,.18));}
+.sw-avatar-wrap{position:absolute;left:14px;bottom:30px;}
+.sw-pet-wrap{position:absolute;right:14px;bottom:32px;}
+.sw-goalbar{position:relative;margin:0;padding:11px 14px 14px;background:rgba(255,255,255,.55);}
+.sw-goalbar b{font-size:13px;color:#3a4a55;}
+.sw-goalbar .g-txt{font-size:12.5px;color:#4a5b65;font-weight:700;margin:3px 0 7px;display:block;min-height:18px;}
+.sw-mini{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
+.sw-mini .chip{cursor:pointer;}
+
+/* ---- 積木角色 Avatar (純 CSS div) ---- */
+.sw-avatar{position:relative;width:84px;height:128px;transform-origin:50% 100%;
+  animation:swIdle 3.4s ease-in-out infinite;}
+.sw-av-hat{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:26px;z-index:6;line-height:1;}
+.sw-av-hair{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:54px;height:26px;
+  border-radius:16px 16px 8px 8px;z-index:2;}
+.sw-av-hair.long::after{content:"";position:absolute;top:14px;left:-4px;right:-4px;height:34px;
+  border-radius:0 0 12px 12px;background:inherit;opacity:.92;}
+.sw-av-head{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:48px;height:44px;
+  background:#ffe0c4;border-radius:14px;z-index:3;box-shadow:inset 0 -4px 0 rgba(0,0,0,.05);}
+.sw-av-eye{position:absolute;top:20px;width:7px;height:9px;background:#4a3a32;border-radius:50%;z-index:4;
+  animation:swBlink 4.6s infinite;}
+.sw-av-eye.l{left:31px;} .sw-av-eye.r{right:31px;}
+.sw-av-mouth{position:absolute;top:33px;left:50%;transform:translateX(-50%);width:12px;height:6px;
+  border-bottom:2.5px solid #c98b6b;border-radius:0 0 10px 10px;z-index:4;}
+.sw-av-body{position:absolute;top:48px;left:50%;transform:translateX(-50%);width:56px;height:46px;
+  border-radius:14px 14px 10px 10px;z-index:2;box-shadow:inset 0 -5px 0 rgba(0,0,0,.07);}
+.sw-av-arm{position:absolute;top:52px;width:13px;height:36px;border-radius:8px;z-index:1;}
+.sw-av-arm.l{left:6px;transform:rotate(6deg);} .sw-av-arm.r{right:6px;transform:rotate(-6deg);}
+.sw-av-leg{position:absolute;top:90px;width:18px;height:26px;background:#5a6b8a;border-radius:6px;z-index:1;}
+.sw-av-leg.l{left:20px;} .sw-av-leg.r{right:20px;}
+.sw-av-shoe{position:absolute;top:112px;width:22px;height:14px;border-radius:7px 7px 5px 5px;z-index:3;}
+.sw-av-shoe.l{left:16px;} .sw-av-shoe.r{right:16px;}
+.sw-av-acc{position:absolute;top:54px;right:-6px;font-size:20px;z-index:6;animation:swFloat 3s ease-in-out infinite;}
+.sw-av-name{position:absolute;top:-40px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-size:10px;font-weight:800;color:#fff;background:rgba(90,74,85,.8);padding:2px 8px;border-radius:10px;z-index:7;}
+.sw-av-name .ttl{display:block;font-size:8.5px;color:#ffe9b0;}
+
+.sw-avatar.happy{animation:swJump .6s ease;}
+.sw-avatar.levelup{animation:swLevel 1.1s ease;}
+.sw-avatar.sad{animation:swSad 1.4s ease;}
+.sw-avatar.celebrate{animation:swCelebrate 1s ease;}
+@keyframes swIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes swJump{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.04)}55%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+@keyframes swLevel{0%{transform:translateY(0);filter:none}40%{transform:translateY(-10px);filter:brightness(1.5) drop-shadow(0 0 12px #ffd166)}100%{transform:translateY(0);filter:none}}
+@keyframes swSad{0%,100%{transform:translateY(0) rotate(0);filter:none}40%{transform:translateY(3px) rotate(-3deg);filter:grayscale(.4) brightness(.94)}}
+@keyframes swCelebrate{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg) translateY(-6px)}50%{transform:rotate(8deg) translateY(-10px)}80%{transform:rotate(-4deg) translateY(-3px)}}
+@keyframes swBlink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes swFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ---- 寵物 ---- */
+.sw-pet{position:relative;width:74px;height:74px;display:flex;align-items:flex-end;justify-content:center;
+  transform-origin:50% 100%;animation:swPetBreath 2.8s ease-in-out infinite;}
+.sw-pet-face{font-size:50px;line-height:1;filter:drop-shadow(0 4px 4px rgba(0,0,0,.12));}
+.sw-pet-shadow{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:46px;height:9px;
+  background:rgba(0,0,0,.13);border-radius:50%;z-index:-1;}
+.sw-pet-z{position:absolute;top:-2px;right:-2px;font-size:15px;font-weight:900;color:#7cc4ff;opacity:0;}
+.sw-pet-acc{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:18px;}
+.sw-pet-name{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-size:10px;font-weight:800;color:#3a4a55;}
+@keyframes swPetBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.sw-pet.happy{animation:swPetJump .6s ease 2;}
+.sw-pet.hungry{animation:none;transform:translateY(8px) rotate(-6deg);opacity:.92;}
+.sw-pet.sleepy{animation:swPetSleep 3.2s ease-in-out infinite;}
+.sw-pet.sleepy .sw-pet-z{animation:swZzz 2.4s ease-in-out infinite;}
+.sw-pet.levelup{animation:swPetGlow 1.1s ease;}
+.sw-pet.celebrate{animation:swPetParty .9s ease 2;}
+@keyframes swPetJump{0%{transform:translateY(0)}40%{transform:translateY(-22px) scale(1.06)}100%{transform:translateY(0)}}
+@keyframes swPetSleep{0%,100%{transform:translateY(4px) rotate(-3deg) scale(1)}50%{transform:translateY(6px) rotate(-3deg) scale(1.03)}}
+@keyframes swZzz{0%{opacity:0;transform:translate(0,0) scale(.6)}40%{opacity:1}100%{opacity:0;transform:translate(10px,-18px) scale(1.1)}}
+@keyframes swPetGlow{0%{filter:none}40%{filter:brightness(1.6) drop-shadow(0 0 14px #ffd166)}100%{filter:none}}
+@keyframes swPetParty{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg) translateY(-8px)}75%{transform:rotate(12deg) translateY(-8px)}}
+
+/* ---- 房子 SVG 分層建造 ---- */
+.hl{opacity:0;transition:opacity .6s ease;}
+.hl.on{opacity:1;}
+.hl.hl-new{animation:swBuild 1.1s ease;}
+@keyframes swBuild{0%{opacity:0;transform:translateY(16px)}60%{opacity:1;transform:translateY(-3px)}100%{opacity:1;transform:translateY(0)}}
+.sw-spark{position:absolute;font-size:18px;opacity:0;pointer-events:none;z-index:8;}
+.sw-spark.go{animation:swSpark 1.2s ease forwards;}
+@keyframes swSpark{0%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(1) translateY(-14px)}}
+.sw-upbanner{position:absolute;top:8px;left:50%;transform:translateX(-50%) scale(.6);opacity:0;z-index:9;
+  background:linear-gradient(135deg,#ffd166,#ff8fb1);color:#fff;font-weight:900;font-size:14px;
+  padding:7px 16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.2);white-space:nowrap;}
+.sw-upbanner.go{animation:swBanner 2.2s ease forwards;}
+@keyframes swBanner{0%{opacity:0;transform:translateX(-50%) scale(.6)}15%{opacity:1;transform:translateX(-50%) scale(1.05)}80%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) scale(.9)}}
+
+/* ---- 商店 / 背包 ---- */
+.sw-panel{margin-top:12px;}
+.sw-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+.sw-tab{flex:0 0 auto;border:none;background:#f0eaf3;color:var(--ink2);font-weight:800;font-size:12px;
+  padding:7px 12px;border-radius:14px;cursor:pointer;font-family:inherit;}
+.sw-tab.on{background:linear-gradient(135deg,var(--purple),var(--sky));color:#fff;}
+.sw-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
+.sw-item{background:var(--cream);border-radius:14px;padding:9px 6px;text-align:center;position:relative;
+  border:2px solid transparent;cursor:pointer;transition:transform .12s;}
+.sw-item:active{transform:scale(.95);}
+.sw-item.equipped{border-color:var(--mint);background:#eafff5;}
+.sw-item.owned{border-color:#ead9ff;}
+.sw-item .e{font-size:26px;display:block;line-height:1.2;}
+.sw-item .nm{font-size:11px;font-weight:800;color:var(--ink);display:block;}
+.sw-item .pr{font-size:10.5px;color:#b5790a;font-weight:800;}
+.sw-item .own{position:absolute;top:4px;right:6px;font-size:10px;}
+.sw-item .eqtag{position:absolute;top:4px;left:6px;font-size:9px;background:var(--mint);color:#0a6b4a;
+  padding:1px 5px;border-radius:8px;font-weight:800;}
+.sw-empty{text-align:center;color:var(--ink2);font-size:13px;padding:20px;}
+@media(max-width:360px){ .sw-grid{grid-template-columns:1fr 1fr;} .sw-stage{height:210px;} }
+
+/* ---- 家園裝飾 / 花園 疊加層 ---- */
+.sw-deco{position:absolute;font-size:18px;z-index:5;pointer-events:none;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.12));animation:swFloat 3.4s ease-in-out infinite;}
+.sw-garden-item{position:absolute;bottom:30px;font-size:18px;z-index:4;pointer-events:none;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.12));}
+
+/* ---- 世界特效 ---- */
+.sw-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:7;}
+.sw-fx-item{position:absolute;top:-10%;font-size:16px;opacity:.9;animation:swFxFall linear infinite;}
+@keyframes swFxFall{0%{transform:translateY(-20px) rotate(0);opacity:0}10%{opacity:.95}100%{transform:translateY(260px) rotate(40deg);opacity:0}}
+.sw-fx-rainbow{position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:240px;height:160px;
+  border-radius:50%;border:14px solid;border-color:#ff8fb1 #ffd166 #8ad97a transparent;opacity:.5;z-index:1;pointer-events:none;}
+
+/* ---- 我的裝扮 面板 ---- */
+.sw-dresshead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.sw-dresshead b{font-size:16px;color:var(--ink);}
+.sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
+
+@media (prefers-reduced-motion: reduce){
+  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.sw-av-acc,.sw-av-eye,.hl,.hl-new,
+  .sw-spark,.sw-upbanner,.sw-pet-z,.sw-deco,.sw-fx-item{animation:none !important;}
+  .sw-avatar,.sw-pet{transform:none !important;}
+  .hl{opacity:1 !important;transition:none !important;}
+  .sw-spark.go,.sw-upbanner.go{opacity:1 !important;}
+}
 </style>
 </head>
 <body>
@@ -1253,6 +1414,16 @@ const DAILY_TABLET_CAP=60, BANK_CAP=180, CORE_TASK_NEED=3, DAILY_TASK_TARGET=5;
 const SCHEMA_VERSION=3;
 const LS_KEY='sisterBank2pro';
 const CHILD_SESSION_KEY='familyGrowth_childId';
+// 家園 10 階：依「累積 XP(lifetime)」自動成長（須在 load() 之前定義，syncV3Model 會用到）
+const HOME_STAGE_XP=[0,60,180,360,600,900,1300,1800,2500,3500];
+const HOME_STAGE_NAMES=['空地','地基','木架','牆壁','屋頂','門窗','花園','寵物小屋','陽台','夢想屋'];
+const HOME_STAGE_LAYERS=['ground','foundation','frame','wall','roof','door','garden','petHouse','secondFloor','dream'];
+// 內建角色預設零件（不需購買即可顯示）
+const AVATAR_BUILTIN={
+  tee_blue:{slot:'outfit',color:'#6cb8ff',name:'藍上衣',e:'👕'},
+  short_brown:{slot:'hair',color:'#5a3b2a',name:'棕短髮',e:'💇'},
+  sneaker_red:{slot:'shoes',color:'#ff7a7a',name:'紅球鞋',e:'👟'}
+};
 let state=load();
 let childSession=localStorage.getItem(CHILD_SESSION_KEY)||'';
 
@@ -1362,9 +1533,37 @@ function defaultInventoryFor(existing){
     decorations:{},
     wallpaper:{},
     floor:{},
-    rareItems:{}
+    hat:{},
+    rareItems:{},
+    // ---- Sister World 世界裝扮分類 ----
+    avatarItem:{},
+    petAccessory:{},
+    homeDecoration:{},
+    gardenItem:{},
+    themeSkin:{},
+    specialEffect:{}
   }, existing||{});
 }
+/* ============ Sister World：角色 / 世界 資料模型 ============ */
+function defaultAvatarFor(childId, existing){
+  return Object.assign({
+    id:'avatar_'+childId, childId,
+    avatarName:'', avatarLevel:1, avatarExp:0,
+    avatarOutfit:'tee_blue', avatarHair:'short_brown', avatarShoes:'sneaker_red',
+    avatarHat:'', avatarAccessory:'', avatarPose:'idle', avatarTitle:''
+  }, existing||{});
+}
+function defaultWorldFor(childId, existing){
+  const w=Object.assign({
+    id:'world_'+childId, childId,
+    themeSkin:'sky', specialEffect:'', specialEffectId:'fx_none',
+    petAccessory:'', decorations:[], gardenItems:[]
+  }, existing||{});
+  w.decorations=Array.isArray(w.decorations)?w.decorations:[];
+  w.gardenItems=Array.isArray(w.gardenItems)?w.gardenItems:[];
+  return w;
+}
+function homeLevelFromXp(lt){ let lv=1; for(let i=0;i<HOME_STAGE_XP.length;i++){ if((lt||0)>=HOME_STAGE_XP[i]) lv=i+1; } return lv; }
 const PET_TYPES={
   dog:{e:'🐶',name:'狗狗',mood:'忠誠'},
   cat:{e:'🐱',name:'貓貓',mood:'優雅'},
@@ -1393,7 +1592,14 @@ const SHOP_CATEGORIES=[
   {id:'floor',label:'地板',e:'🧱'},
   {id:'hat',label:'帽子',e:'🎩'},
   {id:'decorations',label:'裝飾',e:'🌼'},
-  {id:'rareItems',label:'稀有',e:'✨'}
+  {id:'rareItems',label:'稀有',e:'✨'},
+  // ---- Sister World 世界裝扮 ----
+  {id:'avatarItem',label:'角色服裝',e:'🧑‍🎤'},
+  {id:'petAccessory',label:'寵物配件',e:'🎀'},
+  {id:'homeDecoration',label:'房子裝飾',e:'🎈'},
+  {id:'gardenItem',label:'花園裝飾',e:'🌻'},
+  {id:'themeSkin',label:'世界背景',e:'🌈'},
+  {id:'specialEffect',label:'特殊效果',e:'🎆'}
 ];
 const SHOP_CATALOG={
   food:[
@@ -1440,6 +1646,53 @@ const SHOP_CATALOG={
   rareItems:[
     {id:'seed',name:'神秘種子',e:'🌱',cost:35,desc:'稀有道具',usable:false},
     {id:'gem',name:'閃亮寶石',e:'💎',cost:60,desc:'收藏用稀有品',usable:false}
+  ],
+  // ============ Sister World 世界裝扮商品 ============
+  avatarItem:[
+    {id:'tee_red',name:'紅色上衣',e:'👕',cost:14,desc:'活力滿滿的紅上衣',usable:false,slot:'outfit',color:'#ff7a7a'},
+    {id:'dress_pink',name:'粉色洋裝',e:'👗',cost:20,desc:'可愛的粉洋裝',usable:false,slot:'outfit',color:'#ff9ecb'},
+    {id:'hoodie_mint',name:'薄荷帽T',e:'🧥',cost:22,desc:'舒服的帽T',usable:false,slot:'outfit',color:'#7fe0c0'},
+    {id:'tee_yellow',name:'陽光黃上衣',e:'🟡',cost:16,desc:'像太陽一樣亮',usable:false,slot:'outfit',color:'#ffd45e'},
+    {id:'hair_long_black',name:'黑長髮',e:'💇',cost:16,desc:'飄逸的黑長髮',usable:false,slot:'hair',color:'#3b2f2a',long:true},
+    {id:'hair_twin',name:'雙馬尾',e:'🎀',cost:18,desc:'活潑雙馬尾',usable:false,slot:'hair',color:'#7a4d2a',long:true},
+    {id:'hair_blonde',name:'金色短髮',e:'👱',cost:18,desc:'閃亮金髮',usable:false,slot:'hair',color:'#e9b95e'},
+    {id:'cap_blue',name:'藍色棒球帽',e:'🧢',cost:12,desc:'帥氣鴨舌帽',usable:false,slot:'hat',emoji:'🧢'},
+    {id:'crown_gold',name:'黃金皇冠',e:'👑',cost:40,desc:'今天你是主角',usable:false,slot:'hat',emoji:'👑'},
+    {id:'bow_hat',name:'蝴蝶結',e:'🎀',cost:14,desc:'甜美蝴蝶結',usable:false,slot:'hat',emoji:'🎀'},
+    {id:'sneaker_white',name:'白色球鞋',e:'👟',cost:12,desc:'乾淨白球鞋',usable:false,slot:'shoes',color:'#ffffff'},
+    {id:'boots_brown',name:'棕色靴子',e:'🥾',cost:16,desc:'冒險靴子',usable:false,slot:'shoes',color:'#a4632b'},
+    {id:'wing_acc',name:'小翅膀',e:'🪽',cost:30,desc:'背上小翅膀',usable:false,slot:'accessory',emoji:'🪽'},
+    {id:'star_acc',name:'星星魔杖',e:'⭐',cost:20,desc:'閃亮星星棒',usable:false,slot:'accessory',emoji:'⭐'}
+  ],
+  petAccessory:[
+    {id:'pet_bow',name:'寵物蝴蝶結',e:'🎀',cost:12,desc:'幫寵物綁蝴蝶結',usable:false,emoji:'🎀'},
+    {id:'pet_hat',name:'寵物小禮帽',e:'🎩',cost:14,desc:'紳士寵物',usable:false,emoji:'🎩'},
+    {id:'pet_glasses',name:'寵物墨鏡',e:'🕶️',cost:18,desc:'酷酷寵物',usable:false,emoji:'🕶️'},
+    {id:'pet_crown',name:'寵物皇冠',e:'👑',cost:30,desc:'寵物界的國王',usable:false,emoji:'👑'}
+  ],
+  homeDecoration:[
+    {id:'deco_balloon',name:'氣球',e:'🎈',cost:10,desc:'家門口的氣球',usable:false,emoji:'🎈'},
+    {id:'deco_lantern',name:'小燈籠',e:'🏮',cost:12,desc:'溫暖的燈籠',usable:false,emoji:'🏮'},
+    {id:'deco_flag',name:'彩旗',e:'🎏',cost:14,desc:'隨風飄的彩旗',usable:false,emoji:'🎏'},
+    {id:'deco_mailbox',name:'信箱',e:'📮',cost:16,desc:'家的信箱',usable:false,emoji:'📮'}
+  ],
+  gardenItem:[
+    {id:'garden_rose',name:'玫瑰花叢',e:'🌹',cost:10,desc:'花園裡的玫瑰',usable:false,emoji:'🌹'},
+    {id:'garden_tree',name:'小樹',e:'🌳',cost:14,desc:'院子裡的小樹',usable:false,emoji:'🌳'},
+    {id:'garden_mushroom',name:'蘑菇',e:'🍄',cost:8,desc:'可愛的蘑菇',usable:false,emoji:'🍄'},
+    {id:'garden_fountain',name:'小噴泉',e:'⛲',cost:24,desc:'夢幻噴泉',usable:false,emoji:'⛲'}
+  ],
+  themeSkin:[
+    {id:'sky',name:'晴空背景',e:'🌤️',cost:0,desc:'明亮的藍天',usable:false,sky:['#bfe9ff','#dff4ff','#eafff2','#d8f5c8']},
+    {id:'sunset',name:'黃昏背景',e:'🌇',cost:20,desc:'溫暖的黃昏',usable:false,sky:['#ffd9a8','#ffc1a8','#ffd6e8','#f6dcc8']},
+    {id:'night',name:'星空背景',e:'🌌',cost:26,desc:'神秘的夜晚',usable:false,sky:['#3b3f8b','#4b4fa6','#6b6fc0','#8b7fd0']},
+    {id:'candy',name:'糖果背景',e:'🍬',cost:24,desc:'甜甜糖果世界',usable:false,sky:['#ffd6f0','#ffe0f6','#fff0fb','#ffe9d6']}
+  ],
+  specialEffect:[
+    {id:'fx_none',name:'關閉特效',e:'🚫',cost:0,desc:'乾淨的世界',usable:false,fx:''},
+    {id:'fx_sparkle',name:'閃亮特效',e:'✨',cost:18,desc:'閃閃發光',usable:false,fx:'sparkle'},
+    {id:'fx_hearts',name:'愛心特效',e:'💕',cost:18,desc:'飄落愛心',usable:false,fx:'hearts'},
+    {id:'fx_rainbow',name:'彩虹特效',e:'🌈',cost:30,desc:'天空彩虹',usable:false,fx:'rainbow'}
   ]
 };
 const HOUSE_WALLPAPER_THEME={
@@ -1592,12 +1845,18 @@ function syncV3Model(s){
   s.houses=s.houses||{};
   s.inventory=s.inventory||{};
   s.learning=s.learning||{};
+  s.avatars=s.avatars||{};
+  s.world=s.world||{};
   Object.keys(KIDS).forEach(k=>{
     s.pets['pet_'+k]=defaultPetFor(k,s.pets['pet_'+k]);
     if(!s.pets['pet_'+k].type && s.children[k].preferences.petType) s.pets['pet_'+k].type=s.children[k].preferences.petType;
     s.houses['house_'+k]=defaultHouseFor(k,s.houses['house_'+k]);
     s.inventory[k]=defaultInventoryFor(s.inventory[k]);
     s.learning[k]=defaultLearningFor(k,s.learning[k]);
+    s.avatars[k]=defaultAvatarFor(k,s.avatars[k]);
+    s.world[k]=defaultWorldFor(k,s.world[k]);
+    // 首次計算家園階段基準（避免載入時誤觸「升級動畫」）
+    if(s.world[k].lastHomeLevel==null) s.world[k].lastHomeLevel=homeLevelFromXp((s.kids[k]||{}).lifetime||0);
   });
   s.shopItems=buildV3ShopItems(s);
   s.wishRewards=s.wishRewards||{};
@@ -1770,7 +2029,14 @@ function inventoryListOf(childId){
   });
   return out;
 }
+const WORLD_COSMETIC_CATS=['avatarItem','petAccessory','themeSkin','specialEffect','homeDecoration','gardenItem'];
 function useInventoryItem(childId, category, itemId){
+  // Sister World 裝扮類：不消耗、可由孩子直接裝備
+  if(WORLD_COSMETIC_CATS.includes(category)){
+    if(category==='homeDecoration'||category==='gardenItem') placeHomeDecoration(childId,itemId);
+    else equipInventoryItem(childId,itemId);
+    return;
+  }
   if(!isUnlocked()){ if(!promptUnlock()) return; }
   const def=(SHOP_CATALOG[category]||[]).find(x=>x.id===itemId);
   if(!def){toast('找不到道具');return;}
@@ -1920,6 +2186,11 @@ function coinShopActionLabel(category){
   if(category==='clothing' || category==='hat') return '穿戴';
   if(category==='wallpaper' || category==='floor' || category==='furniture' || category==='decorations') return '放入家中';
   if(category==='rareItems') return '收藏';
+  if(category==='avatarItem') return '裝扮角色';
+  if(category==='petAccessory') return '裝飾寵物';
+  if(category==='homeDecoration' || category==='gardenItem') return '放到家園';
+  if(category==='themeSkin') return '套用背景';
+  if(category==='specialEffect') return '開啟特效';
   return '使用';
 }
 function coinShopIconFor(category){
@@ -3310,6 +3581,374 @@ function childLogout(){
   localStorage.removeItem(CHILD_SESSION_KEY);
   renderAll();
 }
+/* =======================================================================
+   Sister World — 我的世界（角色 / 寵物 / 家園 即時連動）
+   ===================================================================== */
+let worldFx={};          // 暫存動畫狀態（不寫入儲存）：{childId:{avatarAnim,petAnim,petMood,newHomeStage,until}}
+let swDressTab='avatarItem';
+
+function avatarOf(childId){
+  state.avatars=state.avatars||{};
+  state.avatars[childId]=defaultAvatarFor(childId,state.avatars[childId]);
+  return state.avatars[childId];
+}
+function worldOf(childId){
+  state.world=state.world||{};
+  state.world[childId]=defaultWorldFor(childId,state.world[childId]);
+  return state.world[childId];
+}
+function shopDefOf(category,id){ return (SHOP_CATALOG[category]||[]).find(x=>x.id===id)||null; }
+function avatarItemDef(slot,id){
+  if(!id) return null;
+  const c=(SHOP_CATALOG.avatarItem||[]).find(x=>x.id===id && (!slot||x.slot===slot));
+  if(c) return c;
+  const b=AVATAR_BUILTIN[id];
+  return (b && (!slot||b.slot===slot))?b:null;
+}
+
+/* ---- 等級 / 家園 / 寵物心情 計算 ---- */
+function getAvatarLevel(childId){ return levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0).cur.lv; }
+function getHomeLevel(childId){ return homeLevelFromXp((state.kids[childId]&&state.kids[childId].lifetime)||0); }
+function adventureCompletionPct(childId){
+  const adv=getTodayAdventure(childId);
+  const total=(adv && adv.taskInstanceIds && adv.taskInstanceIds.length)||quickListOf(childId).length||0;
+  const done=(adv && adv.completedCount)||0;
+  return total?Math.round(done/total*100):0;
+}
+function getPetMood(childId){
+  const pet=petState(childId); if(!pet) return 'idle';
+  const fx=worldFx[childId];
+  if(fx && fx.petMood && Date.now()<(fx.until||0)) return fx.petMood;   // 暫態：剛完成任務 / 連續達成
+  const hour=new Date().getHours();
+  if(hour>=21 || hour<6) return 'sleepy';                               // 晚上 21:00 後想睡
+  const comp=adventureCompletionPct(childId);
+  if((pet.hunger||80)<35 || comp<30) return 'hungry';                   // 完成率 < 30% 或肚子餓
+  if((pet.happiness||80)>=80 && (pet.hunger||80)>=60) return 'happy';
+  return 'idle';
+}
+function petMoodMessage(childId){
+  const pet=petState(childId); const nm=escHtml(pet&&pet.name||'寵物');
+  const map={
+    hungry:`${nm}肚子餓了，完成閱讀任務可以餵牠！`,
+    sleepy:`${nm}想睡覺了，今天辛苦了，明天再一起冒險 💤`,
+    happy:`${nm}超開心，因為你完成了任務 🎉`,
+    celebrate:`${nm}在慶祝你的連續達成，太棒了！`,
+    levelup:`${nm}升級了，變得更厲害！`,
+    idle:`${nm}正在家裡陪著你 🐾`
+  };
+  return map[getPetMood(childId)]||map.idle;
+}
+function calculateNextWorldGoal(childId){
+  const lt=(state.kids[childId]&&state.kids[childId].lifetime)||0;
+  const lv=getHomeLevel(childId);
+  if(lv<10){
+    const need=Math.max(0,HOME_STAGE_XP[lv]-lt);
+    const lvLabel=HOME_STAGE_NAMES[lv];
+    return {type:'home',level:lv,nextName:lvLabel,need,
+      text:need>0?`再 ${need} XP，家園就會蓋出「${lvLabel}」！`:`快完成任務，家園即將升級成「${lvLabel}」！`,
+      pct:Math.min(100,Math.round((lt-HOME_STAGE_XP[lv-1])/(HOME_STAGE_XP[lv]-HOME_STAGE_XP[lv-1])*100))};
+  }
+  return {type:'max',level:10,need:0,text:'夢想屋已完成 🎉 繼續完成任務照顧寵物、裝扮角色吧！',pct:100};
+}
+
+/* ---- 積木角色 Avatar（純 CSS div）---- */
+function buildAvatarHtml(childId){
+  const av=avatarOf(childId), info=KIDS[childId];
+  const outfit=avatarItemDef('outfit',av.avatarOutfit);
+  const hair=avatarItemDef('hair',av.avatarHair);
+  const shoes=avatarItemDef('shoes',av.avatarShoes);
+  const hat=av.avatarHat?avatarItemDef('hat',av.avatarHat):null;
+  const acc=av.avatarAccessory?avatarItemDef('accessory',av.avatarAccessory):null;
+  const bodyColor=(outfit&&outfit.color)||info.c1||'#7cc4ff';
+  const hairColor=(hair&&hair.color)||'#5a3b2a';
+  const shoeColor=(shoes&&shoes.color)||'#ff7a7a';
+  const lv=getAvatarLevel(childId);
+  const title=av.avatarTitle||levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0).cur.name;
+  const name=escHtml(av.avatarName||info.name);
+  return `<div class="sw-avatar" data-child="${childId}" onclick="dressUp('avatarItem')" title="點我換裝">
+    <div class="sw-av-name">${name}<span class="ttl">Lv.${lv} ${escHtml(title)}</span></div>
+    ${hat?`<div class="sw-av-hat">${hat.emoji||'🎩'}</div>`:''}
+    <div class="sw-av-hair ${hair&&hair.long?'long':''}" style="background:${hairColor}"></div>
+    <div class="sw-av-head"></div>
+    <div class="sw-av-eye l"></div><div class="sw-av-eye r"></div>
+    <div class="sw-av-mouth"></div>
+    <div class="sw-av-body" style="background:${bodyColor}"></div>
+    <div class="sw-av-arm l" style="background:${bodyColor}"></div>
+    <div class="sw-av-arm r" style="background:${bodyColor}"></div>
+    <div class="sw-av-leg l"></div><div class="sw-av-leg r"></div>
+    <div class="sw-av-shoe l" style="background:${shoeColor}"></div>
+    <div class="sw-av-shoe r" style="background:${shoeColor}"></div>
+    ${acc?`<div class="sw-av-acc">${acc.emoji||'⭐'}</div>`:''}
+  </div>`;
+}
+
+/* ---- 寵物 ---- */
+function buildSwPetHtml(childId){
+  const pet=petState(childId), mood=getPetMood(childId), w=worldOf(childId);
+  const acc=w.petAccessory?shopDefOf('petAccessory',w.petAccessory):null;
+  return `<div class="sw-pet ${mood}" data-child="${childId}" onclick="dressUp('petAccessory')" title="點我裝飾寵物">
+    <div class="sw-pet-z">Zzz</div>
+    ${acc?`<div class="sw-pet-acc">${acc.emoji||acc.e}</div>`:''}
+    <div class="sw-pet-face">${petIcon(pet.type)}</div>
+    <div class="sw-pet-shadow"></div>
+    <div class="sw-pet-name">${escHtml(pet.name||'夥伴')}</div>
+  </div>`;
+}
+
+/* ---- 家園：SVG 分層建造（10 階）---- */
+function buildHouseSvg(level,newStage){
+  const L=[];
+  const on=(n)=>`hl on${newStage===n?' hl-new':''}`;
+  if(level>=1) L.push(`<g class="${on(1)}"><ellipse cx="90" cy="135" rx="66" ry="12" fill="#cda976"/><ellipse cx="90" cy="133" rx="60" ry="9" fill="#d8b985"/></g>`);
+  if(level>=2) L.push(`<g class="${on(2)}"><rect x="38" y="120" width="104" height="16" rx="3" fill="#b9966a"/><line x1="38" y1="128" x2="142" y2="128" stroke="#a37f53" stroke-width="1.5"/><line x1="72" y1="120" x2="72" y2="136" stroke="#a37f53" stroke-width="1.5"/><line x1="108" y1="120" x2="108" y2="136" stroke="#a37f53" stroke-width="1.5"/></g>`);
+  if(level>=3) L.push(`<g class="${on(3)}"><rect x="46" y="74" width="8" height="48" fill="#a9794e"/><rect x="126" y="74" width="8" height="48" fill="#a9794e"/><rect x="46" y="74" width="88" height="8" fill="#b98a5e"/></g>`);
+  if(level>=4) L.push(`<g class="${on(4)}"><rect x="50" y="80" width="80" height="42" rx="2" fill="#fff3da" stroke="#ebcf9f" stroke-width="2"/></g>`);
+  if(level>=5) L.push(`<g class="${on(5)}"><polygon points="42,82 90,46 138,82" fill="#ff9a9a"/><polygon points="42,82 90,46 138,82" fill="none" stroke="#f07d7d" stroke-width="2" stroke-linejoin="round"/><rect x="86" y="52" width="8" height="14" rx="2" fill="#c98b5a"/></g>`);
+  if(level>=6) L.push(`<g class="${on(6)}"><rect x="82" y="96" width="20" height="26" rx="2" fill="#b07a47"/><circle cx="98" cy="110" r="1.8" fill="#ffe08a"/><rect x="56" y="88" width="16" height="16" rx="2" fill="#bfe9ff" stroke="#fff" stroke-width="2"/><rect x="108" y="88" width="16" height="16" rx="2" fill="#bfe9ff" stroke="#fff" stroke-width="2"/></g>`);
+  if(level>=7) L.push(`<g class="${on(7)}"><text x="30" y="134" font-size="15">🌷</text><text x="138" y="134" font-size="15">🌼</text><ellipse cx="46" cy="130" rx="9" ry="6" fill="#8ad97a"/></g>`);
+  if(level>=8) L.push(`<g class="${on(8)}"><rect x="146" y="112" width="24" height="18" rx="2" fill="#c98b5a"/><polygon points="144,112 158,100 172,112" fill="#a96a3a"/><ellipse cx="158" cy="123" rx="6" ry="7" fill="#7a4a2a"/></g>`);
+  if(level>=9) L.push(`<g class="${on(9)}"><rect x="78" y="58" width="24" height="18" rx="2" fill="#fff3da" stroke="#ebcf9f" stroke-width="2"/><polygon points="74,58 90,46 106,58" fill="#ff9a9a"/><rect x="80" y="62" width="9" height="11" rx="1.5" fill="#bfe9ff"/><rect x="52" y="116" width="76" height="4" fill="#a9794e"/><rect x="56" y="108" width="3" height="10" fill="#b98a5e"/><rect x="121" y="108" width="3" height="10" fill="#b98a5e"/></g>`);
+  if(level>=10) L.push(`<g class="${on(10)}"><rect x="89" y="28" width="2.5" height="20" fill="#9a7b5a"/><polygon points="91,28 106,33 91,38" fill="#ff5d8f"/><text x="118" y="50" font-size="15">⭐</text><text x="40" y="60" font-size="13">✨</text></g>`);
+  return `<svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg">${L.join('')}</svg>`;
+}
+
+/* ---- 主畫面 ---- */
+function renderSisterWorld(childId){
+  const av=avatarOf(childId), w=worldOf(childId), pet=petState(childId);
+  const info=KIDS[childId], legacy=state.kids[childId]||{};
+  const lv=getAvatarLevel(childId);
+  const homeLv=getHomeLevel(childId);
+  const goal=calculateNextWorldGoal(childId);
+  const fx=worldFx[childId]||{};
+  const newStage=(fx.newHomeStage && Date.now()<(fx.until||0))?fx.newHomeStage:0;
+  const skin=shopDefOf('themeSkin',w.themeSkin)||SHOP_CATALOG.themeSkin[0];
+  const sky=(skin&&skin.sky)||['#bfe9ff','#dff4ff','#eafff2','#d8f5c8'];
+  const heroBg=`linear-gradient(180deg,${sky[0]} 0%,${sky[1]} 42%,${sky[2]} 70%,${sky[3]} 100%)`;
+  // 裝飾 / 花園 疊加
+  const decoHtml=(w.decorations||[]).slice(0,5).map((id,i)=>{
+    const d=shopDefOf('homeDecoration',id); if(!d) return '';
+    const left=[24,150,40,138,90][i%5];
+    return `<div class="sw-deco" style="left:${left}px;bottom:${78+(i%2)*16}px;animation-delay:${i*.4}s">${d.emoji||d.e}</div>`;
+  }).join('');
+  const gardenHtml=(w.gardenItems||[]).slice(0,6).map((id,i)=>{
+    const g=shopDefOf('gardenItem',id); if(!g) return '';
+    const left=[16,40,150,128,64,108][i%6];
+    return `<div class="sw-garden-item" style="left:${left}px">${g.emoji||g.e}</div>`;
+  }).join('');
+  // 特效
+  let fxHtml='';
+  if(w.specialEffect==='sparkle'||w.specialEffect==='hearts'){
+    const ic=w.specialEffect==='hearts'?['💕','💗','💖']:['✨','⭐','🌟'];
+    fxHtml='<div class="sw-fx">'+Array.from({length:7}).map((_,i)=>
+      `<span class="sw-fx-item" style="left:${8+i*13}%;animation-duration:${4+i%3}s;animation-delay:${i*.5}s">${ic[i%ic.length]}</span>`).join('')+'</div>';
+  }else if(w.specialEffect==='rainbow'){
+    fxHtml='<div class="sw-fx-rainbow"></div>';
+  }
+  const upBanner=newStage?`<div class="sw-upbanner go">🏠 家園升級！${HOME_STAGE_NAMES[newStage-1]}</div>
+    <div class="sw-spark go" style="left:30%;top:30%">✨</div><div class="sw-spark go" style="left:64%;top:24%;animation-delay:.2s">⭐</div>`:'';
+  return `
+  <div class="card sw-hero" style="background:${heroBg}">
+    <div class="sw-sky"><div class="sw-sun">☀️</div><div class="sw-cloud">☁️</div><div class="sw-cloud c2">☁️</div></div>
+    <div class="sw-herotop">
+      <div class="sw-pin" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+      <div>
+        <div class="sw-htitle">${escHtml(info.name)}的世界</div>
+        <div class="sw-hsub">Lv.${lv} ${escHtml(levelOf(legacy.lifetime||0).cur.name)}・家園 Lv.${homeLv} ${HOME_STAGE_NAMES[homeLv-1]}</div>
+      </div>
+      <div class="sw-stats">
+        <div class="sw-stat"><b>${legacy.xp||0}</b><span>XP</span></div>
+        <div class="sw-stat"><b>${legacy.coins||0}</b><span>金幣</span></div>
+        <div class="sw-stat"><b>${homeLv}</b><span>家園</span></div>
+      </div>
+    </div>
+    <div class="sw-stage">
+      ${fxHtml}
+      <div class="sw-ground"></div>
+      ${gardenHtml}
+      <div class="sw-house-wrap" onclick="houseTap('${childId}')" title="點我看家園">${buildHouseSvg(homeLv,newStage)}</div>
+      ${decoHtml}
+      <div class="sw-avatar-wrap">${buildAvatarHtml(childId)}</div>
+      <div class="sw-pet-wrap">${buildSwPetHtml(childId)}</div>
+      ${upBanner}
+    </div>
+    <div class="sw-goalbar">
+      <b>🎯 下一個建造目標</b>
+      <span class="g-txt">${goal.text}</span>
+      <div class="progress" style="margin-bottom:6px;"><i style="width:${goal.pct||0}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
+      <span class="g-txt" style="margin:0;">🐾 ${petMoodMessage(childId)}</span>
+      <div class="sw-mini">
+        <span class="chip unlock" onclick="switchTab('home')">📋 去任務</span>
+        <span class="chip ok" onclick="switchTab('rewards')">🛍️ 商店</span>
+        <span class="chip" onclick="dressUp('avatarItem')">🎒 背包/裝扮</span>
+        <span class="chip" onclick="switchTab('achieve')">🏆 成就</span>
+      </div>
+    </div>
+  </div>
+  ${renderDressUp(childId)}`;
+}
+
+/* ---- 我的裝扮（背包即時裝備）---- */
+const DRESS_TABS=[
+  {id:'avatarItem',label:'角色',e:'🧑‍🎤'},
+  {id:'petAccessory',label:'寵物',e:'🎀'},
+  {id:'homeDecoration',label:'房子',e:'🎈'},
+  {id:'gardenItem',label:'花園',e:'🌻'},
+  {id:'themeSkin',label:'背景',e:'🌈'},
+  {id:'specialEffect',label:'特效',e:'🎆'}
+];
+function ownedWorldItems(childId,category){
+  const inv=(state.inventory[childId]||defaultInventoryFor())[category]||{};
+  let ids=Object.keys(inv).filter(id=>inv[id]>0);
+  // 預設一定擁有的項目
+  if(category==='themeSkin' && !ids.includes('sky')) ids.unshift('sky');
+  if(category==='specialEffect' && !ids.includes('fx_none')) ids.unshift('fx_none');
+  return ids.map(id=>shopDefOf(category,id)).filter(Boolean);
+}
+function isWorldEquipped(childId,category,id){
+  const av=avatarOf(childId), w=worldOf(childId);
+  if(category==='avatarItem'){ return av.avatarOutfit===id||av.avatarHair===id||av.avatarShoes===id||av.avatarHat===id||av.avatarAccessory===id; }
+  if(category==='petAccessory') return w.petAccessory===id;
+  if(category==='themeSkin') return w.themeSkin===id;
+  if(category==='specialEffect') return w.specialEffectId===id;
+  if(category==='homeDecoration') return (w.decorations||[]).includes(id);
+  if(category==='gardenItem') return (w.gardenItems||[]).includes(id);
+  return false;
+}
+function renderDressUp(childId){
+  const cat=swDressTab||'avatarItem';
+  const items=ownedWorldItems(childId,cat);
+  const tabHtml=DRESS_TABS.map(t=>`<button class="sw-tab ${cat===t.id?'on':''}" onclick="pickDressTab('${t.id}')">${t.e} ${t.label}</button>`).join('');
+  let grid;
+  if(!items.length){
+    grid=`<div class="sw-empty">背包還沒有這類道具<br><span class="chip unlock" style="margin-top:8px;display:inline-block" onclick="switchTab('rewards')">🛍️ 用金幣去商店買</span></div>`;
+  }else{
+    grid=`<div class="sw-grid">`+items.map(it=>{
+      const eq=isWorldEquipped(childId,cat,it.id);
+      const action=(cat==='homeDecoration'||cat==='gardenItem')?'放到家園':(cat==='themeSkin'?'套用':(cat==='specialEffect'?'開啟':'裝備'));
+      const fn=(cat==='homeDecoration'||cat==='gardenItem')?`placeHomeDecoration('${childId}','${it.id}')`:`equipInventoryItem('${childId}','${it.id}')`;
+      return `<button class="sw-item ${eq?'equipped':'owned'}" onclick="${fn}">
+        ${eq?'<span class="eqtag">使用中</span>':''}
+        <span class="e">${it.emoji||it.e}</span>
+        <span class="nm">${escHtml(it.name)}</span>
+        <span class="pr">${eq?'點擊收回/切換':action}</span>
+      </button>`;
+    }).join('')+`</div>`;
+  }
+  return `<div class="card sw-panel" id="swDress">
+    <div class="sw-dresshead"><b>✨ 我的裝扮</b><span class="chip ok" onclick="switchTab('rewards')">🛍️ 更多</span></div>
+    <p class="sw-hint">點擊背包道具即可裝備，立即顯示在上面的世界裡。</p>
+    <div class="sw-tabs">${tabHtml}</div>
+    ${grid}
+  </div>`;
+}
+function pickDressTab(cat){ swDressTab=cat; renderChildDashboard(); }
+function dressUp(cat){
+  swDressTab=cat||'avatarItem';
+  renderChildDashboard();
+  const el=document.getElementById('swDress');
+  if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+/* ---- 裝備 / 擺放 ---- */
+function equipByCategory(childId,category,def){
+  if(category==='avatarItem'){
+    const av=avatarOf(childId);
+    const slot=def.slot||'outfit';
+    const field={outfit:'avatarOutfit',hair:'avatarHair',shoes:'avatarShoes',hat:'avatarHat',accessory:'avatarAccessory'}[slot]||'avatarOutfit';
+    if((slot==='hat'||slot==='accessory') && av[field]===def.id) av[field]='';   // 帽子/配件可再次點擊取下
+    else av[field]=def.id;
+  }else if(category==='petAccessory'){
+    const w=worldOf(childId); w.petAccessory=(w.petAccessory===def.id)?'':def.id;
+  }else if(category==='themeSkin'){
+    worldOf(childId).themeSkin=def.id;
+  }else if(category==='specialEffect'){
+    const w=worldOf(childId); w.specialEffectId=def.id; w.specialEffect=def.fx||'';
+  }
+  save();
+  renderAll();
+  triggerAvatarAnimation('happy');
+  toast(`✨ 已裝備 ${def.name}`);
+}
+function equipInventoryItem(childId,itemId){
+  for(const cat of ['avatarItem','petAccessory','themeSkin','specialEffect']){
+    const def=shopDefOf(cat,itemId);
+    if(def){ equipByCategory(childId,cat,def); return; }
+  }
+  for(const cat of ['homeDecoration','gardenItem']){
+    if(shopDefOf(cat,itemId)){ placeHomeDecoration(childId,itemId); return; }
+  }
+  toast('找不到可裝備的道具');
+}
+function placeHomeDecoration(childId,itemId){
+  const w=worldOf(childId);
+  let def=shopDefOf('homeDecoration',itemId), field='decorations';
+  if(!def){ def=shopDefOf('gardenItem',itemId); field='gardenItems'; }
+  if(!def){ toast('找不到裝飾'); return; }
+  w[field]=Array.isArray(w[field])?w[field]:[];
+  let placed;
+  if(w[field].includes(itemId)){ w[field]=w[field].filter(x=>x!==itemId); placed=false; }
+  else { w[field].push(itemId); placed=true; }
+  save();
+  renderAll();
+  toast(placed?`🏡 已把 ${def.name} 放到家園`:`已收回 ${def.name}`);
+}
+
+/* ---- 動畫觸發 ---- */
+function triggerAvatarAnimation(type){
+  const el=document.querySelector('#childWorld .sw-avatar'); if(!el) return;
+  ['happy','levelup','sad','celebrate'].forEach(c=>el.classList.remove(c));
+  void el.offsetWidth;
+  if(type && type!=='idle'){ el.classList.add(type); setTimeout(()=>{ if(el) el.classList.remove(type); },1400); }
+}
+function triggerPetAnimation(type){
+  const el=document.querySelector('#childWorld .sw-pet'); if(!el) return;
+  ['happy','levelup','celebrate'].forEach(c=>el.classList.remove(c));
+  void el.offsetWidth;
+  if(type && ['happy','levelup','celebrate'].includes(type)){ el.classList.add(type); setTimeout(()=>{ if(el) el.classList.remove(type); },1500); }
+}
+function triggerHomeUpgrade(oldLevel,newLevel){
+  celebrate('🏠',`家園升級！Lv.${newLevel}`,`蓋好了「${HOME_STAGE_NAMES[newLevel-1]}」，角色與寵物一起慶祝！`);
+}
+function applyPendingWorldFx(childId){
+  const fx=worldFx[childId]; if(!fx) return;
+  const live=Date.now()<(fx.until||0);
+  if(live && fx.avatarAnim){ triggerAvatarAnimation(fx.avatarAnim); fx.avatarAnim=null; }
+  if(live && fx.petAnim){ triggerPetAnimation(fx.petAnim); fx.petAnim=null; }
+}
+
+/* ---- 任務 / 加分 / 審核後：世界連動 ---- */
+function updateWorldAfterReward(childId,rewardData){
+  if(!KIDS[childId]) return;
+  rewardData=rewardData||{};
+  const w=worldOf(childId);
+  worldFx[childId]=worldFx[childId]||{};
+  const fx=worldFx[childId];
+  // 寵物變開心（持久狀態）
+  const pet=petState(childId);
+  if(pet){
+    pet.happiness=Math.min(100,(pet.happiness||80)+5);
+    pet.hunger=Math.min(100,(pet.hunger||80)+3);
+    pet.lastCareAt=Date.now();
+  }
+  // 暫態動畫：角色 happy、寵物 happy
+  fx.avatarAnim='happy'; fx.petAnim='happy'; fx.petMood='happy'; fx.until=Date.now()+2800;
+  // 連續完成達標 → 慶祝
+  const streak=streakOfSafe(state,childId);
+  if(streak>=3){ fx.avatarAnim='celebrate'; fx.petAnim='celebrate'; fx.petMood='celebrate'; }
+  // 家園升級偵測
+  const prev=(w.lastHomeLevel==null)?getHomeLevel(childId):w.lastHomeLevel;
+  const nowLv=getHomeLevel(childId);
+  if(nowLv>prev){
+    w.lastHomeLevel=nowLv;
+    fx.newHomeStage=nowLv; fx.until=Date.now()+3400;
+    fx.avatarAnim='levelup'; fx.petAnim='levelup'; fx.petMood='levelup';
+    triggerHomeUpgrade(prev,nowLv);
+  }else{
+    w.lastHomeLevel=Math.max(prev,nowLv);
+  }
+  save(true);
+}
+
 function renderChildDashboard(){
   const box=document.getElementById('childWorld'); if(!box) return;
   const active=activeChildId();
@@ -3334,34 +3973,7 @@ function renderChildDashboard(){
   const mood=petMoodLabel(pet);
   const petProg=petLevelProgress(pet);
   box.innerHTML=`
-    <div class="card worldhero">
-      <div class="worldsky"></div>
-      <div class="worldtop">
-        <div class="worldavatar" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
-        <div>
-          <div class="worldname">${escHtml(info.name)}的世界</div>
-          <div class="worlddate">${dateLabel}・Lv.${L.cur.lv} ${L.cur.name}</div>
-        </div>
-        <div class="coinbubble"><b>${stats.coins||legacy.coins||0}</b><span>金幣</span></div>
-      </div>
-      <div class="worldscene">
-        <div class="worldtile">
-          <div class="big">${petIcon(pet.type)}</div>
-          <b>${escHtml(pet.name||'夥伴')}</b>
-          <span>快樂 ${pet.happiness||80}・飽食 ${pet.hunger||80}</span>
-        </div>
-        <div class="worldtile houseclick" onclick="houseTap('${active}')">
-          <div class="big">🏠</div>
-          <b>Lv.${house.level||1} 小屋</b>
-          <span>${worldIcon(child.activeWorldId||'forest')} 點我升級 / 去裝潢</span>
-        </div>
-      </div>
-      <div class="goalstrip">
-        <b>今日目標</b>
-        <span>${goalText}</span>
-        <div class="progress" style="margin-bottom:0;"><i style="width:${pct}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
-      </div>
-    </div>
+    ${renderSisterWorld(active)}
     ${renderAiPanel(active)}
     <div id="reminderPanel" style="margin-top:10px;"></div>
     <div id="noticePreview" style="margin-top:10px;"></div>
@@ -3425,6 +4037,7 @@ function renderChildDashboard(){
   renderReminderPanel(active);
   renderNoticePreview(active);
   renderLearningHomePanel();
+  applyPendingWorldFx(active);
 }
 
 /* ============ 工具 ============ */
@@ -3930,6 +4543,7 @@ function quickScore(cat,n,x,btn){
     cat,task:n,xp:x,note:'',status:'approved',type:'score'});
   save();
   checkLevelUp(sel.scoreKid);
+  updateWorldAfterReward(sel.scoreKid,{reason:'score',xp:x});
   if(btn){ btn.classList.remove('flash'); void btn.offsetWidth; btn.classList.add('flash'); }
   flyXp(x,btn);
   toast(`✅ ${sel.scoreParent}幫${KIDS[sel.scoreKid].name}加了 +${x} XP（${n}）`);
@@ -3950,6 +4564,7 @@ function confirmReminder(){
     task:sel.remTask,xp:sel.remTaskXp,note:'今天有一個成長提醒，沒關係，明天可以補回來 💛',
     status:'done',type:'reminder'});
   save();
+  updateWorldAfterReward(sel.remKid,{reason:'reminder',xp:sel.remTaskXp});
   toast('🌱 已記錄成長提醒，明天會更好！');
   sel.remTask=null;renderAll();
 }
@@ -4057,6 +4672,7 @@ function approveApply(idx){
   }
   save();
   checkLevelUp(r.kid);
+  updateWorldAfterReward(r.kid,{reason:'approve',xp:r.xp});
   toast(`✅ 已核准 ${KIDS[r.kid].name} +${r.xp} XP`);
   renderAll();
 }
