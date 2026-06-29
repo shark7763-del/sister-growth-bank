@@ -491,6 +491,9 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 /* ---- 走動 / 散步 / 寵物小跑 ---- */
 .sw-avatar-wrap{animation:swStroll 9s ease-in-out infinite;}
 @keyframes swStroll{0%,100%{transform:translateX(0)}50%{transform:translateX(52px)}}
+/* 角色走到端點會「轉身」面向前進方向（只翻 SVG，不翻名牌）*/
+.av-svg{transform-origin:50% 100%;animation:swFace 9s ease-in-out infinite;}
+@keyframes swFace{0%,44%{transform:scaleX(1)}56%,94%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
 /* 角色走路時雙腿前後擺動（左右反相）*/
 .av-leg{transform-box:fill-box;transform-origin:50% 6%;}
 .av-leg-l{animation:swStep 1s ease-in-out infinite;}
@@ -499,12 +502,16 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 /* 走路時手臂輕微擺動（右手揮手時會被 wave 覆蓋）*/
 .av-arm-l{transform-box:fill-box;transform-origin:55% 10%;animation:swArmSwing 1s ease-in-out infinite;}
 @keyframes swArmSwing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
-/* 寵物：小跑步＋蹦跳在旁邊晃 */
-.sw-pet-wrap.wander{animation:swPetTrot 8s ease-in-out infinite;}
-@keyframes swPetTrot{
-  0%{transform:translate(0,0)}12%{transform:translate(-16px,-7px)}25%{transform:translate(-30px,0)}
-  37%{transform:translate(-44px,-7px)}50%{transform:translate(-56px,0)}62%{transform:translate(-42px,-7px)}
-  75%{transform:translate(-28px,0)}87%{transform:translate(-14px,-7px)}100%{transform:translate(0,0)}}
+/* 寵物：跟著角色一起小跑步＋蹦跳（站在角色右後方，慢半拍跟上）*/
+.sw-pet-wrap.follow{left:120px;right:auto;animation:swPetFollow 9s ease-in-out infinite;animation-delay:-8.4s;}
+@keyframes swPetFollow{
+  0%{transform:translate(0,0)}12%{transform:translate(8px,-7px)}25%{transform:translate(16px,0)}
+  37%{transform:translate(30px,-7px)}50%{transform:translate(52px,0)}62%{transform:translate(40px,-7px)}
+  75%{transform:translate(26px,0)}87%{transform:translate(12px,-7px)}100%{transform:translate(0,0)}}
+/* 點寵物：愛心彈出 */
+.sw-pet-heart{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:20px;z-index:9;pointer-events:none;
+  animation:swPetHeart 1s ease forwards;}
+@keyframes swPetHeart{0%{opacity:0;transform:translate(-50%,4px) scale(.5)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-26px) scale(1.15)}}
 
 /* ---- 寵物 ---- */
 .sw-pet{position:relative;width:74px;height:74px;display:flex;align-items:flex-end;justify-content:center;
@@ -583,10 +590,10 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
 
 @media (prefers-reduced-motion: reduce){
-  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,
-  .sw-avatar-wrap,.sw-pet-wrap,.hl,.hl-new,
+  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,.av-svg,
+  .sw-avatar-wrap,.sw-pet-wrap,.sw-pet-heart,.hl,.hl-new,
   .sw-spark,.sw-upbanner,.sw-pet-z,.sw-deco,.sw-fx-item{animation:none !important;}
-  .sw-avatar,.sw-pet,.sw-avatar-wrap,.sw-pet-wrap{transform:none !important;}
+  .sw-avatar,.sw-pet,.sw-avatar-wrap,.sw-pet-wrap,.av-svg{transform:none !important;}
   .hl{opacity:1 !important;transition:none !important;}
   .sw-spark.go,.sw-upbanner.go{opacity:1 !important;}
 }
@@ -3775,13 +3782,15 @@ function renderAvatarFace(opt){
     ? `<path d="M52 73 Q60 67 68 73" stroke="#c8826a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
     : `<path d="M52 70 Q60 78 68 70" stroke="#c8826a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
   const eye=(cx)=>`<g class="av-eye">
-      <ellipse cx="${cx}" cy="58" rx="5.6" ry="7.2" fill="#fff"/>
-      <circle cx="${cx}" cy="59.4" r="3.5" fill="#3a2e2a"/>
-      <circle cx="${cx-1.6}" cy="56.6" r="1.5" fill="#fff"/>
+      <ellipse cx="${cx}" cy="58" rx="5.8" ry="7.4" fill="#fff" stroke="#5b4a44" stroke-width="1.1"/>
+      <circle cx="${cx}" cy="59.6" r="3.7" fill="#3a2e2a"/>
+      <circle cx="${cx-1.7}" cy="56.6" r="1.7" fill="#fff"/>
     </g>`;
+  const brow=(x)=>`<path d="M${x} 49 Q${x+4} 46.5 ${x+8} 49" stroke="#7a5848" stroke-width="2" fill="none" stroke-linecap="round"/>`;
   return `<g class="av-faceg">
-    <ellipse cx="43" cy="65" rx="6.5" ry="4.6" fill="#ff9bb0" opacity="0.5"/>
-    <ellipse cx="77" cy="65" rx="6.5" ry="4.6" fill="#ff9bb0" opacity="0.5"/>
+    ${brow(44)}${brow(68)}
+    <ellipse cx="42" cy="66" rx="6.8" ry="4.8" fill="#ff9bb0" opacity="0.5"/>
+    <ellipse cx="78" cy="66" rx="6.8" ry="4.8" fill="#ff9bb0" opacity="0.5"/>
     ${eye(48)}${eye(72)}
     ${mouth}
   </g>`;
@@ -3789,33 +3798,34 @@ function renderAvatarFace(opt){
 // 服裝（身體＋雙手＋雙腳＋鞋子，含亮暗面）— opt:{cid}
 function renderAvatarOutfit(opt){
   const cid=opt.cid;
-  return `<g class="av-outfit">
+  const bo=opt.bodyOL, so=opt.shoeOL, lo=opt.legOL, ko=opt.skinOL;
+  return `<g class="av-outfit" stroke-linejoin="round">
     <!-- 左腿＋左鞋（走路時整隻擺動）-->
     <g class="av-leg av-leg-l">
-      <rect x="47" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
-      <rect x="41" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
-      <rect x="42" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+      <rect x="47" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})" stroke="${lo}" stroke-width="2"/>
+      <rect x="41" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}" stroke="${so}" stroke-width="1.4"/>
+      <rect x="42" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})" stroke="${so}" stroke-width="1.7"/>
       <ellipse cx="47" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/>
     </g>
     <!-- 右腿＋右鞋 -->
     <g class="av-leg av-leg-r">
-      <rect x="61" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
-      <rect x="60" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
-      <rect x="61" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+      <rect x="61" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})" stroke="${lo}" stroke-width="2"/>
+      <rect x="60" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}" stroke="${so}" stroke-width="1.4"/>
+      <rect x="61" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})" stroke="${so}" stroke-width="1.7"/>
       <ellipse cx="66" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/>
     </g>
     <!-- 脖子 -->
     <rect x="54" y="78" width="12" height="9" rx="4" fill="url(#skin_${cid})"/>
     <!-- 身體（短）-->
-    <rect x="34" y="85" width="52" height="35" rx="16" fill="url(#body_${cid})"/>
+    <rect x="34" y="85" width="52" height="35" rx="16" fill="url(#body_${cid})" stroke="${bo}" stroke-width="2.3"/>
     <ellipse cx="48" cy="94" rx="12" ry="7" fill="#ffffff" opacity="0.26"/>
     <path d="M52 86 Q60 92 68 86" stroke="${opt.bodyDark}" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
     <!-- 左手（走路擺動）-->
-    <g class="av-arm-l"><rect x="24" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
-       <circle cx="30.5" cy="115" r="6" fill="url(#skin_${cid})"/></g>
+    <g class="av-arm-l"><rect x="24" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})" stroke="${bo}" stroke-width="2"/>
+       <circle cx="30.5" cy="115" r="6" fill="url(#skin_${cid})" stroke="${ko}" stroke-width="1.6"/></g>
     <!-- 右手（揮手）-->
-    <g class="av-arm-r"><rect x="83" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
-       <circle cx="89.5" cy="115" r="6" fill="url(#skin_${cid})"/></g>
+    <g class="av-arm-r"><rect x="83" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})" stroke="${bo}" stroke-width="2"/>
+       <circle cx="89.5" cy="115" r="6" fill="url(#skin_${cid})" stroke="${ko}" stroke-width="1.6"/></g>
   </g>`;
 }
 function renderAvatar(childId){
@@ -3854,25 +3864,28 @@ function renderAvatar(childId){
       <stop offset="0" stop-color="#9aa6d2"/><stop offset="1" stop-color="#5a6aa0"/>
     </linearGradient>
   </defs>`;
+  // 卡通描邊色（各部位取較深的同色系）
+  const skinOL='#e0a878', bodyOL=shadeHex(bodyColor,-0.42), hairOL=shadeHex(hairColor,-0.42), shoeOL=shadeHex(shoeColor,-0.5), legOL='#46527e';
   const hairBack=longHair?`<g class="av-hair-back">
-      <rect x="26" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})"/>
-      <rect x="83" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})"/>
+      <rect x="26" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2"/>
+      <rect x="83" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2"/>
     </g>`:'';
   const svg=`<svg class="av-svg" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
     ${defs}
     <ellipse class="av-shadow" cx="60" cy="144" rx="30" ry="6" fill="#2a2a45" opacity="0.16"/>
-    ${renderAvatarOutfit({cid, bodyDark:shadeHex(bodyColor,-0.28), shoeSole:shadeHex(shoeColor,-0.4)})}
+    ${renderAvatarOutfit({cid, bodyDark:shadeHex(bodyColor,-0.28), shoeSole:shadeHex(shoeColor,-0.4), bodyOL, shoeOL, legOL, skinOL})}
     ${hairBack}
     <!-- 耳朵 -->
-    <circle cx="29" cy="55" r="6" fill="url(#skin_${cid})"/>
-    <circle cx="91" cy="55" r="6" fill="url(#skin_${cid})"/>
+    <circle cx="29" cy="55" r="6" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="1.8"/>
+    <circle cx="91" cy="55" r="6" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="1.8"/>
     <!-- 頭（大、圓角方塊，柔和明暗）-->
-    <rect x="28" y="22" width="64" height="60" rx="24" fill="url(#skin_${cid})"/>
+    <rect x="28" y="22" width="64" height="60" rx="24" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="2.4"/>
     <path d="M60 80 Q86 80 88 52 Q90 74 74 80 Z" fill="#000000" opacity="0.05"/>
     ${renderAvatarFace({sad})}
-    <!-- 頭髮（瀏海＋高光）-->
-    <path d="M26 56 Q21 24 60 17 Q99 24 94 56 Q89 39 78 44 Q72 33 60 36 Q48 33 42 44 Q31 39 26 56 Z" fill="url(#hair_${cid})"/>
-    <ellipse cx="47" cy="31" rx="14" ry="6" fill="#ffffff" opacity="0.34"/>
+    <!-- 頭髮（瀏海＋描邊＋高光）-->
+    <path d="M26 56 Q21 24 60 17 Q99 24 94 56 Q89 39 78 44 Q72 33 60 36 Q48 33 42 44 Q31 39 26 56 Z" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2.2" stroke-linejoin="round"/>
+    <ellipse cx="47" cy="31" rx="14" ry="6" fill="#ffffff" opacity="0.38"/>
+    <ellipse cx="68" cy="29" rx="7" ry="3.4" fill="#ffffff" opacity="0.28"/>
   </svg>`;
   return `<div class="sw-avatar" data-child="${childId}" onclick="avatarTap('${childId}')" title="點我打招呼／到下方換裝">
     <div class="sw-av-name">${name}<span class="ttl">Lv.${lv} ${escHtml(title)}</span></div>
@@ -3890,12 +3903,26 @@ function updateAvatarStyle(childId){
 }
 // 點角色：揮手打招呼
 function avatarTap(childId){ triggerAvatarAnimation('wave'); }
+// 點寵物：開心跳一下＋愛心彈出
+function petTapReact(childId){
+  triggerPetAnimation('happy');
+  const wrap=document.querySelector('#childWorld .sw-pet-wrap');
+  if(wrap){
+    const h=document.createElement('div');
+    h.className='sw-pet-heart';
+    h.textContent=['💗','💛','💖','⭐'][Math.floor(Math.random()*4)];
+    wrap.appendChild(h);
+    setTimeout(()=>{ if(h&&h.remove) h.remove(); },1000);
+  }
+  const pet=petState(childId);
+  toast(`${(pet&&pet.name)||'夥伴'} 好開心！🐾`);
+}
 
 /* ---- 寵物 ---- */
 function buildSwPetHtml(childId){
   const pet=petState(childId), mood=getPetMood(childId), w=worldOf(childId);
   const acc=w.petAccessory?shopDefOf('petAccessory',w.petAccessory):null;
-  return `<div class="sw-pet ${mood}" data-child="${childId}" onclick="dressUp('petAccessory')" title="點我裝飾寵物">
+  return `<div class="sw-pet ${mood}" data-child="${childId}" onclick="petTapReact('${childId}')" title="點我跟我玩">
     <div class="sw-pet-z">Zzz</div>
     ${acc?`<div class="sw-pet-acc">${acc.emoji||acc.e}</div>`:''}
     <div class="sw-pet-face">${petIcon(pet.type)}</div>
@@ -3977,7 +4004,7 @@ function renderSisterWorld(childId){
       <div class="sw-house-wrap" onclick="houseTap('${childId}')" title="點我看家園">${buildHouseSvg(homeLv,newStage)}</div>
       ${decoHtml}
       <div class="sw-avatar-wrap">${buildAvatarHtml(childId)}</div>
-      <div class="sw-pet-wrap ${['idle','happy'].includes(getPetMood(childId))?'wander':''}">${buildSwPetHtml(childId)}</div>
+      <div class="sw-pet-wrap ${['idle','happy'].includes(getPetMood(childId))?'follow':''}">${buildSwPetHtml(childId)}</div>
       ${upBanner}
     </div>
     <div class="sw-goalbar">
