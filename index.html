@@ -582,16 +582,77 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   .hl{opacity:1 !important;transition:none !important;}
   .sw-spark.go,.sw-upbanner.go{opacity:1 !important;}
 }
+
+/* ========================================================================
+   登入首頁（家庭主帳號＋孩子各自登入）
+   ===================================================================== */
+.identitybar{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.identitybar .idchip{background:rgba(255,255,255,.85);color:#7a4d8a;font-weight:800;font-size:12.5px;
+  padding:6px 12px;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.12);}
+.identitybar .idlogout{border:none;border-radius:16px;padding:6px 14px;font-size:12.5px;font-weight:800;
+  background:rgba(255,255,255,.32);color:#fff;cursor:pointer;font-family:inherit;}
+.identitybar .idlogout:active{transform:scale(.96);}
+
+.logingate{position:fixed;inset:0;z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;
+  background:linear-gradient(165deg,#ffd9ec 0%,#e7d4ff 38%,#d4ecff 72%,#d8f5e6 100%);}
+.logingate.on{display:block;}
+.lg-wrap{max-width:460px;margin:0 auto;padding:34px 20px 48px;min-height:100%;display:flex;flex-direction:column;}
+.lg-logo{text-align:center;font-size:46px;line-height:1;margin-bottom:6px;animation:swFloat 3.4s ease-in-out infinite;}
+.lg-title{text-align:center;font-size:26px;font-weight:900;color:#6a3d7a;letter-spacing:1px;margin:2px 0;}
+.lg-sub{text-align:center;font-size:13px;font-weight:700;color:#8a6d9a;margin-bottom:22px;}
+.lg-cards{display:flex;flex-direction:column;gap:13px;}
+.lg-card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.86);border:none;border-radius:22px;
+  padding:16px 18px;cursor:pointer;box-shadow:0 8px 22px rgba(120,90,140,.16);font-family:inherit;
+  transition:transform .12s;text-align:left;width:100%;}
+.lg-card:active{transform:scale(.97);}
+.lg-card .lg-face{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:34px;flex:0 0 auto;box-shadow:0 4px 10px rgba(0,0,0,.12);}
+.lg-card .lg-info{flex:1;min-width:0;}
+.lg-card .lg-info b{display:block;font-size:18px;color:#4a3a52;}
+.lg-card .lg-info span{font-size:12px;color:#8a7a92;font-weight:700;}
+.lg-card .lg-arrow{font-size:22px;color:#b59ec5;}
+.lg-card.parent{background:linear-gradient(135deg,#fff3e0,#ffe6f0);}
+
+.lg-pinview{background:rgba(255,255,255,.92);border-radius:24px;padding:24px 20px 26px;box-shadow:0 10px 28px rgba(120,90,140,.18);}
+.lg-pinhead{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.lg-pinhead .lg-face{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:0 0 auto;}
+.lg-pinhead b{font-size:19px;color:#4a3a52;display:block;}
+.lg-pinhead span{font-size:12px;color:#8a7a92;font-weight:700;}
+.lg-dots{display:flex;justify-content:center;gap:14px;margin:6px 0 18px;}
+.lg-dot{width:18px;height:18px;border-radius:50%;background:#e7dcf0;transition:background .15s,transform .15s;}
+.lg-dot.f{background:linear-gradient(135deg,#b07cff,#7cc4ff);transform:scale(1.12);}
+.lg-pinview.shake{animation:lgShake .4s;}
+@keyframes lgShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.lg-pw{width:100%;font-size:18px;text-align:center;letter-spacing:3px;padding:13px;border-radius:14px;
+  border:2px solid #e7dcf0;margin-bottom:14px;font-family:inherit;}
+.lg-keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.lg-key{border:none;border-radius:16px;padding:16px 0;font-size:22px;font-weight:800;background:#f3ecfb;color:#5a4a66;
+  cursor:pointer;font-family:inherit;box-shadow:0 2px 4px rgba(0,0,0,.05);}
+.lg-key:active{transform:scale(.94);background:#e9dcf7;}
+.lg-key.wide{font-size:15px;}
+.lg-actions{display:flex;gap:10px;margin-top:16px;}
+.lg-actions .btn{flex:1;}
+.lg-install{margin-top:26px;background:rgba(255,255,255,.7);border-radius:18px;padding:15px 16px;}
+.lg-install h4{margin:0 0 8px;font-size:13.5px;color:#6a4d7a;}
+.lg-install p{margin:5px 0;font-size:12px;color:#6a5d72;line-height:1.5;font-weight:600;}
+.lg-remember{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;font-size:13px;
+  font-weight:700;color:#7a5d8a;}
+.lg-remember input{width:18px;height:18px;}
+@media(max-width:380px){ .lg-title{font-size:22px;} .lg-card .lg-face{width:52px;height:52px;font-size:30px;} }
 </style>
 </head>
 <body>
+
+<!-- ========== 登入首頁（角色選擇 / PIN）========== -->
+<div id="loginGate" class="logingate"></div>
 
 <header class="app">
   <span class="deco d1">🌸</span><span class="deco d2">⭐</span><span class="deco d3">🦄</span>
   <h1>🏦 姊妹成長銀行 3.0</h1>
   <p>惟甯・昕穎｜任務升級 × XP 經驗值 × 親子獎勵</p>
   <div id="syncStatus" style="font-size:11px;opacity:.9;margin-top:4px;">💾 本機模式（尚未連雲端）</div>
-  <button id="lockBtn" onclick="toggleLock()" style="margin-top:8px;border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:800;background:rgba(255,255,255,.85);color:#7a4d8a;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12);">🔓 未設密碼</button>
+  <div id="identityBar" class="identitybar"></div>
+  <button id="lockBtn" onclick="toggleLock()" style="display:none;"></button>
 </header>
 
 <div class="wrap">
@@ -789,8 +850,8 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <button class="btn purple" style="margin-top:14px;" onclick="submitApply()">📨 送出申請</button>
     </div>
 
-    <h2 class="sec"><span class="ic">⏳</span>待審核申請</h2>
-    <div class="card" id="pendingList"><p class="muted">目前沒有待審核的申請 🎉</p></div>
+    <h2 class="sec parent-only"><span class="ic">⏳</span>待審核申請</h2>
+    <div class="card parent-only" id="pendingList"><p class="muted">目前沒有待審核的申請 🎉</p></div>
 
     <h2 class="sec"><span class="ic">🌱</span>成長提醒</h2>
     <div class="lock-note child-lock-note" style="display:none;">🔒 成長提醒需家長解鎖</div>
@@ -980,15 +1041,27 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
 
     <div class="card">
-      <h3 style="margin:0 0 10px;font-size:15px;">🔒 家長密碼鎖</h3>
+      <h3 style="margin:0 0 10px;font-size:15px;">🔐 爸媽管理密碼</h3>
       <p class="subnote" id="pinHint"></p>
-      <label class="fl">設定 / 更新密碼（建議 4 位數字）</label>
-      <input type="password" id="pinInput" inputmode="numeric" placeholder="輸入新密碼">
+      <label class="fl">設定 / 更新爸媽密碼（登入爸媽後台用）</label>
+      <input type="password" id="pinInput" inputmode="text" placeholder="輸入新的爸媽密碼">
       <div class="btnrow" style="margin-top:10px;">
-        <button class="btn purple sm" style="flex:1;" onclick="setPin()">💾 設定密碼</button>
-        <button class="btn gray sm" style="flex:1;" onclick="removePin()">移除密碼</button>
+        <button class="btn purple sm" style="flex:1;" onclick="setPin()">💾 更新密碼</button>
       </div>
-      <p class="subnote" style="margin-top:8px;">設定後，加分 / 核准 / 兌換 / 設定等功能會上鎖；孩子仍可看排行、自己的等級並送出申請。標題下方按鈕可隨時上鎖／解鎖。</p>
+      <p class="subnote" style="margin-top:8px;">預設密碼 <b>parent123</b>，建議第一次使用就改掉。孩子用各自的 4 位數 PIN 登入，看不到爸媽後台。</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🔢 孩子登入 PIN</h3>
+      <p class="subnote">每個孩子用自己的 4 位數 PIN 登入自己的世界。改完按各自的「儲存」。</p>
+      <div id="childPinManage" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">🛡️ 孩子端權限</h3>
+      <label class="checkitem" style="margin-top:4px;"><input type="checkbox" id="setRemember" onchange="saveParentSettings()"> 允許「記住這台裝置」自動登入</label>
+      <label class="checkitem" style="margin-top:8px;"><input type="checkbox" id="setChildShop" onchange="saveParentSettings()"> 允許孩子用自己的金幣逛商店</label>
+      <label class="checkitem" style="margin-top:8px;"><input type="checkbox" id="setChildApply" onchange="saveParentSettings()"> 允許孩子送出 XP 申請</label>
     </div>
 
     <div class="card admin-only">
@@ -1426,6 +1499,23 @@ const AVATAR_BUILTIN={
 };
 let state=load();
 let childSession=localStorage.getItem(CHILD_SESSION_KEY)||'';
+
+/* ============ 登入身份（家庭主帳號＋孩子各自登入）============ */
+const SESSION_KEY='sgb_session_v1';
+let session=null;   // {role:'child'|'parent', childId, childName, loginAt, remember}
+function loadSession(){ try{ return JSON.parse(localStorage.getItem(SESSION_KEY))||null; }catch(e){ return null; } }
+function persistSession(){
+  try{
+    if(session && session.remember!==false) localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    else localStorage.removeItem(SESSION_KEY);
+  }catch(e){}
+}
+function currentRole(){ return session?session.role:''; }
+function currentChildId(){ return (session && session.role==='child')?session.childId:''; }
+function loggedIn(){ return !!(session && (session.role==='parent' || (session.role==='child' && KIDS[session.childId]))); }
+function getParentPassword(){ return state.parentPin || 'parent123'; }
+function canChildAct(childId){ return currentRole()==='child' && session && session.childId===childId; }
+function rememberAllowed(){ return !(state.parentSettings && state.parentSettings.allowRememberDevice===false); }
 
 function freshKid(){return {xp:0, coins:0, lifetime:0, tablet:0, badges:[], dailyTablet:{}, quick:{}};}
 function defaultChallenge(){
@@ -1892,6 +1982,10 @@ function normalize(s){
   s.usedBigRewards=s.usedBigRewards||[];
   s.customSpecial=s.customSpecial||{};
   s.parentPin=s.parentPin||'';
+  // 孩子登入 PIN（家庭主帳號＋孩子各自登入）
+  s.childPins=Object.assign({weining:'1111',xinying:'2222',yaoting:'3333',yuxuan:'4444'}, s.childPins||{});
+  Object.keys(KIDS).forEach(k=>{ if(s.childPins[k]==null||s.childPins[k]==='') s.childPins[k]=String(1111).slice(0,4); });
+  s.parentSettings=Object.assign({allowRememberDevice:true, allowChildShop:true, allowChildRequestXP:true}, s.parentSettings||{});
   s.reminders=Array.isArray(s.reminders)?s.reminders:[];
   s.noticeReads=Object.assign({parent:0,child:{}}, s.noticeReads||{});
   s.weeklyChallenge=Object.assign(defaultChallenge(), s.weeklyChallenge||{});
@@ -2008,7 +2102,8 @@ function removeInventoryItem(childId, category, itemId){
   return true;
 }
 function buyShopItem(childId, category, itemId){
-  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const allowChildShop=!(state.parentSettings && state.parentSettings.allowChildShop===false);
+  if(!isUnlocked() && !(canChildAct(childId)&&allowChildShop)){ if(!promptUnlock()) return; }
   const item=shopCatalog(category).find(x=>x.id===itemId);
   if(!item){toast('找不到商品');return;}
   if(!coinSpend(childId,item.cost,`購買 ${item.name}`,item.id)){toast('金幣不足');return;}
@@ -2037,7 +2132,7 @@ function useInventoryItem(childId, category, itemId){
     else equipInventoryItem(childId,itemId);
     return;
   }
-  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  if(!isUnlocked() && !canChildAct(childId)){ if(!promptUnlock()) return; }
   const def=(SHOP_CATALOG[category]||[]).find(x=>x.id===itemId);
   if(!def){toast('找不到道具');return;}
   if(category!=='rareItems' && !removeInventoryItem(childId,category,itemId)){toast('背包沒有這個道具');return;}
@@ -2731,7 +2826,7 @@ function buildNoticeDigest(scope, childId){
   const today=noticeRecords(scope, childId).filter(r=>todayStr(new Date(r.time))===todayStr(now));
   const kid=scope==='child' ? (childId||activeChildId()) : '';
   const lines=[];
-  if(scope==='child' && kid){
+  if(scope==='child' && kid && KIDS[kid]){
     const info=KIDS[kid];
     const done=today.filter(r=>r.type==='score' || r.type==='apply' || r.type==='learning' || r.type==='pet' || r.type==='house').length;
     const coins=today.filter(r=>r.coins>0).reduce((s,r)=>s+r.coins,0);
@@ -3371,6 +3466,9 @@ function weeklyCategoryStats(childId,weekStart){
 
 /* ============ Child Dashboard ============ */
 function activeChildId(){
+  // 孩子登入：固定看自己的世界
+  if(currentRole()==='child' && session.childId && KIDS[session.childId]) return session.childId;
+  // 爸媽預覽某個孩子的世界
   if(childSession && KIDS[childSession]) return childSession;
   return '';
 }
@@ -3784,7 +3882,25 @@ function renderSisterWorld(childId){
       </div>
     </div>
   </div>
-  ${renderDressUp(childId)}`;
+  ${renderDressUp(childId)}
+  ${renderChildReport(childId)}`;
+}
+/* ---- 孩子端：本週成長簡報 ---- */
+function renderChildReport(childId){
+  const wx=weekXpOf(childId), wt=weekTaskCountOf(childId), st=streakOf(childId);
+  const tx=todayXpOf(childId), tt=todayTaskCountOf(childId);
+  const L=levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0);
+  return `<div class="card sw-panel">
+    <div class="sw-dresshead"><b>📊 我的本週成長</b><span class="chip ok">Lv.${L.cur.lv} ${escHtml(L.cur.name)}</span></div>
+    <div class="parentdash" style="margin-top:6px;">
+      <div class="pdstat"><b>${tx}</b><span>今日 XP</span></div>
+      <div class="pdstat"><b>${tt}</b><span>今日完成</span></div>
+      <div class="pdstat"><b>${wx}</b><span>本週 XP</span></div>
+      <div class="pdstat"><b>${wt}</b><span>本週完成</span></div>
+      <div class="pdstat"><b>${st}🔥</b><span>連續天數</span></div>
+    </div>
+    <p class="sw-hint" style="margin-top:8px;text-align:center;">${st>=3?'連續達成中，太厲害了！繼續保持 💪':'每天完成一個任務，就能讓世界長大 🌱'}</p>
+  </div>`;
 }
 
 /* ---- 我的裝扮（背包即時裝備）---- */
@@ -4032,7 +4148,7 @@ function renderChildDashboard(){
       <button class="btn sun sm" onclick="switchTab('rewards')">商店</button>
       <button class="btn purple sm" onclick="switchTab('achieve')">成就</button>
     </div>
-    <button class="btn gray sm" style="width:100%;margin-top:10px;" onclick="childLogout()">切換孩子</button>
+    ${isUnlocked()?`<button class="btn gray sm" style="width:100%;margin-top:10px;" onclick="childLogout()">切換預覽孩子</button>`:`<button class="btn gray sm" style="width:100%;margin-top:10px;" onclick="logout()">🚪 登出</button>`}
   `;
   renderReminderPanel(active);
   renderNoticePreview(active);
@@ -4621,6 +4737,9 @@ function renderApplyTasks(){
 function pickApplyKid(k){sel.applyKid=k;sel.applyTask=null;renderApply();}
 function pickApplyTask(cat,n,x){sel.applyCat=cat;sel.applyTask=n;sel.applyTaskXp=x;renderApplyTasks();}
 function submitApply(){
+  if(state.parentSettings && state.parentSettings.allowChildRequestXP===false && currentRole()==='child'){
+    toast('目前爸媽暫停了 XP 申請功能'); return;
+  }
   if(!sel.applyTask){toast('請先選擇完成的任務');return;}
   const r1=document.getElementById('applyR1').value.trim();
   const r2=document.getElementById('applyR2').value.trim();
@@ -5178,9 +5297,47 @@ function fillSettingSelects(){
   renderReminderPickers();
   renderReminderSettings();
   const ph=document.getElementById('pinHint');
-  if(ph) ph.textContent=getPin()?'✅ 已設定密碼（目前'+(isUnlocked()?'已解鎖':'已上鎖')+'）':'尚未設定密碼，目前所有人都能操作';
+  if(ph) ph.textContent='目前爸媽密碼：'+(state.parentPin?'已自訂':'預設 parent123');
+  renderChildPinManage();
+  syncParentSettingsUI();
   renderCustomManage();
   refreshAdminUI();
+}
+function renderChildPinManage(){
+  const box=document.getElementById('childPinManage'); if(!box) return;
+  box.innerHTML=Object.keys(KIDS).map(k=>{
+    const info=KIDS[k], pin=(state.childPins&&state.childPins[k])||'';
+    return `<div class="pdrow" style="margin-bottom:8px;">
+      <div class="pdavatar" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+      <div class="pdmain"><b>${escHtml(info.name)}</b></div>
+      <input type="text" inputmode="numeric" maxlength="4" id="cpin_${k}" value="${escHtml(pin)}" style="width:84px;text-align:center;letter-spacing:3px;font-weight:800;">
+      <button class="btn purple sm" onclick="saveChildPin('${k}')">儲存</button>
+    </div>`;
+  }).join('');
+}
+function saveChildPin(k){
+  const inp=document.getElementById('cpin_'+k); if(!inp) return;
+  const v=(inp.value||'').replace(/\D/g,'').slice(0,4);
+  if(v.length!==4){ toast('PIN 需要 4 位數字'); return; }
+  state.childPins=state.childPins||{};
+  state.childPins[k]=v; save();
+  toast(`✅ 已更新 ${KIDS[k].name} 的 PIN`);
+}
+function syncParentSettingsUI(){
+  const ps=state.parentSettings||{};
+  const r=document.getElementById('setRemember'); if(r) r.checked=ps.allowRememberDevice!==false;
+  const s=document.getElementById('setChildShop'); if(s) s.checked=ps.allowChildShop!==false;
+  const a=document.getElementById('setChildApply'); if(a) a.checked=ps.allowChildRequestXP!==false;
+}
+function saveParentSettings(){
+  state.parentSettings=state.parentSettings||{};
+  const r=document.getElementById('setRemember'), s=document.getElementById('setChildShop'), a=document.getElementById('setChildApply');
+  if(r) state.parentSettings.allowRememberDevice=r.checked;
+  if(s) state.parentSettings.allowChildShop=s.checked;
+  if(a) state.parentSettings.allowChildRequestXP=a.checked;
+  save();
+  buildTabs();
+  toast('已更新孩子端權限設定');
 }
 function saveGasUrl(){
   const u=document.getElementById('gasUrl').value.trim();
@@ -5606,18 +5763,168 @@ function renderParentWeeklyReport(){
   }).join('');
 }
 
-/* ============ 家長密碼鎖 ============ */
-const PARENT_TABS=['parent','report','setting']; // 需要密碼才能進入的分頁（其餘分頁可瀏覽，動作另行上鎖）
+/* =======================================================================
+   登入首頁（角色選擇 / PIN / 記住裝置 / 網址快速登入）
+   ===================================================================== */
+let gateView='home';      // 'home' | 'childpin' | 'parentpin'
+let gateTarget='';        // 選定的孩子 id
+let gateInput='';         // 目前輸入的 PIN / 密碼
+let gateRemember=true;
+
+function gateEl(){ return document.getElementById('loginGate'); }
+function showLoginGate(){ const g=gateEl(); if(g){ g.classList.add('on'); renderLoginGate(); } document.body.style.overflow='hidden'; }
+function hideLoginGate(){ const g=gateEl(); if(g) g.classList.remove('on'); document.body.style.overflow=''; }
+
+function renderLoginGate(){
+  const g=gateEl(); if(!g) return;
+  gateRemember = gateRemember && rememberAllowed();
+  if(gateView==='home'){
+    const childCards=Object.keys(KIDS).map(k=>{
+      const info=KIDS[k];
+      return `<button class="lg-card" onclick="gateOpenChild('${k}')">
+        <div class="lg-face" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+        <div class="lg-info"><b>我是${escHtml(info.name)}</b><span>輸入我的 4 位數密碼進入我的世界</span></div>
+        <div class="lg-arrow">›</div>
+      </button>`;
+    }).join('');
+    g.innerHTML=`<div class="lg-wrap">
+      <div class="lg-logo">🏰</div>
+      <div class="lg-title">Sister World 成長世界</div>
+      <div class="lg-sub">選擇你是誰，進入屬於自己的世界 ✨</div>
+      <div class="lg-cards">
+        ${childCards}
+        <button class="lg-card parent" onclick="gateOpenParent()">
+          <div class="lg-face" style="background:linear-gradient(135deg,#ffd6a8,#ff9ec4)">👪</div>
+          <div class="lg-info"><b>爸媽管理</b><span>設定任務、加分、審核、看週報</span></div>
+          <div class="lg-arrow">›</div>
+        </button>
+      </div>
+      ${rememberAllowed()?`<label class="lg-remember"><input type="checkbox" id="gateRemember" ${gateRemember?'checked':''} onchange="gateRemember=this.checked"> 記住這台裝置，下次自動進入</label>`:''}
+      <div class="lg-install">
+        <h4>📲 把它變成這台裝置的 App</h4>
+        <p>👧 <b>惟甯／昕穎的平板</b>：用自己的入口登入後按「安裝成 App」，下次打開直接進入自己的世界。</p>
+        <p>👪 <b>爸媽的手機</b>：用爸媽入口登入後按「安裝成 App」，下次打開直接進入管理後台。</p>
+        <p class="subnote" style="margin-top:8px;color:#9a8aa2;">提示：每位孩子用自己的 PIN（預設 惟甯 1111、昕穎 2222），爸媽用管理密碼（預設 parent123）。</p>
+      </div>
+    </div>`;
+  }else if(gateView==='childpin'){
+    const info=KIDS[gateTarget]||{name:'',emoji:'🙂',c1:'#ddd',c2:'#fff'};
+    g.innerHTML=`<div class="lg-wrap"><div class="lg-pinview" id="lgPinView">
+      <div class="lg-pinhead">
+        <div class="lg-face" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+        <div><b>${escHtml(info.name)}</b><span>輸入你的 4 位數密碼</span></div>
+      </div>
+      <div class="lg-dots">${[0,1,2,3].map(i=>`<div class="lg-dot ${i<gateInput.length?'f':''}"></div>`).join('')}</div>
+      ${gateKeypad()}
+      <div class="lg-actions"><button class="btn gray sm" onclick="gateBack()">‹ 返回</button></div>
+    </div></div>`;
+  }else if(gateView==='parentpin'){
+    g.innerHTML=`<div class="lg-wrap"><div class="lg-pinview" id="lgPinView">
+      <div class="lg-pinhead">
+        <div class="lg-face" style="background:linear-gradient(135deg,#ffd6a8,#ff9ec4)">👪</div>
+        <div><b>爸媽管理</b><span>輸入管理密碼</span></div>
+      </div>
+      <input type="password" class="lg-pw" id="gateParentPw" placeholder="管理密碼" value="${escHtml(gateInput)}" oninput="gateInput=this.value" onkeydown="if(event.key==='Enter')gateSubmitParent()">
+      <div class="lg-actions">
+        <button class="btn gray sm" onclick="gateBack()">‹ 返回</button>
+        <button class="btn purple sm" onclick="gateSubmitParent()">登入</button>
+      </div>
+    </div></div>`;
+    setTimeout(()=>{ const i=document.getElementById('gateParentPw'); if(i) i.focus(); },60);
+  }
+}
+function gateKeypad(){
+  const keys=['1','2','3','4','5','6','7','8','9','del','0','ok'];
+  return `<div class="lg-keys">${keys.map(k=>{
+    if(k==='del') return `<button class="lg-key wide" onclick="gateKey('del')">⌫</button>`;
+    if(k==='ok')  return `<button class="lg-key wide" onclick="gateKey('ok')">✔</button>`;
+    return `<button class="lg-key" onclick="gateKey('${k}')">${k}</button>`;
+  }).join('')}</div>`;
+}
+function gateOpenChild(k){ gateView='childpin'; gateTarget=k; gateInput=''; renderLoginGate(); }
+function gateOpenParent(){ gateView='parentpin'; gateInput=''; renderLoginGate(); }
+function gateBack(){ gateView='home'; gateInput=''; gateTarget=''; renderLoginGate(); }
+function gateKey(k){
+  if(k==='del'){ gateInput=gateInput.slice(0,-1); }
+  else if(k==='ok'){ gateSubmitChild(); return; }
+  else if(gateInput.length<4){ gateInput+=k; }
+  renderLoginGate();
+  if(gateInput.length===4) setTimeout(gateSubmitChild,140);
+}
+function gateShake(){ const v=document.getElementById('lgPinView'); if(v){ v.classList.add('shake'); setTimeout(()=>v.classList.remove('shake'),420);} }
+function gateSubmitChild(){
+  const want=String((state.childPins&&state.childPins[gateTarget])||'');
+  if(gateInput!==want){ gateShake(); gateInput=''; renderLoginGate(); toast('密碼不對喔，再試一次 😊'); return; }
+  doLogin('child', gateTarget);
+}
+function gateSubmitParent(){
+  if(String(gateInput)!==String(getParentPassword())){ gateShake(); toast('管理密碼不正確 😣'); return; }
+  doLogin('parent','');
+}
+function doLogin(role, childId){
+  const remember = rememberAllowed() && gateRemember;
+  if(role==='child'){
+    session={role:'child', childId, childName:(KIDS[childId]&&KIDS[childId].name)||'', loginAt:Date.now(), remember};
+    childSession=childId; localStorage.setItem(CHILD_SESSION_KEY,childId);
+    registerChildLogin(childId);
+  }else{
+    session={role:'parent', childId:'', childName:'爸媽', loginAt:Date.now(), remember};
+  }
+  persistSession();
+  gateInput='';
+  applyRoleToApp(role==='parent'?'parent':'child');
+  hideLoginGate();
+  toast(role==='child'?('歡迎回來，'+session.childName+'！'):'已進入爸媽管理後台 👪');
+}
+function logout(){
+  session=null; persistSession();
+  childSession=''; localStorage.removeItem(CHILD_SESSION_KEY);
+  sessionUnlocked=false; adminSession=false;
+  gateView='home'; gateInput=''; gateTarget='';
+  updateIdentityBar();
+  showLoginGate();
+  toast('已登出，回到登入首頁');
+}
+function updateIdentityBar(){
+  const el=document.getElementById('identityBar'); if(!el) return;
+  if(!loggedIn()){ el.innerHTML=''; return; }
+  const label=currentRole()==='parent'
+    ? '👪 爸媽'
+    : ((KIDS[session.childId]&&KIDS[session.childId].emoji||'🙂')+' '+escHtml(session.childName||''));
+  el.innerHTML=`<span class="idchip">目前身份：${label}</span><button class="idlogout" onclick="logout()">登出</button>`;
+}
+function applyRoleToApp(preferTab){
+  buildTabs();
+  updateIdentityBar();
+  const ids=visibleTabIds();
+  let target=preferTab||currentTab;
+  if(!ids.includes(target)) target=(currentRole()==='parent'?'parent':'child');
+  switchTab(target);
+  renderAll();
+}
+// 網址快速登入：?child=weining / ?child=xinying / ?role=parent
+function readUrlEntry(){
+  try{
+    const p=new URLSearchParams(location.search);
+    const child=p.get('child'), role=p.get('role');
+    if(role==='parent') return {view:'parentpin'};
+    if(child && KIDS[child]) return {view:'childpin', target:child};
+  }catch(e){}
+  return null;
+}
+
+/* ============ 家長密碼鎖（改為登入身分制）============ */
+const PARENT_TABS=['parent','report','setting'];     // 僅爸媽身分可見的分頁
+const CHILD_TAB_IDS=['child','home','rewards','learning','achieve'];  // 孩子只看到自己的世界
 let sessionUnlocked=false;
 let currentTab='child';
 function getPin(){ return state.parentPin||''; }
-function isUnlocked(){ return sessionUnlocked || !getPin(); }
+// 新版：是否為「爸媽」身分（登入後台）= 解鎖所有家長功能
+function isUnlocked(){ return currentRole()==='parent'; }
 function promptUnlock(){
-  if(!getPin()) return true;
-  const v=prompt('請輸入家長密碼 🔒');
-  if(v===null) return false;
-  if(String(v)===String(getPin())){ sessionUnlocked=true; updateLockUI(); toast('🔓 已解鎖家長模式'); return true; }
-  toast('密碼錯誤 😣'); return false;
+  if(isUnlocked()) return true;
+  toast('這是爸媽的功能，請用爸媽身分登入 🔐');
+  return false;
 }
 function toggleLock(){
   if(!getPin()){ toast('請先到設定頁設定家長密碼'); switchTab('setting'); return; }
@@ -5662,7 +5969,7 @@ function removePin(){
 }
 /* ===== 管理模式 ===== */
 let adminSession=false;
-function isAdmin(){ return adminSession || !getPin(); }
+function isAdmin(){ return currentRole()==='parent'; }
 function toggleAdmin(){
   if(isAdmin() && getPin()){ adminSession=false; refreshAdminUI(); toast('🔒 已退出管理模式'); return; }
   if(!getPin()){ refreshAdminUI(); return; }
@@ -5700,12 +6007,21 @@ const TABS=[
   {id:'report',l:'成長報告',ic:'📊',render:renderReportTab},
   {id:'setting',l:'家長設定',ic:'⚙️',render:fillSettingSelects}
 ];
+function visibleTabIds(){
+  if(currentRole()==='parent') return TABS.map(t=>t.id);
+  let ids=CHILD_TAB_IDS.slice();
+  if(state.parentSettings && state.parentSettings.allowChildShop===false) ids=ids.filter(x=>x!=='rewards');
+  return ids;
+}
 function buildTabs(){
-  document.getElementById('tabbar').innerHTML=TABS.map((t,i)=>
-    `<button class="${i===0?'on':''}" data-id="${t.id}" onclick="switchTab('${t.id}')">
+  const ids=visibleTabIds();
+  const list=TABS.filter(t=>ids.includes(t.id));
+  document.getElementById('tabbar').innerHTML=list.map(t=>
+    `<button class="${t.id===currentTab?'on':''}" data-id="${t.id}" onclick="switchTab('${t.id}')">
       <span class="ic">${t.ic}</span>${t.l}</button>`).join('');
 }
 function switchTab(id){
+  if(!visibleTabIds().includes(id)){ id=(currentRole()==='parent'?'parent':'child'); }
   if(PARENT_TABS.includes(id) && !isUnlocked()){ if(!promptUnlock()) return; }
   currentTab=id;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
@@ -5722,7 +6038,7 @@ function renderAll(){
   renderParentDashboard();
   renderAdventurePanel();
   renderHome();renderScore();renderApply();
-  renderNoticeCards(isUnlocked()?'parent':'child', activeChildId()||sel.noticeKid||sel.reportKid||Object.keys(KIDS)[0]);
+  renderNoticeCards(isUnlocked()?'parent':'child', activeChildId()||sel.reportKid||Object.keys(KIDS)[0]);
   renderShop();renderCoinShop();renderInventoryPanel();renderLearningHomePanel();renderLearningTab();renderTablet();
   renderSpecial();renderRank();renderTitles();
   renderSettlement();renderReport();renderRecord();
@@ -5736,10 +6052,27 @@ function initPrevLevels(){
 buildTabs();
 fillSettingSelects();
 initPrevLevels();
-if(childSession && KIDS[childSession]) registerChildLogin(childSession);
+// ---- 登入身份：記住裝置 / 網址快速登入 ----
+gateRemember=rememberAllowed();
+session=loadSession();
+if(session && session.role==='child' && !KIDS[session.childId]) session=null;   // 角色已不存在
 renderAll();
 updateLockUI();
 refreshInstallStatus();
+if(loggedIn()){
+  if(session.role==='child'){
+    childSession=session.childId;
+    localStorage.setItem(CHILD_SESSION_KEY,childSession);
+    registerChildLogin(childSession);
+  }
+  applyRoleToApp(session.role==='parent'?'parent':'child');
+  hideLoginGate();
+}else{
+  childSession='';
+  const entry=readUrlEntry();
+  if(entry){ gateView=entry.view; gateTarget=entry.target||''; }
+  showLoginGate();
+}
 
 if(cloud.url){ cloudStatus('☁️ 連線中…'); pullRemote({pushIfNewer:true}); }
 checkReminders();
