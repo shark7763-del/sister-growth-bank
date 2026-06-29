@@ -488,6 +488,24 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 @keyframes swCelebrate{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg) translateY(-7px)}50%{transform:rotate(8deg) translateY(-11px)}80%{transform:rotate(-4deg) translateY(-3px)}}
 @keyframes swFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
+/* ---- 走動 / 散步 / 寵物小跑 ---- */
+.sw-avatar-wrap{animation:swStroll 9s ease-in-out infinite;}
+@keyframes swStroll{0%,100%{transform:translateX(0)}50%{transform:translateX(52px)}}
+/* 角色走路時雙腿前後擺動（左右反相）*/
+.av-leg{transform-box:fill-box;transform-origin:50% 6%;}
+.av-leg-l{animation:swStep 1s ease-in-out infinite;}
+.av-leg-r{animation:swStep 1s ease-in-out infinite;animation-delay:-.5s;}
+@keyframes swStep{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
+/* 走路時手臂輕微擺動（右手揮手時會被 wave 覆蓋）*/
+.av-arm-l{transform-box:fill-box;transform-origin:55% 10%;animation:swArmSwing 1s ease-in-out infinite;}
+@keyframes swArmSwing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+/* 寵物：小跑步＋蹦跳在旁邊晃 */
+.sw-pet-wrap.wander{animation:swPetTrot 8s ease-in-out infinite;}
+@keyframes swPetTrot{
+  0%{transform:translate(0,0)}12%{transform:translate(-16px,-7px)}25%{transform:translate(-30px,0)}
+  37%{transform:translate(-44px,-7px)}50%{transform:translate(-56px,0)}62%{transform:translate(-42px,-7px)}
+  75%{transform:translate(-28px,0)}87%{transform:translate(-14px,-7px)}100%{transform:translate(0,0)}}
+
 /* ---- 寵物 ---- */
 .sw-pet{position:relative;width:74px;height:74px;display:flex;align-items:flex-end;justify-content:center;
   transform-origin:50% 100%;animation:swPetBreath 2.8s ease-in-out infinite;}
@@ -565,9 +583,10 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
 
 @media (prefers-reduced-motion: reduce){
-  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.hl,.hl-new,
+  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,
+  .sw-avatar-wrap,.sw-pet-wrap,.hl,.hl-new,
   .sw-spark,.sw-upbanner,.sw-pet-z,.sw-deco,.sw-fx-item{animation:none !important;}
-  .sw-avatar,.sw-pet{transform:none !important;}
+  .sw-avatar,.sw-pet,.sw-avatar-wrap,.sw-pet-wrap{transform:none !important;}
   .hl{opacity:1 !important;transition:none !important;}
   .sw-spark.go,.sw-upbanner.go{opacity:1 !important;}
 }
@@ -3771,24 +3790,28 @@ function renderAvatarFace(opt){
 function renderAvatarOutfit(opt){
   const cid=opt.cid;
   return `<g class="av-outfit">
-    <!-- 腿 -->
-    <rect x="47" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
-    <rect x="61" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
-    <!-- 鞋子（有厚度：鞋底較暗）-->
-    <g><rect x="41" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
-       <rect x="42" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
-       <ellipse cx="47" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/></g>
-    <g><rect x="60" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
-       <rect x="61" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
-       <ellipse cx="66" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/></g>
+    <!-- 左腿＋左鞋（走路時整隻擺動）-->
+    <g class="av-leg av-leg-l">
+      <rect x="47" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
+      <rect x="41" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
+      <rect x="42" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+      <ellipse cx="47" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/>
+    </g>
+    <!-- 右腿＋右鞋 -->
+    <g class="av-leg av-leg-r">
+      <rect x="61" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
+      <rect x="60" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
+      <rect x="61" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+      <ellipse cx="66" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/>
+    </g>
     <!-- 脖子 -->
     <rect x="54" y="78" width="12" height="9" rx="4" fill="url(#skin_${cid})"/>
     <!-- 身體（短）-->
     <rect x="34" y="85" width="52" height="35" rx="16" fill="url(#body_${cid})"/>
     <ellipse cx="48" cy="94" rx="12" ry="7" fill="#ffffff" opacity="0.26"/>
     <path d="M52 86 Q60 92 68 86" stroke="${opt.bodyDark}" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
-    <!-- 左手 -->
-    <g><rect x="24" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
+    <!-- 左手（走路擺動）-->
+    <g class="av-arm-l"><rect x="24" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
        <circle cx="30.5" cy="115" r="6" fill="url(#skin_${cid})"/></g>
     <!-- 右手（揮手）-->
     <g class="av-arm-r"><rect x="83" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
@@ -3954,7 +3977,7 @@ function renderSisterWorld(childId){
       <div class="sw-house-wrap" onclick="houseTap('${childId}')" title="點我看家園">${buildHouseSvg(homeLv,newStage)}</div>
       ${decoHtml}
       <div class="sw-avatar-wrap">${buildAvatarHtml(childId)}</div>
-      <div class="sw-pet-wrap">${buildSwPetHtml(childId)}</div>
+      <div class="sw-pet-wrap ${['idle','happy'].includes(getPetMood(childId))?'wander':''}">${buildSwPetHtml(childId)}</div>
       ${upBanner}
     </div>
     <div class="sw-goalbar">
