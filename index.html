@@ -2059,55 +2059,88 @@ function save(localOnly){
   state=syncV3Model(state);
   if(!localOnly) state.updatedAt=Date.now();
   localStorage.setItem(LS_KEY, JSON.stringify(state));
-  if(!localOnly && cloud.url) schedulePush();
+  if(!localOnly && cloud.url){ markPending(true); schedulePush(); }
 }
 
-/* ============ 雲端同步（GAS + Google Sheet） ============ */
+/* ============ 雲端同步（GAS + Google Sheet）— 正式同步流程 ============ */
 const CLOUD_KEY='sisterBank_gasUrl';
-const cloud={url:localStorage.getItem(CLOUD_KEY)||'', pushTimer:null, busy:false};
+const PENDING_KEY='sisterBank_pendingSync';
+const cloud={url:localStorage.getItem(CLOUD_KEY)||'', pushTimer:null, busy:false,
+  pending:(localStorage.getItem(PENDING_KEY)==='1'), lastStatus:''};
 function setCloudUrl(u){ cloud.url=(u||'').trim(); localStorage.setItem(CLOUD_KEY,cloud.url); }
-function cloudStatus(s){ const el=document.getElementById('syncStatus'); if(el) el.textContent=s; }
+function isOnline(){ try{ return navigator.onLine!==false; }catch(e){ return true; } }
+function markPending(v){
+  cloud.pending=!!v;
+  try{ v?localStorage.setItem(PENDING_KEY,'1'):localStorage.removeItem(PENDING_KEY); }catch(e){}
+}
+// 同步狀態：local / connected / syncing / success / fail / pending
+function setSyncStatus(kind, extra){
+  cloud.lastStatus=kind;
+  const t={
+    local:'💾 本機模式（尚未連雲端）',
+    connected:'☁️ 已連線雲端',
+    syncing:'🔄 同步中…',
+    success:'✅ 已同步',
+    fail:'⚠️ 同步失敗（資料已安全存在本機，稍後自動重試）',
+    pending:'🕒 有變更待同步…'
+  }[kind]||'';
+  const time=(kind==='success')?(' '+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'';
+  const el=document.getElementById('syncStatus'); if(el) el.textContent=t+time+(extra?(' '+extra):'');
+}
+function cloudStatus(s){ const el=document.getElementById('syncStatus'); if(el) el.textContent=s; } // 相容舊呼叫
 function schedulePush(){ clearTimeout(cloud.pushTimer); cloud.pushTimer=setTimeout(pushRemote,800); }
+// 離線佇列：整份 state 以 last-write-wins 上傳，失敗就標記待同步、下次連線補傳
+function queueOfflineChange(change){ markPending(true); if(cloud.url) setSyncStatus('pending'); }
+async function flushPendingSyncQueue(){
+  if(cloud.pending && cloud.url && !cloud.busy && isOnline()){ await pushRemote(); }
+}
 
 async function pullRemote(opts){
   opts=opts||{};
   if(!cloud.url) return;
+  if(!isOnline()){ setSyncStatus('pending'); return; }
   try{
-    cloudStatus('☁️ 同步中…');
+    setSyncStatus('syncing');
     const res=await fetch(cloud.url+'?action=load&t='+Date.now());
     const data=await res.json();
     if(data&&data.ok){
       const serverAt=(data.state&&data.state.updatedAt)||0;
       const localAt=state.updatedAt||0;
-      if(data.state && serverAt>localAt){
+      if(data.state && serverAt>localAt && !cloud.pending){
         state=normalize(data.state);
         save(true);
         initPrevLevels(); renderAll(); updateLockUI(); fillSettingSelects();
-        cloudStatus('☁️ 已同步（已更新到雲端最新）');
-      }else if(localAt>serverAt && (opts.pushIfNewer || !data.state)){
-        pushRemote();
+        setSyncStatus('success','（已更新到最新）');
+      }else if(localAt>serverAt && (opts.pushIfNewer || !data.state || cloud.pending)){
+        await pushRemote();
       }else{
-        cloudStatus('☁️ 已同步 '+new Date().toLocaleTimeString());
+        setSyncStatus('success');
       }
-    }
-  }catch(e){ cloudStatus('⚠️ 雲端連線失敗，使用本機資料'); }
+    }else{ setSyncStatus('fail'); }
+  }catch(e){ setSyncStatus('fail'); }
 }
 
 async function pushRemote(){
-  if(!cloud.url || cloud.busy) return;
+  if(!cloud.url) return;
+  if(cloud.busy) return;
+  if(!isOnline()){ markPending(true); setSyncStatus('pending'); return; }
   cloud.busy=true;
+  setSyncStatus('syncing');
   try{
-    cloudStatus('☁️ 上傳中…');
     const res=await fetch(cloud.url,{
       method:'POST',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
       body:JSON.stringify({action:'save', state})
     });
     const data=await res.json();
-    cloudStatus(data&&data.ok ? ('☁️ 已同步 '+new Date().toLocaleTimeString()) : '⚠️ 上傳失敗（已存本機）');
-  }catch(e){ cloudStatus('⚠️ 上傳失敗（已存本機）'); }
+    if(data&&data.ok){ markPending(false); setSyncStatus('success'); }
+    else { markPending(true); setSyncStatus('fail'); }
+  }catch(e){ markPending(true); setSyncStatus('fail'); }
   finally{ cloud.busy=false; }
 }
+// 命名 API
+function syncToCloud(){ return pushRemote(); }
+function syncFromCloud(){ return pullRemote({pushIfNewer:true}); }
 function syncNow(){ if(!cloud.url){toast('請先設定雲端網址');return;} pullRemote({pushIfNewer:true}); }
 
 function getTasks(kid){
@@ -3594,6 +3627,7 @@ function addPetGrowth(childId,delta){
   pet.level=next.level;
   if(next.level>before){
     celebrate(PET_TYPES[pet.type]?.e||'🐾',`寵物升級！Lv.${next.level}`,`${KIDS[childId].name} 的寵物變強了`);
+    if(typeof triggerPetAnimation==='function') triggerPetAnimation('levelup');
   }
 }
 function feedPet(childId,foodId){
@@ -4445,6 +4479,14 @@ function triggerPetAnimation(type){
 function triggerHomeUpgrade(oldLevel,newLevel){
   celebrate('🏠',`家園升級！Lv.${newLevel}`,`蓋好了「${HOME_STAGE_NAMES[newLevel-1]}」，角色與寵物一起慶祝！`);
 }
+// 命名 API：家園施工動畫（建材升起＋星星＋角色寵物慶祝，沿用 worldFx 機制）
+function triggerHomeBuildAnimation(oldLevel,newLevel){
+  worldFx[activeChildId()]=worldFx[activeChildId()]||{};
+  const fx=worldFx[activeChildId()];
+  fx.newHomeStage=newLevel; fx.until=Date.now()+3400; fx.avatarAnim='levelup'; fx.petAnim='levelup';
+  triggerHomeUpgrade(oldLevel,newLevel);
+  applyPendingWorldFx(activeChildId());
+}
 function applyPendingWorldFx(childId){
   const fx=worldFx[childId]; if(!fx) return;
   const live=Date.now()<(fx.until||0);
@@ -5132,6 +5174,7 @@ function checkLevelUp(kid){
   if(after>before){
     const L=LEVELS[after-1];
     celebrate(L.ic,`升級！Lv.${L.lv} ${L.name}`,`${KIDS[kid].name} 升到 ${L.name} 了，太厲害了！`);
+    if(typeof triggerAvatarAnimation==='function' && activeChildId()===kid) triggerAvatarAnimation('levelup');
   }
   prevLevels[kid]=after;
 }
@@ -5940,7 +5983,9 @@ function clearKid(k){
   save();initPrevLevels();renderAll();toast('已清除 '+KIDS[k].name+' 資料');
 }
 function resetAll(){
-  if(!confirm('確定要重置所有資料嗎？此動作無法復原！')) return;
+  if(!isAdmin()){ toast('清除資料需先解鎖管理模式（二次驗證）'); return; }
+  if(!confirm('⚠️ 第 1 次確認：確定要清除所有資料嗎？此動作無法復原！')) return;
+  if(!confirm('⚠️ 第 2 次確認：真的要清除全部孩子、任務、XP、金幣、家園資料？')) return;
   localStorage.removeItem(LS_KEY);state=load();save();initPrevLevels();renderAll();
   toast('🗑️ 已重置所有資料');
 }
@@ -6391,25 +6436,30 @@ function removePin(){
   if(!confirm('確定移除家長密碼？移除後所有功能將不再上鎖')) return;
   state.parentPin=''; save(); sessionUnlocked=false; adminSession=false; updateLockUI(); refreshAdminUI(); toast('已移除家長密碼');
 }
-/* ===== 管理模式 ===== */
+/* ===== 管理模式（爸媽登入後，需再次輸入密碼二次驗證）===== */
 let adminSession=false;
-function isAdmin(){ return currentRole()==='parent'; }
+function isAdmin(){ return currentRole()==='parent' && adminSession; }
+function unlockAdminMode(password){
+  if(currentRole()!=='parent'){ toast('請先用爸媽身分登入'); return false; }
+  if(String(password)===String(getParentPassword())){ adminSession=true; refreshAdminUI(); toast('🔐 已進入管理模式'); return true; }
+  toast('密碼錯誤 😣'); return false;
+}
 function toggleAdmin(){
-  if(isAdmin() && getPin()){ adminSession=false; refreshAdminUI(); toast('🔒 已退出管理模式'); return; }
-  if(!getPin()){ refreshAdminUI(); return; }
-  const v=prompt('請輸入家長密碼以進入管理模式 🔐');
+  if(currentRole()!=='parent'){ toast('請先用爸媽身分登入'); return; }
+  if(isAdmin()){ adminSession=false; refreshAdminUI(); toast('🔒 已退出管理模式'); return; }
+  const v=prompt('管理模式需要二次驗證，請再次輸入爸媽密碼 🔐');
   if(v===null) return;
-  if(String(v)===String(getPin())){ adminSession=true; refreshAdminUI(); toast('🔐 已進入管理模式'); }
-  else toast('密碼錯誤 😣');
+  unlockAdminMode(v);
 }
 function refreshAdminUI(){
   const show=isAdmin();
   document.querySelectorAll('.admin-only').forEach(el=>{ el.style.display=show?'':'none'; });
   const st=document.getElementById('adminStatus');
-  if(st) st.textContent=show?'✅ 管理模式已開啟，可使用雲端同步與資料管理':'🔒 管理模式已鎖定（雲端 / 匯入匯出 / 清除 已隱藏）';
+  if(st) st.textContent=show?'✅ 管理模式已開啟（雲端同步 / 匯入匯出 / 清除資料 已解鎖）':'🔒 管理模式已鎖定，需二次驗證（雲端 / 匯入匯出 / 清除 已隱藏）';
   const btn=document.getElementById('adminBtn');
-  if(btn) btn.textContent=(show&&getPin())?'🔓 退出管理模式':(getPin()?'🔐 解鎖管理模式':'🔓 未設密碼（全部開放）');
+  if(btn) btn.textContent=show?'🔓 退出管理模式':'🔐 解鎖管理模式（二次驗證）';
 }
+function renderAdminSettings(){ refreshAdminUI(); }
 
 /* ============ 導覽 ============ */
 function renderChildTab(){ renderChildDashboard(); updateParentUI(); }
@@ -6499,11 +6549,13 @@ if(loggedIn()){
   showLoginGate();
 }
 
-if(cloud.url){ cloudStatus('☁️ 連線中…'); pullRemote({pushIfNewer:true}); }
+if(cloud.url){ setSyncStatus('connected'); pullRemote({pushIfNewer:true}); } else { setSyncStatus('local'); }
 checkReminders();
 setInterval(checkReminders, 60000);
-setInterval(()=>{ if(cloud.url && !document.hidden) pullRemote(); }, 12000);
-document.addEventListener('visibilitychange', ()=>{ if(cloud.url && !document.hidden) pullRemote(); });
+setInterval(()=>{ if(cloud.url && !document.hidden){ flushPendingSyncQueue(); pullRemote(); } }, 12000);
+document.addEventListener('visibilitychange', ()=>{ if(cloud.url && !document.hidden){ flushPendingSyncQueue(); pullRemote(); } });
+window.addEventListener('online', ()=>{ if(cloud.url){ setSyncStatus('connected'); flushPendingSyncQueue(); } });
+window.addEventListener('offline', ()=>{ if(cloud.url) setSyncStatus('pending'); });
 window.addEventListener('beforeinstallprompt', e=>{
   e.preventDefault();
   deferredInstallPrompt=e;
