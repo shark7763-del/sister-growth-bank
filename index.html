@@ -451,8 +451,8 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
   background:radial-gradient(circle at 12px 0,#8ad97a 6px,transparent 7px) repeat-x;background-size:24px 8px;}
 .sw-house-wrap{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);width:182px;}
 .sw-house-wrap svg{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 8px rgba(80,90,110,.18));}
-.sw-avatar-wrap{position:absolute;left:14px;bottom:30px;}
-.sw-pet-wrap{position:absolute;right:14px;bottom:32px;}
+.sw-avatar-wrap{position:absolute;left:0;bottom:26px;}
+.sw-pet-wrap{position:absolute;left:0;bottom:28px;}
 .sw-goalbar{position:relative;margin:0;padding:11px 14px 14px;background:rgba(255,255,255,.55);}
 .sw-goalbar b{font-size:13px;color:#3a4a55;}
 .sw-goalbar .g-txt{font-size:12.5px;color:#4a5b65;font-weight:700;margin:3px 0 7px;display:block;min-height:18px;}
@@ -488,30 +488,68 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 @keyframes swCelebrate{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg) translateY(-7px)}50%{transform:rotate(8deg) translateY(-11px)}80%{transform:rotate(-4deg) translateY(-3px)}}
 @keyframes swFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
-/* ---- 走動 / 散步 / 寵物小跑 ---- */
-.sw-avatar-wrap{animation:swStroll 9s ease-in-out infinite;}
-@keyframes swStroll{0%,100%{transform:translateX(0)}50%{transform:translateX(52px)}}
-/* 角色走到端點會「轉身」面向前進方向（只翻 SVG，不翻名牌）*/
-.av-svg{transform-origin:50% 100%;animation:swFace 9s ease-in-out infinite;}
-@keyframes swFace{0%,44%{transform:scaleX(1)}56%,94%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
-/* 角色走路時雙腿前後擺動（左右反相）*/
+/* ---- 世界走動（位置由 JS 控制，CSS 只負責平滑過場與肢體擺動）---- */
+.sw-avatar-wrap{transition:transform 1.9s ease-in-out;will-change:transform;}
+.sw-pet-wrap{transition:transform 1.5s ease-in-out;will-change:transform;}
+.av-svg{transform-origin:50% 100%;transition:transform .25s ease;}
+.sw-avatar.face-left .av-svg{transform:scaleX(-1);}
+.sw-pet .sw-pet-face{transition:transform .2s ease;}
+.sw-pet.face-left .sw-pet-face{transform:scaleX(-1);}
+/* 只有「走路中」腿與手才擺動 */
 .av-leg{transform-box:fill-box;transform-origin:50% 6%;}
-.av-leg-l{animation:swStep 1s ease-in-out infinite;}
-.av-leg-r{animation:swStep 1s ease-in-out infinite;animation-delay:-.5s;}
-@keyframes swStep{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
-/* 走路時手臂輕微擺動（右手揮手時會被 wave 覆蓋）*/
-.av-arm-l{transform-box:fill-box;transform-origin:55% 10%;animation:swArmSwing 1s ease-in-out infinite;}
-@keyframes swArmSwing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
-/* 寵物：跟著角色一起小跑步＋蹦跳（站在角色右後方，慢半拍跟上）*/
-.sw-pet-wrap.follow{left:120px;right:auto;animation:swPetFollow 9s ease-in-out infinite;animation-delay:-8.4s;}
-@keyframes swPetFollow{
-  0%{transform:translate(0,0)}12%{transform:translate(8px,-7px)}25%{transform:translate(16px,0)}
-  37%{transform:translate(30px,-7px)}50%{transform:translate(52px,0)}62%{transform:translate(40px,-7px)}
-  75%{transform:translate(26px,0)}87%{transform:translate(12px,-7px)}100%{transform:translate(0,0)}}
+.av-arm-l{transform-box:fill-box;transform-origin:55% 10%;}
+.sw-avatar.walking .av-leg-l{animation:swStep .5s ease-in-out infinite;}
+.sw-avatar.walking .av-leg-r{animation:swStep .5s ease-in-out infinite;animation-delay:-.25s;}
+.sw-avatar.walking .av-arm-l{animation:swArmSwing .5s ease-in-out infinite;}
+@keyframes swStep{0%,100%{transform:rotate(11deg)}50%{transform:rotate(-11deg)}}
+@keyframes swArmSwing{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+/* 寵物移動中小跳 */
+.sw-pet.moving{animation:swPetTrotHop .45s ease-in-out infinite;}
+@keyframes swPetTrotHop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.04)}}
+/* 對話泡泡 */
+.sw-bubble{position:absolute;left:50%;top:-16px;transform:translateX(-50%);background:#fff;color:#5a4a55;
+  font-size:11px;font-weight:800;padding:5px 11px;border-radius:13px;white-space:nowrap;z-index:12;
+  box-shadow:0 3px 9px rgba(0,0,0,.18);animation:swBubble 2.6s ease forwards;pointer-events:none;}
+.sw-bubble::after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#fff;}
+@keyframes swBubble{0%{opacity:0;transform:translate(-50%,6px) scale(.7)}12%{opacity:1;transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-6px) scale(.96)}}
 /* 點寵物：愛心彈出 */
 .sw-pet-heart{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-size:20px;z-index:9;pointer-events:none;
   animation:swPetHeart 1s ease forwards;}
 @keyframes swPetHeart{0%{opacity:0;transform:translate(-50%,4px) scale(.5)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-26px) scale(1.15)}}
+/* 飛入右上角的 XP / 金幣 */
+.fly-reward{position:fixed;z-index:1200;font-weight:900;font-size:15px;pointer-events:none;
+  transition:transform 1s cubic-bezier(.4,.1,.5,1),opacity 1s ease;}
+/* 任務完成獎勵彈窗 */
+.reward-pop{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(.6);z-index:1300;
+  background:linear-gradient(155deg,#fff,#fff4fb);border-radius:24px;padding:20px 26px;text-align:center;
+  box-shadow:0 16px 44px rgba(120,80,140,.34);opacity:0;pointer-events:none;min-width:200px;}
+.reward-pop.on{animation:rewardPop 2.6s ease forwards;}
+.reward-pop .rp-emoji{font-size:46px;line-height:1;}
+.reward-pop h3{margin:6px 0 4px;font-size:20px;color:#6a3d7a;}
+.reward-pop .rp-line{font-size:15px;font-weight:800;color:#4a3a52;margin:2px 0;}
+.reward-pop .rp-xp{color:#7a4dba;} .reward-pop .rp-coin{color:#c8890a;}
+.reward-pop .rp-note{font-size:12px;color:#8a7a92;margin-top:8px;font-weight:700;}
+@keyframes rewardPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}22%{transform:translate(-50%,-50%) scale(1)}82%{opacity:1}100%{opacity:0;transform:translate(-50%,-58%) scale(.96)}}
+/* 寶箱面板 */
+.chest-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.chest-card{flex:1;min-width:96px;background:var(--cream);border-radius:16px;padding:12px 8px;text-align:center;border:2px solid transparent;}
+.chest-card.ready{border-color:#ffd166;background:#fff8e6;cursor:pointer;animation:chestWiggle 1.4s ease-in-out infinite;}
+.chest-card.done{opacity:.55;}
+.chest-card .ce{font-size:34px;line-height:1.1;}
+.chest-card b{display:block;font-size:13px;color:var(--ink);}
+.chest-card small{font-size:11px;color:var(--ink2);}
+@keyframes chestWiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+/* 每日歡迎卡 */
+.welcome-card{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.8);z-index:1300;
+  background:linear-gradient(160deg,#fff,#fef0f8);border-radius:26px;padding:26px 28px;text-align:center;
+  box-shadow:0 18px 50px rgba(120,80,140,.36);max-width:84vw;width:330px;opacity:0;transition:all .3s ease;}
+.welcome-card.on{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.welcome-card .wc-face{font-size:54px;}
+.welcome-card h3{margin:8px 0 6px;font-size:22px;color:#6a3d7a;}
+.welcome-card p{margin:4px 0;font-size:14px;color:#5a4a62;font-weight:700;}
+.welcome-mask{position:fixed;inset:0;z-index:1290;background:rgba(60,40,70,.32);opacity:0;transition:opacity .3s;}
+.welcome-mask.on{opacity:1;}
 
 /* ---- 寵物 ---- */
 .sw-pet{position:relative;width:74px;height:74px;display:flex;align-items:flex-end;justify-content:center;
@@ -590,10 +628,11 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
 
 @media (prefers-reduced-motion: reduce){
-  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,.av-svg,
-  .sw-avatar-wrap,.sw-pet-wrap,.sw-pet-heart,.hl,.hl-new,
+  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,
+  .sw-pet-heart,.hl,.hl-new,
   .sw-spark,.sw-upbanner,.sw-pet-z,.sw-deco,.sw-fx-item{animation:none !important;}
-  .sw-avatar,.sw-pet,.sw-avatar-wrap,.sw-pet-wrap,.av-svg{transform:none !important;}
+  .sw-avatar,.sw-pet{transform:none !important;}
+  .sw-avatar-wrap,.sw-pet-wrap,.av-svg{transition:none !important;}
   .hl{opacity:1 !important;transition:none !important;}
   .sw-spark.go,.sw-upbanner.go{opacity:1 !important;}
 }
@@ -2001,6 +2040,8 @@ function normalize(s){
   s.childPins=Object.assign({weining:'1111',xinying:'2222',yaoting:'3333',yuxuan:'4444'}, s.childPins||{});
   Object.keys(KIDS).forEach(k=>{ if(s.childPins[k]==null||s.childPins[k]==='') s.childPins[k]=String(1111).slice(0,4); });
   s.parentSettings=Object.assign({allowRememberDevice:true, allowChildShop:true, allowChildRequestXP:true}, s.parentSettings||{});
+  s.chestLog=s.chestLog||{};       // {childId:{date,small,big,streak}}
+  s.streakClaims=s.streakClaims||{}; // {childId:{'3':true,...}}
   s.reminders=Array.isArray(s.reminders)?s.reminders:[];
   s.noticeReads=Object.assign({parent:0,child:{}}, s.noticeReads||{});
   s.weeklyChallenge=Object.assign(defaultChallenge(), s.weeklyChallenge||{});
@@ -3901,22 +3942,257 @@ function updateAvatarStyle(childId){
   const wrap=document.querySelector('#childWorld .sw-avatar-wrap');
   if(wrap) wrap.innerHTML=renderAvatar(childId);
 }
-// 點角色：揮手打招呼
-function avatarTap(childId){ triggerAvatarAnimation('wave'); }
-// 點寵物：開心跳一下＋愛心彈出
-function petTapReact(childId){
-  triggerPetAnimation('happy');
-  const wrap=document.querySelector('#childWorld .sw-pet-wrap');
-  if(wrap){
-    const h=document.createElement('div');
-    h.className='sw-pet-heart';
-    h.textContent=['💗','💛','💖','⭐'][Math.floor(Math.random()*4)];
-    wrap.appendChild(h);
-    setTimeout(()=>{ if(h&&h.remove) h.remove(); },1000);
-  }
-  const pet=petState(childId);
-  toast(`${(pet&&pet.name)||'夥伴'} 好開心！🐾`);
+/* =======================================================================
+   世界走動 / 互動（JS 控制位置；只在「我的世界」卡片內移動）
+   ===================================================================== */
+const WORLD={timer:null,childId:'',av:{x:30,facing:1},pet:{x:200,facing:1},nextAv:0,nextPet:0,_inited:false,_avT:null,_petT:null};
+function worldReduced(){ try{ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } }
+function stageMetrics(){
+  const stage=document.querySelector('#childWorld .sw-stage');
+  const w=(stage&&stage.clientWidth)||320;
+  return {w, avMax:Math.max(10,w-100), petMax:Math.max(10,w-82)};
 }
+function applyFacing(){
+  const a=document.querySelector('#childWorld .sw-avatar'); if(a) a.classList.toggle('face-left',WORLD.av.facing<0);
+  const p=document.querySelector('#childWorld .sw-pet'); if(p) p.classList.toggle('face-left',WORLD.pet.facing<0);
+}
+function applyWorldPositions(){
+  const av=document.querySelector('#childWorld .sw-avatar-wrap');
+  const pet=document.querySelector('#childWorld .sw-pet-wrap');
+  if(av){ av.style.transition='none'; av.style.transform='translateX('+WORLD.av.x+'px)'; }
+  if(pet){ pet.style.transition='none'; pet.style.transform='translateX('+WORLD.pet.x+'px)'; }
+  try{ requestAnimationFrame(()=>{ if(av) av.style.transition=''; if(pet) pet.style.transition=''; }); }catch(e){ if(av) av.style.transition=''; if(pet) pet.style.transition=''; }
+  applyFacing();
+}
+function moveAvatarTo(childId,x){
+  const m=stageMetrics(); x=Math.max(6,Math.min(m.avMax,Math.round(x)));
+  const av=document.querySelector('#childWorld .sw-avatar-wrap'); if(!av) return;
+  WORLD.av.facing=(x>=WORLD.av.x)?1:-1; WORLD.av.x=x; applyFacing();
+  av.style.transition='transform 1.9s ease-in-out'; av.style.transform='translateX('+x+'px)';
+  const el=document.querySelector('#childWorld .sw-avatar'); if(el) el.classList.add('walking');
+  clearTimeout(WORLD._avT); WORLD._avT=setTimeout(()=>{ const e=document.querySelector('#childWorld .sw-avatar'); if(e) e.classList.remove('walking'); },1900);
+}
+function movePetTo(childId,x){
+  const m=stageMetrics(); x=Math.max(6,Math.min(m.petMax,Math.round(x)));
+  const pet=document.querySelector('#childWorld .sw-pet-wrap'); if(!pet) return;
+  WORLD.pet.facing=(x>=WORLD.pet.x)?1:-1; WORLD.pet.x=x; applyFacing();
+  pet.style.transition='transform 1.5s ease-in-out'; pet.style.transform='translateX('+x+'px)';
+  const el=document.querySelector('#childWorld .sw-pet'); if(el) el.classList.add('moving');
+  clearTimeout(WORLD._petT); WORLD._petT=setTimeout(()=>{ const e=document.querySelector('#childWorld .sw-pet'); if(e) e.classList.remove('moving'); },1500);
+}
+function worldTick(){
+  const childId=activeChildId(); if(!childId) return;
+  if(!document.querySelector('#childWorld .sw-avatar-wrap')) return;  // 只有在世界畫面才動
+  if(worldReduced()) return;
+  const now=Date.now(), m=stageMetrics();
+  if(now>=WORLD.nextAv){ moveAvatarTo(childId, 6+Math.random()*m.avMax); WORLD.nextAv=now+4000+Math.random()*4000; }
+  if(now>=WORLD.nextPet){
+    const mood=getPetMood(childId);
+    if(mood==='hungry'||mood==='sleepy'){ WORLD.nextPet=now+3000; }
+    else{
+      const tx=(Math.random()<0.55)?(WORLD.av.x+(Math.random()<0.5?64:-64)):(6+Math.random()*m.petMax);
+      movePetTo(childId,tx); WORLD.nextPet=now+3000+Math.random()*3000;
+    }
+  }
+}
+function initWorldMovement(childId){
+  WORLD.childId=childId;
+  if(!WORLD._inited){ const m=stageMetrics(); WORLD.av.x=Math.round(m.w*0.12); WORLD.pet.x=Math.round(m.w*0.62); WORLD._inited=true; WORLD.nextAv=Date.now()+1600; WORLD.nextPet=Date.now()+2600; }
+  applyWorldPositions();
+  if(!WORLD.timer){ try{ WORLD.timer=setInterval(worldTick,800); }catch(e){} }
+}
+function pickSay(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function showBubble(sel,text){
+  const wrap=document.querySelector('#childWorld '+sel); if(!wrap) return;
+  const old=wrap.querySelector('.sw-bubble'); if(old&&old.remove) old.remove();
+  const b=document.createElement('div'); b.className='sw-bubble'; b.textContent=text; wrap.appendChild(b);
+  setTimeout(()=>{ if(b&&b.remove) b.remove(); },2600);
+}
+// 點草地 → 人物走過去
+function worldGroundClick(e,childId){
+  const g=e.currentTarget, r=g.getBoundingClientRect();
+  const x=(e.clientX-r.left)-49;
+  moveAvatarTo(childId,x); WORLD.nextAv=Date.now()+5000;
+  showBubble('.sw-avatar-wrap','🚶 走過去～');
+}
+// 點人物 → 停下、揮手、泡泡
+function avatarTap(childId){
+  const av=document.querySelector('#childWorld .sw-avatar-wrap');
+  if(av){
+    try{ const mtx=new DOMMatrixReadOnly(getComputedStyle(av).transform); if(!isNaN(mtx.m41)) WORLD.av.x=Math.round(mtx.m41); }catch(err){}
+    av.style.transition='none'; av.style.transform='translateX('+WORLD.av.x+'px)';
+  }
+  const el=document.querySelector('#childWorld .sw-avatar'); if(el) el.classList.remove('walking');
+  WORLD.nextAv=Date.now()+5000;
+  triggerAvatarAnimation('wave');
+  showBubble('.sw-avatar-wrap', pickSay(['嗨！','你好呀～','我在努力長大！','要一起玩嗎？','今天也要加油！']));
+}
+// 點寵物 → 跑到人物旁、跳一下、泡泡＋愛心
+function petTapReact(childId){
+  movePetTo(childId, WORLD.av.x+56); WORLD.nextPet=Date.now()+5000;
+  setTimeout(()=>{ triggerPetAnimation('happy'); },320);
+  showBubble('.sw-pet-wrap', pickSay(['汪汪！','陪我玩～','最喜歡你了！','好開心！🦴']));
+  const wrap=document.querySelector('#childWorld .sw-pet-wrap');
+  if(wrap){ const h=document.createElement('div'); h.className='sw-pet-heart'; h.textContent=['💗','💛','💖','⭐'][Math.floor(Math.random()*4)]; wrap.appendChild(h); setTimeout(()=>{ if(h&&h.remove) h.remove(); },1000); }
+}
+function triggerWorldCelebration(childId){
+  triggerAvatarAnimation('celebrate'); triggerPetAnimation('celebrate');
+  showBubble('.sw-avatar-wrap','耶！完成了！'); showBubble('.sw-pet-wrap','汪汪汪！');
+}
+
+/* =======================================================================
+   獎勵演出（XP/金幣飛入 + 彈窗 + 角色寵物慶祝）
+   ===================================================================== */
+function flyReward(targetEl,label,color){
+  const el=document.createElement('div'); el.className='fly-reward'; el.style.color=color; el.textContent=label;
+  el.style.left=(window.innerWidth/2)+'px'; el.style.top=(window.innerHeight*0.44)+'px';
+  el.style.transform='translate(-50%,-50%) scale(1.3)'; el.style.opacity='1';
+  document.body.appendChild(el);
+  let dx=window.innerWidth*0.38, dy=-window.innerHeight*0.4;
+  try{ if(targetEl&&targetEl.getBoundingClientRect){ const r=targetEl.getBoundingClientRect(); if(r.width||r.height){ dx=r.left+r.width/2-window.innerWidth/2; dy=r.top+r.height/2-window.innerHeight*0.44; } } }catch(e){}
+  try{ requestAnimationFrame(()=>{ el.style.transform='translate(calc(-50% + '+dx+'px), calc(-50% + '+dy+'px)) scale(.6)'; el.style.opacity='0'; }); }catch(e){}
+  setTimeout(()=>{ if(el&&el.remove) el.remove(); },1050);
+}
+function showRewardPopup(childId,xp,coins,reward){
+  const old=document.querySelector('.reward-pop'); if(old&&old.remove) old.remove();
+  const pet=petState(childId), next=calculateNextWorldGoal(childId);
+  const el=document.createElement('div'); el.className='reward-pop on';
+  el.innerHTML='<div class="rp-emoji">🎉</div><h3>任務完成！</h3>'+
+    (xp?'<div class="rp-line rp-xp">+'+xp+' XP</div>':'')+
+    (coins?'<div class="rp-line rp-coin">+'+coins+' 金幣</div>':'')+
+    '<div class="rp-line">'+escHtml((pet&&pet.name)||'夥伴')+'超開心！🐾</div>'+
+    '<div class="rp-note">'+escHtml((reward&&reward.note)||next.text)+'</div>';
+  document.body.appendChild(el);
+  setTimeout(()=>{ if(el&&el.remove) el.remove(); },2600);
+}
+function triggerRewardAnimation(childId,reward){
+  reward=reward||{};
+  const xp=reward.xp||0, coins=(reward.coins!=null)?reward.coins:Math.round(xp*0.6);
+  triggerAvatarAnimation('happy'); triggerPetAnimation('happy');
+  const stats=document.querySelectorAll('#page-child .sw-stat b');
+  if(xp) flyReward(stats[0]||null,'+'+xp+' XP','#7a4dba');
+  if(coins) setTimeout(()=>flyReward(stats[1]||null,'+'+coins+' 🪙','#c8890a'),120);
+  showRewardPopup(childId,xp,coins,reward);
+}
+
+/* =======================================================================
+   Streak 連續完成
+   ===================================================================== */
+function streakInfo(childId){
+  const s=streakOf(childId), tiers=[3,7,14,30];
+  const names={3:'寶箱獎勵',7:'彩虹屋頂',14:'限定背景',30:'夢幻配件'};
+  const next=tiers.find(t=>t>s);
+  let text;
+  if(s<=0) text='🔥 今天完成一個任務，開始連續紀錄！';
+  else if(next) text='🔥 連續完成 '+s+' 天，再 '+(next-s)+' 天解鎖「'+names[next]+'」';
+  else text='🔥 連續完成 '+s+' 天，太厲害了！';
+  return {streak:s,next,text};
+}
+function updateStreak(childId){
+  if(!KIDS[childId]) return null;
+  const s=streakOf(childId);
+  state.streakClaims=state.streakClaims||{};
+  const claims=state.streakClaims[childId]=state.streakClaims[childId]||{};
+  const rewards={3:{coins:15,xp:0},7:{coins:30,xp:20},14:{coins:60,xp:40},30:{coins:120,xp:80}};
+  let granted=null;
+  [3,7,14,30].forEach(t=>{
+    if(s>=t && !claims[t]){
+      claims[t]=true; const r=rewards[t], k=state.kids[childId];
+      if(k){ k.coins=(k.coins||0)+r.coins; if(r.xp){ k.xp+=r.xp; k.lifetime+=r.xp; } const st=childStats(childId); if(st){ st.coins=k.coins; st.points=k.xp; st.exp=k.lifetime; st.lifetimeExp=k.lifetime; } }
+      granted={tier:t,coins:r.coins,xp:r.xp};
+    }
+  });
+  if(granted){ save(); celebrate('🔥','連續 '+granted.tier+' 天！','+'+granted.coins+' 金幣'+(granted.xp?'・+'+granted.xp+' XP':'')); }
+  return granted;
+}
+
+/* =======================================================================
+   每日寶箱
+   ===================================================================== */
+function chestStateOf(childId){
+  state.chestLog=state.chestLog||{};
+  let c=state.chestLog[childId];
+  if(!c||c.date!==todayStr()){ c=state.chestLog[childId]={date:todayStr(),small:false,big:false,streak:false}; }
+  return c;
+}
+function checkDailyChest(childId){
+  const done=todayTaskCountOf(childId), streak=streakOf(childId), c=chestStateOf(childId);
+  return {
+    done, streak,
+    small:{ready:done>=3&&!c.small, opened:c.small, need:Math.max(0,3-done)},
+    big:{ready:done>=5&&!c.big, opened:c.big, need:Math.max(0,5-done)},
+    streakChest:{ready:streak>=3&&!c.streak, opened:c.streak, need:Math.max(0,3-streak)}
+  };
+}
+function openDailyChest(childId,kind){
+  const ch=checkDailyChest(childId);
+  const slot=kind==='small'?ch.small:(kind==='big'?ch.big:ch.streakChest);
+  if(!slot||!slot.ready){ toast('這個寶箱現在還不能開喔'); return; }
+  const c=chestStateOf(childId);
+  if(kind==='small') c.small=true; else if(kind==='big') c.big=true; else c.streak=true;
+  const pool={small:{coins:[10,20],xp:[10,20]},big:{coins:[25,45],xp:[20,40]},streak:{coins:[40,70],xp:[30,60]}}[kind];
+  const coins=pool.coins[0]+Math.floor(Math.random()*(pool.coins[1]-pool.coins[0]+1));
+  const xp=pool.xp[0]+Math.floor(Math.random()*(pool.xp[1]-pool.xp[0]+1));
+  const k=state.kids[childId];
+  if(k){ k.coins=(k.coins||0)+coins; k.xp=(k.xp||0)+xp; k.lifetime=(k.lifetime||0)+xp; const st=childStats(childId); if(st){ st.coins=k.coins; st.points=k.xp; st.exp=k.lifetime; st.lifetimeExp=k.lifetime; } }
+  let bonusName='';
+  const dropChance=kind==='small'?0.4:(kind==='big'?0.7:0.9);
+  if(Math.random()<dropChance){
+    const cats=['avatarItem','petAccessory','homeDecoration','gardenItem','themeSkin'];
+    const cat=cats[Math.floor(Math.random()*cats.length)], list=SHOP_CATALOG[cat]||[];
+    if(list.length){ const item=list[Math.floor(Math.random()*list.length)]; addInventoryItem(childId,cat,item); bonusName=item.name; }
+  }
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'每日寶箱',task:(kind==='small'?'小寶箱':kind==='big'?'大寶箱':'連續寶箱'),xp:0,coins:coins,note:'+'+xp+' XP'+(bonusName?'・'+bonusName:''),status:'done',type:'chest'});
+  save();
+  celebrate('🎁','打開寶箱！','+'+xp+' XP・+'+coins+' 金幣'+(bonusName?'・'+bonusName:''));
+  triggerWorldCelebration(childId);
+  renderAll();
+}
+function renderChestPanel(childId){
+  const ch=checkDailyChest(childId);
+  const card=(kind,title,slot,needLabel,readyEmoji)=>{
+    const cls=slot.opened?'done':(slot.ready?'ready':'');
+    const sub=slot.opened?'已開啟 ✅':(slot.ready?'點我打開！':needLabel);
+    const e=slot.opened?'📭':(slot.ready?(readyEmoji||'🎁'):'🔒');
+    return '<div class="chest-card '+cls+'" '+(slot.ready?'onclick="openDailyChest(\''+childId+'\',\''+kind+'\')"':'')+'><div class="ce">'+e+'</div><b>'+title+'</b><small>'+sub+'</small></div>';
+  };
+  return '<div class="card sw-panel"><div class="sw-dresshead"><b>🎁 每日寶箱</b><span class="chip">今天完成 '+ch.done+' 個任務</span></div><div class="chest-grid">'+
+    card('small','小寶箱',ch.small,'還差 '+ch.small.need+' 個任務')+
+    card('big','大寶箱',ch.big,'還差 '+ch.big.need+' 個任務')+
+    card('streak','連續寶箱',ch.streakChest,'連續再 '+ch.streakChest.need+' 天','🌈')+
+    '</div></div>';
+}
+
+/* =======================================================================
+   每日歡迎
+   ===================================================================== */
+function showDailyWelcome(childId){
+  if(!KIDS[childId]) return;
+  const key='sgb_welcome_'+childId; let last='';
+  try{ last=localStorage.getItem(key)||''; }catch(e){}
+  if(last===todayStr()) return;
+  try{ localStorage.setItem(key,todayStr()); }catch(e){}
+  const info=KIDS[childId], pet=petState(childId), ch=checkDailyChest(childId);
+  const tip=ch.done>=3?'今天已經可以打開寶箱了！':'今天完成 3 個任務，就能打開小寶箱！';
+  const mask=document.createElement('div'); mask.className='welcome-mask';
+  const card=document.createElement('div'); card.className='welcome-card';
+  card.innerHTML='<div class="wc-face">'+info.emoji+'</div><h3>歡迎回來，'+escHtml(info.name)+'！</h3>'+
+    '<p>'+escHtml((pet&&pet.name)||'夥伴')+'已經等你很久了～</p><p>'+tip+'</p>'+
+    '<button class="btn purple" style="margin-top:14px;width:100%;">開始今天的冒險 →</button>';
+  document.body.appendChild(mask); document.body.appendChild(card);
+  try{ requestAnimationFrame(()=>{ mask.classList.add('on'); card.classList.add('on'); }); }catch(e){ mask.classList.add('on'); card.classList.add('on'); }
+  const close=()=>{ mask.classList.remove('on'); card.classList.remove('on'); setTimeout(()=>{ if(mask.remove) mask.remove(); if(card.remove) card.remove(); },300); };
+  const btn=card.querySelector('button'); if(btn) btn.onclick=close; mask.onclick=close;
+}
+
+/* =======================================================================
+   命名 API（登入 / 工作階段 / 渲染入口）
+   ===================================================================== */
+function renderLoginScreen(){ return renderLoginGate(); }
+function getCurrentSession(){ return session; }
+function loginAsChild(childId,pin){ gateTarget=childId; gateInput=String(pin==null?'':pin); gateSubmitChild(); }
+function loginAsParent(password){ gateInput=String(password==null?'':password); gateSubmitParent(); }
+function renderChildApp(childId){ return renderChildDashboard(); }
 
 /* ---- 寵物 ---- */
 function buildSwPetHtml(childId){
@@ -3999,12 +4275,12 @@ function renderSisterWorld(childId){
     </div>
     <div class="sw-stage">
       ${fxHtml}
-      <div class="sw-ground"></div>
+      <div class="sw-ground" onclick="worldGroundClick(event,'${childId}')" title="點草地，我會走過去"></div>
       ${gardenHtml}
       <div class="sw-house-wrap" onclick="houseTap('${childId}')" title="點我看家園">${buildHouseSvg(homeLv,newStage)}</div>
       ${decoHtml}
       <div class="sw-avatar-wrap">${buildAvatarHtml(childId)}</div>
-      <div class="sw-pet-wrap ${['idle','happy'].includes(getPetMood(childId))?'follow':''}">${buildSwPetHtml(childId)}</div>
+      <div class="sw-pet-wrap">${buildSwPetHtml(childId)}</div>
       ${upBanner}
     </div>
     <div class="sw-goalbar">
@@ -4012,6 +4288,7 @@ function renderSisterWorld(childId){
       <span class="g-txt">${goal.text}</span>
       <div class="progress" style="margin-bottom:6px;"><i style="width:${goal.pct||0}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
       <span class="g-txt" style="margin:0;">🐾 ${petMoodMessage(childId)}</span>
+      <span class="g-txt" style="margin:4px 0 0;">${streakInfo(childId).text}</span>
       <div class="sw-mini">
         <span class="chip unlock" onclick="switchTab('home')">📋 去任務</span>
         <span class="chip ok" onclick="switchTab('rewards')">🛍️ 商店</span>
@@ -4020,6 +4297,7 @@ function renderSisterWorld(childId){
       </div>
     </div>
   </div>
+  ${renderChestPanel(childId)}
   ${renderDressUp(childId)}
   ${renderChildReport(childId)}`;
 }
@@ -4160,7 +4438,7 @@ function triggerAvatarAnimation(type){
 }
 function triggerPetAnimation(type){
   const el=document.querySelector('#childWorld .sw-pet'); if(!el) return;
-  ['happy','levelup','celebrate'].forEach(c=>el.classList.remove(c));
+  ['happy','levelup','celebrate','moving'].forEach(c=>el.classList.remove(c));
   void el.offsetWidth;
   if(type && ['happy','levelup','celebrate'].includes(type)){ el.classList.add(type); setTimeout(()=>{ if(el) el.classList.remove(type); },1500); }
 }
@@ -4204,6 +4482,8 @@ function updateWorldAfterReward(childId,rewardData){
   }else{
     w.lastHomeLevel=Math.max(prev,nowLv);
   }
+  updateStreak(childId);
+  if((rewardData.xp||0)>0){ setTimeout(()=>triggerRewardAnimation(childId,{xp:rewardData.xp,coins:rewardData.coins}),120); }
   save(true);
 }
 
@@ -4296,6 +4576,7 @@ function renderChildDashboard(){
   renderNoticePreview(active);
   renderLearningHomePanel();
   applyPendingWorldFx(active);
+  initWorldMovement(active);
 }
 
 /* ============ 工具 ============ */
@@ -4644,7 +4925,7 @@ function renderAdventurePanel(){
     <div class="progress"><i style="width:${pct}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
   </div>
   <div class="adventure-grid">${ids.map(id=>adventureCard(kid,id)).join('') || '<div class="card"><p class="muted" style="text-align:center;">今天還沒有 Adventure，請家長到後台建立任務。</p></div>'}</div>`;
-  renderDailyChest(kid);
+  renderAdventureChest(kid);
 }
 function adventureCard(kid,instanceId){
   const inst=state.taskInstances[instanceId], task=state.tasks[inst.taskId]||{};
@@ -4690,7 +4971,7 @@ function completeAdventure(kid,instanceId,btn){
   toast('✅ Adventure 完成！寵物很開心');
   setTimeout(()=>renderAll(),650);
 }
-function renderDailyChest(kid){
+function renderAdventureChest(kid){
   const box=document.getElementById('dailyChestPanel'); if(!box) return;
   const adv=getTodayAdventure(kid);
   const cls=adv.chestOpened?'opened':adv.allCompleted?'':'locked';
@@ -4700,10 +4981,10 @@ function renderDailyChest(kid){
     <div class="chest">${adv.chestOpened?'🎊':'🧰'}</div>
     <b>${title}</b>
     <p class="subnote">${desc}</p>
-    ${adv.allCompleted&&!adv.chestOpened?`<button class="btn sun sm" style="margin-top:10px;width:100%;" onclick="openDailyChest('${kid}')">開啟寶箱</button>`:''}
+    ${adv.allCompleted&&!adv.chestOpened?`<button class="btn sun sm" style="margin-top:10px;width:100%;" onclick="openAdventureChest('${kid}')">開啟寶箱</button>`:''}
   </div>`;
 }
-function openDailyChest(kid){
+function openAdventureChest(kid){
   const adv=getTodayAdventure(kid);
   if(!adv.allCompleted){toast('完成全部 Adventure 才能開寶箱');return;}
   if(adv.chestOpened){toast('今天已經開過寶箱');return;}
@@ -6017,6 +6298,7 @@ function doLogin(role, childId){
   applyRoleToApp(role==='parent'?'parent':'child');
   hideLoginGate();
   toast(role==='child'?('歡迎回來，'+session.childName+'！'):'已進入爸媽管理後台 👪');
+  if(role==='child') setTimeout(()=>showDailyWelcome(childId),450);
 }
 function logout(){
   session=null; persistSession();
@@ -6209,6 +6491,7 @@ if(loggedIn()){
   }
   applyRoleToApp(session.role==='parent'?'parent':'child');
   hideLoginGate();
+  if(session.role==='child') setTimeout(()=>showDailyWelcome(session.childId),600);
 }else{
   childSession='';
   const entry=readUrlEntry();
