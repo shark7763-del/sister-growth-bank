@@ -459,32 +459,22 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-mini{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
 .sw-mini .chip{cursor:pointer;}
 
-/* ---- 積木角色 Avatar (純 CSS div) ---- */
-.sw-avatar{position:relative;width:84px;height:128px;transform-origin:50% 100%;
-  animation:swIdle 3.4s ease-in-out infinite;}
-.sw-av-hat{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:26px;z-index:6;line-height:1;}
-.sw-av-hair{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:54px;height:26px;
-  border-radius:16px 16px 8px 8px;z-index:2;}
-.sw-av-hair.long::after{content:"";position:absolute;top:14px;left:-4px;right:-4px;height:34px;
-  border-radius:0 0 12px 12px;background:inherit;opacity:.92;}
-.sw-av-head{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:48px;height:44px;
-  background:#ffe0c4;border-radius:14px;z-index:3;box-shadow:inset 0 -4px 0 rgba(0,0,0,.05);}
-.sw-av-eye{position:absolute;top:20px;width:7px;height:9px;background:#4a3a32;border-radius:50%;z-index:4;
-  animation:swBlink 4.6s infinite;}
-.sw-av-eye.l{left:31px;} .sw-av-eye.r{right:31px;}
-.sw-av-mouth{position:absolute;top:33px;left:50%;transform:translateX(-50%);width:12px;height:6px;
-  border-bottom:2.5px solid #c98b6b;border-radius:0 0 10px 10px;z-index:4;}
-.sw-av-body{position:absolute;top:48px;left:50%;transform:translateX(-50%);width:56px;height:46px;
-  border-radius:14px 14px 10px 10px;z-index:2;box-shadow:inset 0 -5px 0 rgba(0,0,0,.07);}
-.sw-av-arm{position:absolute;top:52px;width:13px;height:36px;border-radius:8px;z-index:1;}
-.sw-av-arm.l{left:6px;transform:rotate(6deg);} .sw-av-arm.r{right:6px;transform:rotate(-6deg);}
-.sw-av-leg{position:absolute;top:90px;width:18px;height:26px;background:#5a6b8a;border-radius:6px;z-index:1;}
-.sw-av-leg.l{left:20px;} .sw-av-leg.r{right:20px;}
-.sw-av-shoe{position:absolute;top:112px;width:22px;height:14px;border-radius:7px 7px 5px 5px;z-index:3;}
-.sw-av-shoe.l{left:16px;} .sw-av-shoe.r{right:16px;}
-.sw-av-acc{position:absolute;top:54px;right:-6px;font-size:20px;z-index:6;animation:swFloat 3s ease-in-out infinite;}
-.sw-av-name{position:absolute;top:-40px;left:50%;transform:translateX(-50%);white-space:nowrap;
-  font-size:10px;font-weight:800;color:#fff;background:rgba(90,74,85,.8);padding:2px 8px;border-radius:10px;z-index:7;}
+/* ---- Q版積木角色 Avatar (SVG + 柔和2.5D) ---- */
+.sw-avatar{position:relative;width:98px;height:150px;transform-origin:50% 100%;cursor:pointer;
+  animation:swIdle 3.6s ease-in-out infinite;}
+.sw-avatar .av-svg{width:100%;height:100%;display:block;overflow:visible;
+  filter:drop-shadow(0 7px 6px rgba(60,70,95,.20));}
+/* 眨眼 */
+.av-eye{transform-box:fill-box;transform-origin:center;animation:avBlink 4.8s infinite;}
+@keyframes avBlink{0%,92%,100%{transform:scaleY(1)}95%,97%{transform:scaleY(.12)}}
+/* 揮手（點擊角色）— 右手由肩膀旋轉 */
+.av-arm-r{transform-box:fill-box;transform-origin:78% 14%;}
+.sw-avatar.wave .av-arm-r{animation:avWave .9s ease;}
+@keyframes avWave{0%,100%{transform:rotate(0)}20%{transform:rotate(-54deg)}45%{transform:rotate(-34deg)}70%{transform:rotate(-54deg)}}
+/* 名牌 / 帽子 / 配件 */
+.sw-av-name{position:absolute;top:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-size:10px;font-weight:800;color:#fff;background:rgba(90,74,85,.82);padding:2px 9px;border-radius:11px;z-index:7;
+  box-shadow:0 2px 5px rgba(0,0,0,.15);}
 .sw-av-name .ttl{display:block;font-size:8.5px;color:#ffe9b0;}
 
 .sw-avatar.happy{animation:swJump .6s ease;}
@@ -492,11 +482,10 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-avatar.sad{animation:swSad 1.4s ease;}
 .sw-avatar.celebrate{animation:swCelebrate 1s ease;}
 @keyframes swIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@keyframes swJump{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.04)}55%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
-@keyframes swLevel{0%{transform:translateY(0);filter:none}40%{transform:translateY(-10px);filter:brightness(1.5) drop-shadow(0 0 12px #ffd166)}100%{transform:translateY(0);filter:none}}
+@keyframes swJump{0%{transform:translateY(0)}30%{transform:translateY(-26px) scale(1.05)}55%{transform:translateY(0)}70%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+@keyframes swLevel{0%{transform:translateY(0);filter:none}40%{transform:translateY(-12px) scale(1.08);filter:brightness(1.45) drop-shadow(0 0 14px #ffd166)}100%{transform:translateY(0) scale(1);filter:none}}
 @keyframes swSad{0%,100%{transform:translateY(0) rotate(0);filter:none}40%{transform:translateY(3px) rotate(-3deg);filter:grayscale(.4) brightness(.94)}}
-@keyframes swCelebrate{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg) translateY(-6px)}50%{transform:rotate(8deg) translateY(-10px)}80%{transform:rotate(-4deg) translateY(-3px)}}
-@keyframes swBlink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes swCelebrate{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg) translateY(-7px)}50%{transform:rotate(8deg) translateY(-11px)}80%{transform:rotate(-4deg) translateY(-3px)}}
 @keyframes swFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
 /* ---- 寵物 ---- */
@@ -576,7 +565,7 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
 
 @media (prefers-reduced-motion: reduce){
-  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.sw-av-acc,.sw-av-eye,.hl,.hl-new,
+  .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.hl,.hl-new,
   .sw-spark,.sw-upbanner,.sw-pet-z,.sw-deco,.sw-fx-item{animation:none !important;}
   .sw-avatar,.sw-pet{transform:none !important;}
   .hl{opacity:1 !important;transition:none !important;}
@@ -3750,7 +3739,63 @@ function calculateNextWorldGoal(childId){
 }
 
 /* ---- 積木角色 Avatar（純 CSS div）---- */
-function buildAvatarHtml(childId){
+// 顏色明暗工具：amt>0 變亮、amt<0 變暗（-1..1）
+function shadeHex(hex,amt){
+  hex=String(hex||'#888888').replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  let r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
+  if(isNaN(r)) return hex.startsWith('#')?hex:'#'+hex;
+  const t=amt<0?0:255, p=Math.min(1,Math.abs(amt));
+  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b);
+  return '#'+[r,g,b].map(x=>Math.max(0,Math.min(255,x)).toString(16).padStart(2,'0')).join('');
+}
+// 臉（眼睛/眨眼/腮紅/嘴）— 可帶 {sad}
+function renderAvatarFace(opt){
+  opt=opt||{};
+  const mouth=opt.sad
+    ? `<path d="M52 73 Q60 67 68 73" stroke="#c8826a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+    : `<path d="M52 70 Q60 78 68 70" stroke="#c8826a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  const eye=(cx)=>`<g class="av-eye">
+      <ellipse cx="${cx}" cy="58" rx="5.6" ry="7.2" fill="#fff"/>
+      <circle cx="${cx}" cy="59.4" r="3.5" fill="#3a2e2a"/>
+      <circle cx="${cx-1.6}" cy="56.6" r="1.5" fill="#fff"/>
+    </g>`;
+  return `<g class="av-faceg">
+    <ellipse cx="43" cy="65" rx="6.5" ry="4.6" fill="#ff9bb0" opacity="0.5"/>
+    <ellipse cx="77" cy="65" rx="6.5" ry="4.6" fill="#ff9bb0" opacity="0.5"/>
+    ${eye(48)}${eye(72)}
+    ${mouth}
+  </g>`;
+}
+// 服裝（身體＋雙手＋雙腳＋鞋子，含亮暗面）— opt:{cid}
+function renderAvatarOutfit(opt){
+  const cid=opt.cid;
+  return `<g class="av-outfit">
+    <!-- 腿 -->
+    <rect x="47" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
+    <rect x="61" y="117" width="12" height="15" rx="6" fill="url(#leg_${cid})"/>
+    <!-- 鞋子（有厚度：鞋底較暗）-->
+    <g><rect x="41" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
+       <rect x="42" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+       <ellipse cx="47" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/></g>
+    <g><rect x="60" y="135" width="19" height="6" rx="3" fill="${opt.shoeSole}"/>
+       <rect x="61" y="127" width="17" height="10" rx="5" fill="url(#shoe_${cid})"/>
+       <ellipse cx="66" cy="130" rx="4" ry="2" fill="#ffffff" opacity="0.35"/></g>
+    <!-- 脖子 -->
+    <rect x="54" y="78" width="12" height="9" rx="4" fill="url(#skin_${cid})"/>
+    <!-- 身體（短）-->
+    <rect x="34" y="85" width="52" height="35" rx="16" fill="url(#body_${cid})"/>
+    <ellipse cx="48" cy="94" rx="12" ry="7" fill="#ffffff" opacity="0.26"/>
+    <path d="M52 86 Q60 92 68 86" stroke="${opt.bodyDark}" stroke-width="2" fill="none" opacity="0.5" stroke-linecap="round"/>
+    <!-- 左手 -->
+    <g><rect x="24" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
+       <circle cx="30.5" cy="115" r="6" fill="url(#skin_${cid})"/></g>
+    <!-- 右手（揮手）-->
+    <g class="av-arm-r"><rect x="83" y="88" width="13" height="26" rx="6.5" fill="url(#sleeve_${cid})"/>
+       <circle cx="89.5" cy="115" r="6" fill="url(#skin_${cid})"/></g>
+  </g>`;
+}
+function renderAvatar(childId){
   const av=avatarOf(childId), info=KIDS[childId];
   const outfit=avatarItemDef('outfit',av.avatarOutfit);
   const hair=avatarItemDef('hair',av.avatarHair);
@@ -3760,25 +3805,68 @@ function buildAvatarHtml(childId){
   const bodyColor=(outfit&&outfit.color)||info.c1||'#7cc4ff';
   const hairColor=(hair&&hair.color)||'#5a3b2a';
   const shoeColor=(shoes&&shoes.color)||'#ff7a7a';
+  const longHair=!!(hair&&hair.long);
+  const cid=String(childId).replace(/[^a-zA-Z0-9_]/g,'');
   const lv=getAvatarLevel(childId);
   const title=av.avatarTitle||levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0).cur.name;
   const name=escHtml(av.avatarName||info.name);
-  return `<div class="sw-avatar" data-child="${childId}" onclick="dressUp('avatarItem')" title="點我換裝">
+  const sad=getPetMood && false; // 角色預設開心；sad 由動畫觸發
+  const defs=`<defs>
+    <radialGradient id="skin_${cid}" cx="40%" cy="32%" r="78%">
+      <stop offset="0" stop-color="#fff2e0"/><stop offset="0.55" stop-color="#ffd9b6"/><stop offset="1" stop-color="#f1b489"/>
+    </radialGradient>
+    <linearGradient id="body_${cid}" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="${shadeHex(bodyColor,0.32)}"/><stop offset="0.55" stop-color="${bodyColor}"/><stop offset="1" stop-color="${shadeHex(bodyColor,-0.22)}"/>
+    </linearGradient>
+    <linearGradient id="sleeve_${cid}" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0" stop-color="${shadeHex(bodyColor,0.12)}"/><stop offset="1" stop-color="${shadeHex(bodyColor,-0.3)}"/>
+    </linearGradient>
+    <linearGradient id="hair_${cid}" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="${shadeHex(hairColor,0.4)}"/><stop offset="0.5" stop-color="${hairColor}"/><stop offset="1" stop-color="${shadeHex(hairColor,-0.28)}"/>
+    </linearGradient>
+    <linearGradient id="shoe_${cid}" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="${shadeHex(shoeColor,0.28)}"/><stop offset="0.55" stop-color="${shoeColor}"/><stop offset="1" stop-color="${shadeHex(shoeColor,-0.3)}"/>
+    </linearGradient>
+    <linearGradient id="leg_${cid}" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#9aa6d2"/><stop offset="1" stop-color="#5a6aa0"/>
+    </linearGradient>
+  </defs>`;
+  const hairBack=longHair?`<g class="av-hair-back">
+      <rect x="26" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})"/>
+      <rect x="83" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})"/>
+    </g>`:'';
+  const svg=`<svg class="av-svg" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+    ${defs}
+    <ellipse class="av-shadow" cx="60" cy="144" rx="30" ry="6" fill="#2a2a45" opacity="0.16"/>
+    ${renderAvatarOutfit({cid, bodyDark:shadeHex(bodyColor,-0.28), shoeSole:shadeHex(shoeColor,-0.4)})}
+    ${hairBack}
+    <!-- 耳朵 -->
+    <circle cx="29" cy="55" r="6" fill="url(#skin_${cid})"/>
+    <circle cx="91" cy="55" r="6" fill="url(#skin_${cid})"/>
+    <!-- 頭（大、圓角方塊，柔和明暗）-->
+    <rect x="28" y="22" width="64" height="60" rx="24" fill="url(#skin_${cid})"/>
+    <path d="M60 80 Q86 80 88 52 Q90 74 74 80 Z" fill="#000000" opacity="0.05"/>
+    ${renderAvatarFace({sad})}
+    <!-- 頭髮（瀏海＋高光）-->
+    <path d="M26 56 Q21 24 60 17 Q99 24 94 56 Q89 39 78 44 Q72 33 60 36 Q48 33 42 44 Q31 39 26 56 Z" fill="url(#hair_${cid})"/>
+    <ellipse cx="47" cy="31" rx="14" ry="6" fill="#ffffff" opacity="0.34"/>
+  </svg>`;
+  return `<div class="sw-avatar" data-child="${childId}" onclick="avatarTap('${childId}')" title="點我打招呼／到下方換裝">
     <div class="sw-av-name">${name}<span class="ttl">Lv.${lv} ${escHtml(title)}</span></div>
-    ${hat?`<div class="sw-av-hat">${hat.emoji||'🎩'}</div>`:''}
-    <div class="sw-av-hair ${hair&&hair.long?'long':''}" style="background:${hairColor}"></div>
-    <div class="sw-av-head"></div>
-    <div class="sw-av-eye l"></div><div class="sw-av-eye r"></div>
-    <div class="sw-av-mouth"></div>
-    <div class="sw-av-body" style="background:${bodyColor}"></div>
-    <div class="sw-av-arm l" style="background:${bodyColor}"></div>
-    <div class="sw-av-arm r" style="background:${bodyColor}"></div>
-    <div class="sw-av-leg l"></div><div class="sw-av-leg r"></div>
-    <div class="sw-av-shoe l" style="background:${shoeColor}"></div>
-    <div class="sw-av-shoe r" style="background:${shoeColor}"></div>
-    ${acc?`<div class="sw-av-acc">${acc.emoji||'⭐'}</div>`:''}
+    ${hat?`<div style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);font-size:30px;z-index:6;line-height:1;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25));">${hat.emoji||'🎩'}</div>`:''}
+    ${acc?`<div style="position:absolute;top:64px;right:-3px;font-size:19px;z-index:6;filter:drop-shadow(0 2px 1px rgba(0,0,0,.2));">${acc.emoji||'⭐'}</div>`:''}
+    ${svg}
   </div>`;
 }
+// 向後相容：舊呼叫點仍可用
+function buildAvatarHtml(childId){ return renderAvatar(childId); }
+// 只重繪角色（換裝後即時更新，不必整頁重整）
+function updateAvatarStyle(childId){
+  const wrap=document.querySelector('#childWorld .sw-avatar-wrap');
+  if(wrap) wrap.innerHTML=renderAvatar(childId);
+}
+// 點角色：揮手打招呼
+function avatarTap(childId){ triggerAvatarAnimation('wave'); }
 
 /* ---- 寵物 ---- */
 function buildSwPetHtml(childId){
@@ -4012,9 +4100,13 @@ function placeHomeDecoration(childId,itemId){
 /* ---- 動畫觸發 ---- */
 function triggerAvatarAnimation(type){
   const el=document.querySelector('#childWorld .sw-avatar'); if(!el) return;
-  ['happy','levelup','sad','celebrate'].forEach(c=>el.classList.remove(c));
+  ['happy','levelup','sad','celebrate','wave'].forEach(c=>el.classList.remove(c));
   void el.offsetWidth;
-  if(type && type!=='idle'){ el.classList.add(type); setTimeout(()=>{ if(el) el.classList.remove(type); },1400); }
+  if(type && type!=='idle'){
+    el.classList.add(type);
+    const dur={levelup:1150,celebrate:1050,wave:950,sad:1450,happy:650}[type]||1200;
+    setTimeout(()=>{ if(el) el.classList.remove(type); },dur);
+  }
 }
 function triggerPetAnimation(type){
   const el=document.querySelector('#childWorld .sw-pet'); if(!el) return;
