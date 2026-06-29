@@ -35,6 +35,7 @@ function doGet(e){
   const action = (e && e.parameter && e.parameter.action) || 'load';
   if (action === 'load') return json(loadState());
   if (action === 'ping') return json({ok:true, msg:'pong', time:Date.now()});
+  if (action === 'aiConfig') return json(readAiConfig());
   return json({ok:false, error:'unknown action'});
 }
 
@@ -49,6 +50,13 @@ function doPost(e){
       saveState(st);
       try { writeMirror(st); } catch(mErr) { /* 鏡像失敗不影響主資料 */ }
       return json({ok:true, updatedAt: st.updatedAt});
+    }
+    if (body.action === 'setAiConfig') {
+      saveAiConfig(body || {});
+      return json({ok:true, config: readAiConfig()});
+    }
+    if (body.action === 'ai') {
+      return json(generateAiResponse(body || {}));
     }
     return json({ok:false, error:'unknown action'});
   } catch(err) {
@@ -125,4 +133,81 @@ function writeMirror(st){
     r.getRange(2,1,rr.length,1).setNumberFormat('yyyy/MM/dd HH:mm');
   }
   r.getRange(1,1,1,8).setFontWeight('bold');
+}
+
+/* ===== OpenAI（可選） ===== */
+function readAiConfig(){
+  const props = PropertiesService.getScriptProperties();
+  const apiKey = props.getProperty('OPENAI_API_KEY') || '';
+  const model = props.getProperty('OPENAI_MODEL') || 'gpt-4.1';
+  return {ok:true, configured: !!apiKey, model:model};
+}
+function saveAiConfig(body){
+  const props = PropertiesService.getScriptProperties();
+  const apiKey = String(body.apiKey || '').trim();
+  const model = String(body.model || 'gpt-4.1').trim() || 'gpt-4.1';
+  if (apiKey) props.setProperty('OPENAI_API_KEY', apiKey);
+  else props.deleteProperty('OPENAI_API_KEY');
+  props.setProperty('OPENAI_MODEL', model);
+}
+function aiSystemPrompt_(kind){
+  const base = [
+    '你是「姊妹成長銀行」家庭成長 App 的 AI 助手。',
+    '請只根據提供的今日資料生成 1 到 2 句繁體中文，語氣溫和、具體、正向，適合 5 到 12 歲孩子與家長。',
+    '不要提及政策、不要說明規則、不要使用英文、不要超過 60 個中文字。',
+    '不要編造未提供的事實，不要提及敏感內容。'
+  ];
+  if (kind === 'parent') base.push('給家長的版本可以更像週報摘要，但仍要短。');
+  if (kind === 'report') base.push('報告版本要包含今天的完成狀態，並適合貼到家庭紀錄。');
+  return base.join('');
+}
+function extractResponseText_(resp){
+  if (!resp) return '';
+  if (typeof resp.output_text === 'string' && resp.output_text.trim()) return resp.output_text.trim();
+  const out = resp.output || [];
+  const parts = [];
+  out.forEach(item => {
+    if (item && item.type === 'message' && Array.isArray(item.content)) {
+      item.content.forEach(c => {
+        if (c && c.type === 'output_text' && c.text) parts.push(c.text);
+      });
+    }
+  });
+  return parts.join('').trim();
+}
+function generateAiResponse(body){
+  const cfg = readAiConfig();
+  if (!cfg.configured) return {ok:false, error:'openai_not_configured'};
+  const payload = body.context || {};
+  const model = cfg.model || 'gpt-4.1';
+  const prompt = aiSystemPrompt_(body.kind || 'child');
+  const userText = JSON.stringify(payload);
+  const req = {
+    model: model,
+    input: [
+      {role:'system', content:[{type:'input_text', text: prompt}]},
+      {role:'user', content:[{type:'input_text', text: userText}]}
+    ],
+    max_output_tokens: 120,
+    temperature: 0.8
+  };
+  const res = UrlFetchApp.fetch('https://api.openai.com/v1/responses', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: {
+      Authorization: 'Bearer ' + (PropertiesService.getScriptProperties().getProperty('OPENAI_API_KEY') || '')
+    },
+    payload: JSON.stringify(req),
+    muteHttpExceptions: true
+  });
+  const code = res.getResponseCode();
+  const text = res.getContentText();
+  let data = null;
+  try { data = JSON.parse(text); } catch (e) {}
+  if (code >= 200 && code < 300) {
+    const msg = extractResponseText_(data);
+    if (msg) return {ok:true, text: msg, model:model};
+    return {ok:false, error:'empty_openai_response', raw:data};
+  }
+  return {ok:false, error:'openai_http_'+code, detail:(data && data.error && data.error.message) || text};
 }

@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>姊妹成長銀行 3.0｜惟甯・昕穎</title>
+<meta name="theme-color" content="#a98cff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 :root{
   --pink:#ff8fb1; --pink2:#ffd6e3; --purple:#a98cff; --purple2:#e6dbff;
@@ -122,6 +127,19 @@ textarea{min-height:60px;resize:vertical;}
 .shopitem .nm{font-size:13px;font-weight:700;margin:5px 0;min-height:34px;display:flex;align-items:center;justify-content:center;}
 .shopitem .cost{font-size:13px;font-weight:800;color:var(--sun);background:var(--sun2);border-radius:20px;padding:2px 8px;display:inline-block;}
 .shoptier{font-size:14px;font-weight:800;margin:14px 0 8px;color:var(--ink);}
+.coinshopgrid,.invgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.coinitem,.invitem{border:2px solid #efe7f3;border-radius:16px;padding:12px;background:#fff;}
+.coinitem .top,.invitem .top{display:flex;align-items:flex-start;gap:10px;}
+.coinicon,.invicon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 auto;background:linear-gradient(135deg,#fff8e6,#fff);}
+.coinmeta,.invmeta{flex:1;min-width:0;}
+.coinmeta b,.invmeta b{display:block;font-size:14px;line-height:1.2;}
+.coinmeta small,.invmeta small{display:block;font-size:11px;color:var(--ink2);font-weight:700;margin-top:2px;}
+.coincost{font-size:12px;font-weight:900;color:#a66c00;background:#fff7d8;border:1px solid #ffd166;border-radius:999px;padding:3px 8px;white-space:nowrap;}
+.coinitem p,.invitem p{margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--ink2);}
+.invcount{font-size:12px;font-weight:900;color:var(--purple);background:var(--purple2);border-radius:999px;padding:3px 8px;white-space:nowrap;}
+.invtag{font-size:11px;font-weight:800;color:#7d6d85;background:#f6f1ff;border-radius:999px;padding:3px 8px;white-space:nowrap;}
+.invitem .btn{width:100%;margin-top:10px;}
+.shopempty{padding:14px;text-align:center;color:var(--ink2);font-size:13px;}
 
 /* 紀錄 */
 .rec{display:flex;gap:10px;padding:11px 4px;border-bottom:1px dashed #eee4ef;align-items:flex-start;}
@@ -225,6 +243,184 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 
 /* 稱號牆 */
 .titlecard{display:flex;align-items:center;gap:10px;}
+
+/* Child World */
+.worldhero{position:relative;overflow:hidden;background:linear-gradient(160deg,#dff7ec 0%,#d6ecff 58%,#fff0c9 100%);border:2px solid rgba(255,255,255,.8);}
+.worldsky{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(circle at 16% 18%,rgba(255,255,255,.9) 0 22px,transparent 23px),
+  radial-gradient(circle at 76% 12%,rgba(255,255,255,.72) 0 18px,transparent 19px),
+  linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));}
+.worldtop{position:relative;display:flex;align-items:center;gap:12px;}
+.worldavatar{width:82px;height:82px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:48px;box-shadow:0 10px 22px rgba(80,110,120,.16);}
+.worldname{font-size:25px;font-weight:900;line-height:1.05;}
+.worlddate{font-size:12px;color:var(--ink2);font-weight:700;margin-top:4px;}
+.coinbubble{margin-left:auto;background:#fff7d8;border:2px solid #ffd166;border-radius:18px;padding:9px 11px;text-align:center;box-shadow:0 6px 14px rgba(180,130,30,.12);}
+.coinbubble b{display:block;color:#a66c00;font-size:20px;line-height:1;}
+.coinbubble span{font-size:11px;color:#9a7200;font-weight:800;}
+.worldscene{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.worldtile{background:rgba(255,255,255,.76);border:2px solid rgba(255,255,255,.9);border-radius:18px;padding:12px;text-align:center;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.worldtile .big{font-size:50px;line-height:1;}
+.worldtile b{font-size:15px;margin-top:7px;}
+.worldtile span{font-size:12px;color:var(--ink2);font-weight:700;}
+.goalstrip{position:relative;margin-top:14px;background:rgba(255,255,255,.86);border-radius:18px;padding:12px;border:2px solid rgba(255,255,255,.9);}
+.goalstrip b{display:block;font-size:14px;}
+.goalstrip span{font-size:13px;color:var(--ink2);}
+.childlogin{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.childpick{border:2px solid #efe7f3;background:#fff;border-radius:18px;padding:14px;text-align:center;cursor:pointer;}
+.childpick .face{width:58px;height:58px;border-radius:20px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:34px;}
+.childpick b{display:block;font-size:15px;}
+.worldactions{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
+.worldactions .btn{min-height:50px;padding:10px 6px;font-size:13px;}
+.petroom{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.petcard{background:#fff;border:2px solid #efe7f3;border-radius:20px;padding:14px;overflow:hidden;}
+.petstage{background:linear-gradient(160deg,#fff6df,#effcf6);border-radius:18px;padding:14px;text-align:center;}
+.petface{font-size:64px;line-height:1;display:inline-block;filter:drop-shadow(0 8px 12px rgba(0,0,0,.08));}
+.petmeta{margin-top:10px;}
+.petmeta b{display:block;font-size:17px;}
+.petmeta small{display:block;color:var(--ink2);font-size:12px;font-weight:700;}
+.petbars{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;}
+.petbarrow{display:grid;grid-template-columns:48px 1fr 38px;gap:8px;align-items:center;font-size:12px;font-weight:800;}
+.petbarrow .track{height:13px;border-radius:999px;background:#f0eaf3;overflow:hidden;}
+.petbarrow .track i{display:block;height:100%;border-radius:999px;}
+.petbarrow.hunger .track i{background:linear-gradient(90deg,#ffd166,#ffb347);}
+.petbarrow.happy .track i{background:linear-gradient(90deg,#86ead0,#3fc9a3);}
+.petbarrow.exp .track i{background:linear-gradient(90deg,#9ed3ff,#4fa9ff);}
+.petmoods{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.petmoods .chip{margin:0;}
+.petchips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.petchip{border:2px solid #efe7f3;background:#fff;border-radius:14px;padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:800;line-height:1.2;}
+.petchip .e{display:block;font-size:24px;margin-bottom:4px;}
+.petchip.on{border-color:var(--purple);background:#f6f1ff;color:var(--purple);}
+.petactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.petactions .btn{min-height:44px;font-size:13px;padding:10px 8px;}
+.petnote{margin-top:10px;background:#fff8e8;border:1px dashed #ffd166;border-radius:14px;padding:10px 12px;font-size:12px;color:#9a6500;font-weight:800;}
+.housecard{margin-top:14px;border:2px solid #efe7f3;overflow:hidden;}
+.househead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.housetitle{font-size:18px;font-weight:900;}
+.housemeta{font-size:12px;color:var(--ink2);font-weight:700;margin-top:2px;}
+.housechips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.housechips .chip{margin:0;}
+.housescene{position:relative;border-radius:20px;overflow:hidden;min-height:220px;border:2px solid rgba(255,255,255,.8);}
+.housewindow{position:absolute;left:14px;top:14px;font-size:34px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08));}
+.housefloorbar{position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.3));}
+.houseobjects{position:absolute;inset:0;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;align-items:flex-start;}
+.houseplant,.housepet{font-size:42px;line-height:1;filter:drop-shadow(0 8px 10px rgba(0,0,0,.08));}
+.housepetbtn,.houseclick{cursor:pointer;transition:transform .12s ease, filter .12s ease;}
+.housepetbtn:hover,.houseclick:hover{transform:translateY(-2px) scale(1.02);}
+.housepetbtn:active,.houseclick:active{transform:translateY(0) scale(.98);}
+.housefurniture{display:flex;flex-wrap:wrap;gap:6px;max-width:100%;}
+.housefurniture span,.bagchip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 10px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.8);font-size:12px;font-weight:800;}
+.housegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.housestat{background:#fff;border:2px solid #efe7f3;border-radius:14px;padding:10px;text-align:center;}
+.housestat b{display:block;font-size:18px;line-height:1;}
+.housestat span{display:block;margin-top:4px;font-size:11px;color:var(--ink2);font-weight:700;}
+.houseactions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.houseactions .btn{min-height:44px;padding:10px 8px;font-size:13px;}
+.housebags{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.houselabel{font-size:13px;font-weight:900;margin-bottom:8px;}
+.housebaglist{display:flex;flex-wrap:wrap;gap:6px;}
+.learnhero{border:2px solid #efe7f3;border-radius:18px;padding:14px;background:linear-gradient(135deg,#fff,#f6f1ff);}
+.learnhero-top{display:flex;align-items:center;gap:10px;}
+.learnavatar{width:54px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:0 0 auto;}
+.learntitle{font-size:18px;font-weight:900;}
+.learnsub{font-size:12px;color:var(--ink2);font-weight:700;margin-top:2px;}
+.learnstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;}
+.learnstat{background:#fff;border:2px solid #efe7f3;border-radius:14px;padding:10px;text-align:center;}
+.learnstat b{display:block;font-size:18px;line-height:1;}
+.learnstat span{display:block;margin-top:4px;font-size:11px;color:var(--ink2);font-weight:700;}
+.learncard{border:2px solid #efe7f3;border-radius:18px;overflow:hidden;}
+.learncardhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.learncardhead h3{margin:0;font-size:17px;}
+.learnbadge{background:#f6f1ff;color:var(--purple);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap;}
+.quizgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quizitem{border:2px solid #efe7f3;border-radius:16px;padding:12px;background:#fff;}
+.quizitem.done{border-color:#a6ebce;background:linear-gradient(135deg,#effcf6,#fff);}
+.quiztop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+.quiztag{font-size:11px;font-weight:900;border-radius:999px;padding:4px 8px;background:#fff7d8;color:#a66c00;}
+.quizitem b{display:block;font-size:14px;line-height:1.4;}
+.quizitem small{display:block;color:var(--ink2);font-size:11px;font-weight:700;margin-top:4px;}
+.quizbody{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+.quizopt{border:2px solid #efe7f3;border-radius:14px;padding:10px 12px;background:#fff;text-align:left;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;}
+.quizopt:active{transform:scale(.99);}
+.learnnote{margin-top:10px;font-size:12px;font-weight:800;border-radius:12px;padding:8px 10px;}
+.learnnote.ok{background:#dff7ec;color:#1f9d6b;}
+.aicard{margin-top:14px;border:2px solid #efe7f3;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#fffdf7,#f6f1ff);}
+.aitop{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;}
+.aibadge{font-size:12px;font-weight:900;border-radius:999px;padding:5px 10px;background:#fff7d8;color:#a66c00;white-space:nowrap;}
+.aihero{display:flex;align-items:center;gap:10px;}
+.aiemoji{width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.06);}
+.aititle{font-size:17px;font-weight:900;}
+.aisub{font-size:12px;color:var(--ink2);font-weight:700;margin-top:2px;}
+.aibody{margin-top:10px;font-size:15px;line-height:1.8;}
+.aitags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.aitags .chip{margin:0;}
+@media(max-width:430px){
+  .worldtop{align-items:flex-start;}
+  .coinbubble{padding:8px 9px;}
+  .worldscene,.childlogin{grid-template-columns:1fr 1fr;}
+  .petroom{grid-template-columns:1fr;}
+  .petchips{grid-template-columns:repeat(2,1fr);}
+  .coinshopgrid,.invgrid,.shopgrid{grid-template-columns:1fr;}
+  .worldactions,.housegrid,.houseactions,.housebags,.learnstats,.quizgrid{grid-template-columns:1fr 1fr;}
+  .worldavatar{width:70px;height:70px;font-size:42px;}
+  .worldname{font-size:22px;}
+}
+
+/* Adventure */
+.adventure-head{background:linear-gradient(135deg,#fff7d8,#eafaf4);border:2px solid #ffe3a3;}
+.adventure-title{display:flex;align-items:center;gap:10px;}
+.adventure-title .map{width:52px;height:52px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:31px;box-shadow:0 5px 12px rgba(150,120,50,.12);}
+.adventure-title b{font-size:19px;}
+.adventure-title small{display:block;color:var(--ink2);font-size:12px;font-weight:700;}
+.adventure-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.advcard{position:relative;overflow:hidden;background:#fff;border:2px solid #efe7f3;border-radius:18px;padding:13px;display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:center;}
+.advcard.done{border-color:#a6ebce;background:linear-gradient(135deg,#effcf6,#fff);}
+.advcard.pending{border-color:#ffd99a;background:linear-gradient(135deg,#fff8e6,#fff);}
+.advicon{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--sky2),#fff);display:flex;align-items:center;justify-content:center;font-size:25px;}
+.advmain{min-width:0;}
+.advmain b{display:block;font-size:15px;line-height:1.25;}
+.advmain small{display:block;color:var(--ink2);font-size:12px;margin-top:3px;}
+.advreward{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
+.advreward span{font-size:11px;font-weight:900;border-radius:999px;padding:3px 8px;background:var(--sun2);color:#9a6500;}
+.advreward span.xp{background:var(--purple2);color:#6b4fd6;}
+.advstatus{font-size:12px;font-weight:900;border-radius:12px;padding:8px 10px;white-space:nowrap;}
+.advstatus.todo{background:var(--mint);color:#fff;}
+.advstatus.done{background:#dff7ec;color:#1f9d6b;}
+.advstatus.pending{background:#fff0c9;color:#a5790a;}
+.advstatus.lock{background:#f0eaf3;color:var(--ink2);}
+.petpop{animation:petpop .7s ease;}
+@keyframes petpop{0%{transform:scale(1);}40%{transform:scale(1.18) rotate(-3deg);}100%{transform:scale(1);}}
+.coinburst{position:fixed;z-index:96;font-weight:900;font-size:22px;color:#c98700;pointer-events:none;animation:coinburst 1s ease-out forwards;text-shadow:0 2px 8px rgba(255,255,255,.9);}
+@keyframes coinburst{0%{opacity:0;transform:translateY(10px) scale(.7) rotate(-8deg);}20%{opacity:1;}100%{opacity:0;transform:translateY(-62px) scale(1.25) rotate(8deg);}}
+.chestbox{background:linear-gradient(135deg,#fff4c7,#fff);border:2px solid #ffd166;text-align:center;}
+.chestbox .chest{font-size:52px;line-height:1;}
+.chestbox.locked{filter:saturate(.7);border-color:#efe7f3;background:#fff;}
+.chestbox.opened{border-color:#a6ebce;background:linear-gradient(135deg,#effcf6,#fff);}
+
+/* Parent Dashboard */
+.parentdash{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pdstat{background:#fff;border:2px solid #efe7f3;border-radius:16px;padding:12px;text-align:center;}
+.pdstat b{display:block;font-size:24px;color:var(--purple);line-height:1.1;}
+.pdstat span{font-size:12px;color:var(--ink2);}
+.pdrow{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed #eee4ef;}
+.pdrow:last-child{border-bottom:none;}
+.pdavatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 auto;}
+.pdmain{flex:1;min-width:0;}
+.pdmain b{font-size:15px;}
+.pdmain small{display:block;color:var(--ink2);font-size:12px;}
+.pdactions{display:flex;gap:6px;flex:0 0 auto;}
+.checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.checkitem{display:flex;align-items:center;gap:7px;border:2px solid #efe7f3;border-radius:12px;padding:9px;background:#fff;font-size:13px;font-weight:700;}
+.checkitem input{width:auto;}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.barlist{display:flex;flex-direction:column;gap:8px;}
+.barrow{display:grid;grid-template-columns:72px 1fr 42px;gap:8px;align-items:center;font-size:12px;}
+.bartrack{height:14px;border-radius:999px;background:#f0eaf3;overflow:hidden;}
+.bartrack i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mint),var(--sky));}
+@media(max-width:430px){
+  .parentdash,.formgrid,.checkgrid{grid-template-columns:1fr;}
+  .pdactions{flex-direction:column;}
+}
 </style>
 </head>
 <body>
@@ -239,8 +435,163 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 
 <div class="wrap">
 
+  <!-- ========== Child Dashboard：我的世界 ========== -->
+  <div class="page on" id="page-child">
+    <h2 class="sec"><span class="ic">🏡</span>我的世界</h2>
+    <div id="childWorld"></div>
+  </div>
+
+  <!-- ========== 家長後台 ========== -->
+  <div class="page" id="page-parent">
+    <h2 class="sec"><span class="ic">👪</span>Parent Dashboard</h2>
+    <div class="card">
+      <div class="parentdash" id="parentSummary"></div>
+    </div>
+
+    <h2 class="sec"><span class="ic">🧒</span>孩子管理</h2>
+    <div class="card">
+      <input type="hidden" id="pcId">
+      <div class="formgrid">
+        <div>
+          <label class="fl">名字</label>
+          <input type="text" id="pcName" placeholder="例如：小明">
+        </div>
+        <div>
+          <label class="fl">代表表情</label>
+          <input type="text" id="pcEmoji" value="🙂" maxlength="4">
+        </div>
+        <div>
+          <label class="fl">年級</label>
+          <select id="pcGrade"><option value="toddler">幼兒</option><option value="elementary">國小</option><option value="juniorHigh">國中</option></select>
+        </div>
+        <div>
+          <label class="fl">運動類別</label>
+          <select id="pcSport"><option>跆拳道</option><option>運動</option></select>
+        </div>
+        <div>
+          <label class="fl">寵物種類</label>
+          <select id="pcPetType"></select>
+        </div>
+      </div>
+      <label class="fl">主題配色</label>
+      <select id="pcTheme"></select>
+      <div class="btnrow" style="margin-top:10px;">
+        <button class="btn mint sm" style="flex:1;" onclick="saveParentChild()">💾 儲存孩子</button>
+        <button class="btn gray sm" style="flex:1;" onclick="resetParentChildForm()">清空</button>
+      </div>
+      <div class="divider"></div>
+      <div id="parentChildren"></div>
+    </div>
+
+    <h2 class="sec"><span class="ic">🧭</span>建立任務</h2>
+    <div class="card">
+      <div class="formgrid">
+        <div>
+          <label class="fl">任務名稱</label>
+          <input type="text" id="ptTitle" placeholder="例如：英文 10 分鐘">
+        </div>
+        <div>
+          <label class="fl">類別</label>
+          <select id="ptCategory">
+            <option value="reading">閱讀</option><option value="english">英文</option><option value="math">數學</option>
+            <option value="exercise">運動</option><option value="chores">家事</option><option value="life">生活</option>
+          </select>
+        </div>
+        <div>
+          <label class="fl">點數</label>
+          <input type="number" id="ptPoints" value="20">
+        </div>
+        <div>
+          <label class="fl">金幣</label>
+          <input type="number" id="ptCoins" value="12">
+        </div>
+        <div>
+          <label class="fl">週期</label>
+          <select id="ptSchedule"><option value="daily">每日</option><option value="weekly">每週</option><option value="monthly">每月</option><option value="weekday">指定星期</option><option value="date">指定日期</option></select>
+        </div>
+        <div>
+          <label class="fl">完成期限</label>
+          <input type="text" id="ptDeadline" placeholder="例如 20:30">
+        </div>
+      </div>
+      <label class="fl">指定星期</label>
+      <div class="checkgrid" id="ptWeekdays"></div>
+      <label class="fl">指定日期</label>
+      <input type="text" id="ptDates" placeholder="2026-06-29,2026-07-01">
+      <label class="fl">指派孩子</label>
+      <div class="checkgrid" id="ptChildren"></div>
+      <div class="btnrow" style="margin-top:12px;">
+        <label class="checkitem" style="flex:1;"><input type="checkbox" id="ptPhoto"> 需要拍照</label>
+        <label class="checkitem" style="flex:1;"><input type="checkbox" id="ptApproval" checked> 需要審核</label>
+        <label class="checkitem" style="flex:1;"><input type="checkbox" id="ptAutoReset" checked> 自動重置</label>
+      </div>
+      <button class="btn purple" style="margin-top:12px;" onclick="createParentTask()">➕ 建立 Adventure 任務</button>
+    </div>
+
+    <h2 class="sec"><span class="ic">📚</span>任務模板</h2>
+    <div class="card">
+      <div class="btnrow">
+        <button class="btn mint sm" style="flex:1;" onclick="importTaskTemplate('toddler')">幼兒</button>
+        <button class="btn sky sm" style="flex:1;" onclick="importTaskTemplate('elementary')">國小</button>
+        <button class="btn purple sm" style="flex:1;" onclick="importTaskTemplate('juniorHigh')">國中</button>
+      </div>
+      <div id="parentTaskList" style="margin-top:12px;"></div>
+    </div>
+
+    <h2 class="sec"><span class="ic">⚡</span>快速加扣分</h2>
+    <div class="card">
+      <label class="fl">孩子</label>
+      <select id="paChild"></select>
+      <label class="fl">原因</label>
+      <input type="text" id="paReason" placeholder="例如：主動幫忙媽媽">
+      <div class="btnrow" style="margin-top:12px;">
+        <button class="btn mint sm" style="flex:1;" onclick="parentAdjust(5)">+5</button>
+        <button class="btn mint sm" style="flex:1;" onclick="parentAdjust(10)">+10</button>
+        <button class="btn mint sm" style="flex:1;" onclick="parentAdjust(20)">+20</button>
+        <button class="btn sun sm" style="flex:1;" onclick="parentAdjust(50)">+50</button>
+      </div>
+      <div class="btnrow" style="margin-top:8px;">
+        <button class="btn bad sm" style="flex:1;" onclick="parentAdjust(-5)">扣 5</button>
+        <button class="btn bad sm" style="flex:1;" onclick="parentAdjust(-10)">扣 10</button>
+        <button class="btn bad sm" style="flex:1;" onclick="parentAdjust(-20)">扣 20</button>
+      </div>
+    </div>
+
+    <h2 class="sec"><span class="ic">🎁</span>願望商城</h2>
+    <div class="card">
+      <div class="formgrid">
+        <div>
+          <label class="fl">獎品名稱</label>
+          <input type="text" id="pwTitle" placeholder="例如：買一本漫畫">
+        </div>
+        <div>
+          <label class="fl">圖片 / 表情</label>
+          <input type="text" id="pwImage" value="🎁">
+        </div>
+        <div>
+          <label class="fl">需要點數</label>
+          <input type="number" id="pwPoints" value="100">
+        </div>
+        <div>
+          <label class="fl">庫存</label>
+          <input type="number" id="pwStock" value="1">
+        </div>
+      </div>
+      <label class="checkitem" style="margin-top:10px;"><input type="checkbox" id="pwRedeemable" checked> 可兌換</label>
+      <button class="btn sun" style="margin-top:12px;" onclick="createWishReward()">➕ 新增願望獎品</button>
+      <div id="parentWishList" style="margin-top:12px;"></div>
+    </div>
+
+    <h2 class="sec"><span class="ic">📊</span>每週報表</h2>
+    <div class="card" id="parentWeeklyReport"></div>
+  </div>
+
   <!-- ========== 分頁一：今日任務 ========== -->
-  <div class="page on" id="page-home">
+  <div class="page" id="page-home">
+    <h2 class="sec"><span class="ic">🧭</span>今日 Adventure</h2>
+    <div id="adventurePanel"></div>
+    <div id="dailyChestPanel"></div>
+
     <h2 class="sec"><span class="ic">📊</span>今日總覽儀表板</h2>
     <div id="homeCards"></div>
 
@@ -308,6 +659,28 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
   </div>
 
+  <!-- ========== 分頁二：家庭公告 ========== -->
+  <div class="page" id="page-notice">
+    <h2 class="sec"><span class="ic">🔔</span>家庭通知中心</h2>
+    <div class="card">
+      <div class="statgrid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat"><b id="noticeUnread">0</b><span>未讀通知</span></div>
+        <div class="stat"><b id="noticeToday">0</b><span>今日事件</span></div>
+        <div class="stat"><b id="noticeCount">0</b><span>最近通知</span></div>
+      </div>
+      <div class="subnote" id="noticeScope" style="margin-top:10px;text-align:center;">家庭通知中心</div>
+      <div class="btnrow" style="margin-top:10px;">
+        <button class="btn mint sm" style="flex:1;" onclick="copyNoticeDigest()">📋 複製摘要</button>
+        <button class="btn sky sm" style="flex:1;" onclick="renderNoticeTab()">🔄 重新整理</button>
+      </div>
+      <pre id="noticeDigest" style="white-space:pre-wrap;background:var(--cream);border-radius:14px;padding:14px;font-size:14px;margin:12px 0 0;font-family:inherit;line-height:1.75;"></pre>
+    </div>
+    <div class="card">
+      <div class="pills" id="noticeKidPills"></div>
+      <div id="noticeFeed" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
   <!-- ========== 分頁二：獎勵中心 ========== -->
   <div class="page" id="page-rewards">
     <div class="card" style="text-align:center;">
@@ -325,6 +698,19 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
     <div class="card" id="shopList"></div>
 
+    <h2 class="sec"><span class="ic">🪙</span>金幣商店</h2>
+    <div class="card">
+      <div class="pills" id="coinShopTabs"></div>
+      <div class="subnote" style="margin-top:8px;">可用金幣：<b id="coinBalance">0</b></div>
+      <div id="coinShopPanel" style="margin-top:10px;"></div>
+    </div>
+
+    <h2 class="sec"><span class="ic">🎒</span>我的背包</h2>
+    <div class="card" id="inventoryPanel"></div>
+
+    <h2 class="sec"><span class="ic">🎓</span>學習中心</h2>
+    <div class="card" id="learningHomePanel"></div>
+
     <h2 class="sec"><span class="ic">📱</span>平板時間銀行</h2>
     <div class="card">
       <label class="fl">👧 選擇孩子</label>
@@ -341,6 +727,15 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <p class="subnote" style="text-align:center;">兩姊妹一起完成任務累積，兌換全家共同的大獎勵 💖</p>
       <div id="coopList" style="margin-top:8px;"></div>
     </div>
+  </div>
+
+  <!-- ========== 分頁三：成就徽章 ========== -->
+  <div class="page" id="page-learning">
+    <h2 class="sec"><span class="ic">🎓</span>Learning Center</h2>
+    <div class="card" id="learningSummaryPanel"></div>
+    <div id="learningEnglishPanel" style="margin-top:10px;"></div>
+    <div id="learningMathPanel" style="margin-top:10px;"></div>
+    <div id="learningReadingPanel" style="margin-top:10px;"></div>
   </div>
 
   <!-- ========== 分頁三：成就徽章 ========== -->
@@ -448,6 +843,54 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
     </div>
 
     <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">📱 安裝成 App</h3>
+      <p class="subnote">可安裝到手機主畫面，像原生 App 一樣開啟。</p>
+      <p class="subnote" id="installStatus" style="margin-top:-2px;"></p>
+      <button class="btn mint sm" id="installBtn" style="margin-top:8px;width:100%;display:none;" onclick="installApp()">📲 安裝到手機</button>
+    </div>
+
+    <div class="card admin-only">
+      <h3 style="margin:0 0 10px;font-size:15px;">✨ AI 生成（OpenAI 可選）</h3>
+      <p class="subnote">不設定時，系統會沿用本機 AI。設定後，孩子首頁鼓勵語與週報可改由雲端 AI 生成。</p>
+      <p class="subnote">API Key 只會儲存在 GAS 後台，不會寫入瀏覽器。</p>
+      <label class="fl">OpenAI API Key</label>
+      <input type="password" id="openAiKey" placeholder="sk-...">
+      <label class="fl">模型</label>
+      <input type="text" id="openAiModel" placeholder="gpt-4.1">
+      <div class="btnrow" style="margin-top:10px;">
+        <button class="btn purple sm" style="flex:1;" onclick="saveOpenAiConfig()">💾 儲存 AI 設定</button>
+        <button class="btn mint sm" style="flex:1;" onclick="refreshOpenAiStatus()">🔄 重新讀取狀態</button>
+      </div>
+      <button class="btn sky sm" style="margin-top:10px;width:100%;" onclick="testOpenAiConfig()">🧪 測試雲端 AI</button>
+      <p class="subnote" id="openAiStatus" style="margin-top:8px;"></p>
+    </div>
+
+    <div class="card admin-only">
+      <h3 style="margin:0 0 10px;font-size:15px;">🌱 每日提醒</h3>
+      <p class="subnote">建立刷牙、閱讀、收玩具、睡前整理等提醒，孩子首頁會顯示，支援瀏覽器通知。</p>
+      <p class="subnote" id="reminderPerm" style="margin-top:-2px;"></p>
+      <button class="btn sky sm" style="width:100%;margin-top:8px;" onclick="enableReminderNotifications()">🔔 開啟通知權限</button>
+      <label class="fl">提醒名稱</label>
+      <input type="text" id="remTitle" placeholder="例如：睡前刷牙">
+      <label class="fl">提醒說明</label>
+      <input type="text" id="remNote" placeholder="例如：刷牙 2 分鐘、準備睡覺">
+      <label class="fl">時間</label>
+      <input type="time" id="remTime" value="20:00">
+      <label class="fl">重複</label>
+      <select id="remRepeat">
+        <option value="daily">每日</option>
+        <option value="weekly">每週</option>
+        <option value="once">一次</option>
+      </select>
+      <label class="fl">適用孩子</label>
+      <div class="pills" id="remChilds"></div>
+      <label class="fl">指定星期（每週時使用）</label>
+      <div class="pills" id="remWeekdays"></div>
+      <button class="btn mint sm" style="width:100%;margin-top:10px;" onclick="addReminder()">新增提醒</button>
+      <div id="reminderManage" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="card">
       <h3 style="margin:0 0 10px;font-size:15px;">➕ 新增自訂任務</h3>
       <label class="fl">類別</label>
       <select id="ctCat"></select>
@@ -501,6 +944,19 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <h3 style="margin:0 0 10px;font-size:15px;">🗂️ 管理角色</h3>
       <p class="subnote">內建四位角色不可刪除；自訂角色刪除後，其 XP / 平板 / 徽章 / 紀錄會一併移除。</p>
       <div id="kidManage" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:15px;">📚 學習設定</h3>
+      <p class="subnote">設定孩子的年級與每日閱讀分鐘數，系統會依此生成英文與數學題目。</p>
+      <label class="fl">👧 選擇孩子</label>
+      <div class="pills" id="learningKid"></div>
+      <label class="fl">年級</label>
+      <select id="learnGrade"><option value="toddler">幼兒</option><option value="elementary">國小</option><option value="juniorHigh">國中</option></select>
+      <label class="fl">每日閱讀分鐘數</label>
+      <select id="learnTarget"><option value="10">10 分鐘</option><option value="20">20 分鐘</option><option value="30">30 分鐘</option></select>
+      <button class="btn sky sm" style="margin-top:12px;width:100%;" onclick="saveLearningSettings()">💾 儲存學習設定</button>
+      <div id="learningParentSummary" style="margin-top:12px;"></div>
     </div>
 
     <div class="card">
@@ -568,8 +1024,15 @@ const KID_THEMES=[
 ];
 // 把自訂角色併入 KIDS，並重新計算 SISTERS（姊妹清單）
 function syncKids(s){
-  Object.keys(KIDS).forEach(k=>{ if(!BUILTIN_KIDS[k]) delete KIDS[k]; });
-  Object.assign(KIDS, (s&&s.customKids)||{});
+  const archived=(s&&s.archivedKids)||{};
+  const overrides=(s&&s.childOverrides)||{};
+  Object.keys(KIDS).forEach(k=>delete KIDS[k]);
+  Object.keys(BUILTIN_KIDS).forEach(k=>{
+    if(!archived[k]) KIDS[k]=Object.assign({},BUILTIN_KIDS[k],overrides[k]||{});
+  });
+  Object.keys((s&&s.customKids)||{}).forEach(k=>{
+    if(!archived[k]) KIDS[k]=Object.assign({},s.customKids[k],overrides[k]||{});
+  });
   SISTERS=Object.keys(KIDS).filter(k=>KIDS[k].sister);
 }
 
@@ -787,18 +1250,380 @@ const TABLET_OPTIONS=[
 const DAILY_TABLET_CAP=60, BANK_CAP=180, CORE_TASK_NEED=3, DAILY_TASK_TARGET=5;
 
 /* ============ 狀態 ============ */
+const SCHEMA_VERSION=3;
 const LS_KEY='sisterBank2pro';
+const CHILD_SESSION_KEY='familyGrowth_childId';
 let state=load();
+let childSession=localStorage.getItem(CHILD_SESSION_KEY)||'';
 
-function freshKid(){return {xp:0, lifetime:0, tablet:0, badges:[], dailyTablet:{}, quick:{}};}
+function freshKid(){return {xp:0, coins:0, lifetime:0, tablet:0, badges:[], dailyTablet:{}, quick:{}};}
 function defaultChallenge(){
   return {name:'姊妹連續 5 天完成睡前整理', target:5,
     reward:'家庭電影日 + 姊妹合作 XP 100', rewardXp:100, dates:[], achievedWeeks:[]};
+}
+function idSafe(s){
+  const raw=String(s||'item');
+  const base=raw.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+  let hash=0;
+  for(let i=0;i<raw.length;i++) hash=((hash*31)+raw.charCodeAt(i))>>>0;
+  return (base||'item')+'_'+hash.toString(36);
+}
+function v3Category(cat){
+  const map={'讀書':'reading','英文':'english','數學':'math','跆拳道':'exercise','運動':'exercise',
+    '家事':'chores','品格':'life','生活':'life','姊妹互助':'life','成長提醒':'life'};
+  return map[cat]||'life';
+}
+function v3TaskId(cat,n){
+  return 'task_'+idSafe(v3Category(cat))+'_'+idSafe(cat+'_'+n).slice(0,48);
+}
+function v3ShopId(tier,n){
+  return 'shop_'+idSafe(tier+'_'+n).slice(0,56);
+}
+function v3LevelFromXp(xp){ return levelOf(xp||0).cur.lv; }
+function defaultPetFor(childId, existing){
+  return Object.assign({
+    id:'pet_'+childId, childId, type:'dog', name:'夥伴',
+    level:1, exp:0, hunger:80, happiness:80, equippedItems:[],
+    favoriteFood:'', favoriteToy:'', lastCareAt:0, lastTickAt:0
+  }, existing||{});
+}
+function defaultHouseFor(childId, existing){
+  return Object.assign({
+    id:'house_'+childId, childId, level:1, wallpaper:'starter_sky', floor:'starter_wood',
+    upgradeLevel:0, furniture:[], garden:{flowers:[], trees:[]}, lastUpgradeAt:0
+  }, existing||{});
+}
+function defaultLearningFor(childId, existing){
+  return Object.assign({
+    english:{grade:'elementary',generatedSets:{},progress:{}},
+    math:{grade:'elementary',generatedSets:{},progress:{}},
+    reading:{dailyMinutesTarget:20,logs:[],completedDates:{}}
+  }, existing||{});
+}
+const LEARNING_GRADE_LABELS={
+  toddler:'幼兒',
+  elementary:'國小',
+  juniorHigh:'國中'
+};
+const ENGLISH_BANK={
+  toddler:[
+    {id:'cat',word:'cat',zh:'貓咪',sentence:'The cat is cute.',hint:'動物'},
+    {id:'dog',word:'dog',zh:'狗狗',sentence:'The dog runs fast.',hint:'動物'},
+    {id:'apple',word:'apple',zh:'蘋果',sentence:'I like an apple.',hint:'水果'},
+    {id:'ball',word:'ball',zh:'球',sentence:'The ball is red.',hint:'玩具'},
+    {id:'sun',word:'sun',zh:'太陽',sentence:'The sun is bright.',hint:'天空'},
+    {id:'milk',word:'milk',zh:'牛奶',sentence:'I drink milk.',hint:'飲料'}
+  ],
+  elementary:[
+    {id:'school',word:'school',zh:'學校',sentence:'We go to school every day.',hint:'地方'},
+    {id:'friend',word:'friend',zh:'朋友',sentence:'My friend is kind.',hint:'人物'},
+    {id:'family',word:'family',zh:'家庭',sentence:'Family is important.',hint:'關係'},
+    {id:'water',word:'water',zh:'水',sentence:'Please drink water.',hint:'日常'},
+    {id:'happy',word:'happy',zh:'快樂',sentence:'She feels happy today.',hint:'心情'},
+    {id:'play',word:'play',zh:'玩耍',sentence:'Children play in the park.',hint:'動作'},
+    {id:'book',word:'book',zh:'書',sentence:'I read a book.',hint:'閱讀'},
+    {id:'clean',word:'clean',zh:'乾淨的',sentence:'Keep your desk clean.',hint:'形容'},
+    {id:'study',word:'study',zh:'學習',sentence:'I study English.',hint:'動作'}
+  ],
+  juniorHigh:[
+    {id:'library',word:'library',zh:'圖書館',sentence:'The library is quiet.',hint:'地方'},
+    {id:'science',word:'science',zh:'科學',sentence:'Science helps us learn.',hint:'學科'},
+    {id:'careful',word:'careful',zh:'小心的',sentence:'Be careful when crossing.',hint:'形容'},
+    {id:'journey',word:'journey',zh:'旅程',sentence:'The journey was long.',hint:'名詞'},
+    {id:'important',word:'important',zh:'重要的',sentence:'Sleep is important.',hint:'形容'},
+    {id:'balance',word:'balance',zh:'平衡',sentence:'Find balance in life.',hint:'概念'},
+    {id:'habit',word:'habit',zh:'習慣',sentence:'Reading is a good habit.',hint:'概念'},
+    {id:'challenge',word:'challenge',zh:'挑戰',sentence:'We can face the challenge.',hint:'名詞'}
+  ]
+};
+const MATH_BANK={
+  toddler:{
+    add:[{a:1,b:2},{a:3,b:1},{a:4,b:2},{a:5,b:3}],
+    sub:[{a:5,b:2},{a:4,b:1},{a:6,b:3},{a:7,b:4}]
+  },
+  elementary:{
+    add:[{a:18,b:7},{a:24,b:16},{a:35,b:12}],
+    sub:[{a:42,b:15},{a:30,b:8},{a:55,b:19}],
+    mul:[{a:3,b:4},{a:6,b:5},{a:7,b:2}],
+    div:[{a:24,b:3},{a:36,b:6},{a:45,b:5}]
+  },
+  juniorHigh:{
+    fraction:[{text:'1/2 of 8',answer:'4'},{text:'1/3 of 12',answer:'4'},{text:'3/4 of 16',answer:'12'}],
+    time:[{text:'3:15 + 20 minutes',answer:'3:35'},{text:'7:40 - 15 minutes',answer:'7:25'},{text:'12:05 + 30 minutes',answer:'12:35'}],
+    geometry:[{text:'How many sides does a square have?',answer:'4'},{text:'How many corners does a triangle have?',answer:'3'},{text:'How many faces does a cube have?',answer:'6'}]
+  }
+};
+function defaultInventoryFor(existing){
+  return Object.assign({
+    food:{},
+    toys:{},
+    furniture:{},
+    clothing:{},
+    decorations:{},
+    wallpaper:{},
+    floor:{},
+    rareItems:{}
+  }, existing||{});
+}
+const PET_TYPES={
+  dog:{e:'🐶',name:'狗狗',mood:'忠誠'},
+  cat:{e:'🐱',name:'貓貓',mood:'優雅'},
+  chick:{e:'🐥',name:'小雞',mood:'活潑'},
+  panda:{e:'🐼',name:'熊貓',mood:'溫柔'},
+  dino:{e:'🦖',name:'恐龍',mood:'勇敢'},
+  fox:{e:'🦊',name:'狐狸',mood:'機靈'},
+  rabbit:{e:'🐰',name:'兔兔',mood:'可愛'}
+};
+const PET_FOODS=[
+  {id:'kibble',name:'飼料',e:'🥣',cost:5,hunger:18,happy:2,exp:4},
+  {id:'fruit',name:'水果',e:'🍎',cost:8,hunger:12,happy:6,exp:5},
+  {id:'cake',name:'小點心',e:'🍰',cost:12,hunger:8,happy:12,exp:8}
+];
+const PET_TOYS=[
+  {id:'ball',name:'球球',e:'⚽',cost:6,hunger:-2,happy:14,exp:6},
+  {id:'bone',name:'玩具',e:'🧸',cost:8,hunger:-1,happy:16,exp:7},
+  {id:'bubble',name:'泡泡',e:'🫧',cost:10,hunger:0,happy:20,exp:10}
+];
+const SHOP_CATEGORIES=[
+  {id:'food',label:'食物',e:'🥣'},
+  {id:'toys',label:'玩具',e:'🧸'},
+  {id:'furniture',label:'家具',e:'🛋️'},
+  {id:'clothing',label:'服裝',e:'👕'},
+  {id:'wallpaper',label:'壁紙',e:'🖼️'},
+  {id:'floor',label:'地板',e:'🧱'},
+  {id:'hat',label:'帽子',e:'🎩'},
+  {id:'decorations',label:'裝飾',e:'🌼'},
+  {id:'rareItems',label:'稀有',e:'✨'}
+];
+const SHOP_CATALOG={
+  food:[
+    {id:'kibble',name:'飼料',e:'🥣',cost:5,desc:'給寵物吃的基本糧食',usable:true,hunger:18,happy:2,exp:4},
+    {id:'fruit',name:'水果',e:'🍎',cost:8,desc:'讓寵物開心一點',usable:true,hunger:12,happy:6,exp:5},
+    {id:'cake',name:'點心',e:'🍰',cost:12,desc:'特別的甜點',usable:true,hunger:8,happy:12,exp:8}
+  ],
+  toys:[
+    {id:'ball',name:'球球',e:'⚽',cost:6,desc:'和寵物一起玩',usable:true,hunger:-2,happy:14,exp:6},
+    {id:'bone',name:'骨頭玩具',e:'🧸',cost:8,desc:'可以陪伴玩耍',usable:true,hunger:-1,happy:16,exp:7},
+    {id:'bubble',name:'泡泡器',e:'🫧',cost:10,desc:'快樂加很多',usable:true,hunger:0,happy:20,exp:9}
+  ],
+  furniture:[
+    {id:'chair',name:'小椅子',e:'🪑',cost:18,desc:'可以放在房間裡',usable:false},
+    {id:'table',name:'小桌子',e:'🛏️',cost:24,desc:'房間更完整',usable:false},
+    {id:'lamp',name:'檯燈',e:'💡',cost:16,desc:'房間更溫暖',usable:false},
+    {id:'bed',name:'小床',e:'🛌',cost:30,desc:'讓小屋升級',usable:false}
+  ],
+  clothing:[
+    {id:'shirt',name:'小上衣',e:'👕',cost:14,desc:'給角色穿搭',usable:false},
+    {id:'dress',name:'小洋裝',e:'👗',cost:18,desc:'可愛穿搭',usable:false},
+    {id:'shoes',name:'運動鞋',e:'👟',cost:15,desc:'準備出門玩',usable:false}
+  ],
+  wallpaper:[
+    {id:'sky',name:'天空壁紙',e:'🌤️',cost:20,desc:'更明亮的房間',usable:false},
+    {id:'forest',name:'森林壁紙',e:'🌳',cost:20,desc:'綠綠的家',usable:false},
+    {id:'space',name:'太空壁紙',e:'🪐',cost:24,desc:'神秘房間',usable:false}
+  ],
+  floor:[
+    {id:'wood',name:'木地板',e:'🪵',cost:16,desc:'溫暖地板',usable:false},
+    {id:'tile',name:'磁磚地板',e:'🧱',cost:18,desc:'乾淨整齊',usable:false},
+    {id:'cloud',name:'雲朵地板',e:'☁️',cost:26,desc:'夢幻房間',usable:false}
+  ],
+  hat:[
+    {id:'cap',name:'鴨舌帽',e:'🧢',cost:12,desc:'出門最適合',usable:false},
+    {id:'crown',name:'小皇冠',e:'👑',cost:24,desc:'今天是主角',usable:false},
+    {id:'bow',name:'蝴蝶結',e:'🎀',cost:14,desc:'漂亮裝扮',usable:false}
+  ],
+  decorations:[
+    {id:'plant',name:'小盆栽',e:'🪴',cost:10,desc:'房間變可愛',usable:false},
+    {id:'star',name:'星星貼紙',e:'⭐',cost:8,desc:'點綴牆面',usable:false},
+    {id:'rug',name:'地毯',e:'🟫',cost:12,desc:'地面更柔和',usable:false}
+  ],
+  rareItems:[
+    {id:'seed',name:'神秘種子',e:'🌱',cost:35,desc:'稀有道具',usable:false},
+    {id:'gem',name:'閃亮寶石',e:'💎',cost:60,desc:'收藏用稀有品',usable:false}
+  ]
+};
+const HOUSE_WALLPAPER_THEME={
+  starter_sky:{label:'天空', c1:'#dff7ff', c2:'#ffffff', e:'☁️'},
+  starter_forest:{label:'森林', c1:'#dff7ec', c2:'#ffffff', e:'🌳'},
+  sky:{label:'天空', c1:'#dff7ff', c2:'#fefefe', e:'🌤️'},
+  forest:{label:'森林', c1:'#e7f8e8', c2:'#fdfdfd', e:'🌲'},
+  space:{label:'太空', c1:'#e8ecff', c2:'#f6f1ff', e:'🪐'}
+};
+const HOUSE_FLOOR_THEME={
+  starter_wood:{label:'木地板', c1:'#f8e6c2', c2:'#fff7e7', e:'🪵'},
+  wood:{label:'木地板', c1:'#f3d7b6', c2:'#fff6ea', e:'🪵'},
+  tile:{label:'磁磚', c1:'#dde6ef', c2:'#f8fbff', e:'🧱'},
+  cloud:{label:'雲朵', c1:'#eef6ff', c2:'#ffffff', e:'☁️'}
+};
+const HOUSE_FLOWERS=[
+  {id:'rose',label:'玫瑰',e:'🌹'},
+  {id:'tulip',label:'鬱金香',e:'🌷'},
+  {id:'sunflower',label:'向日葵',e:'🌻'}
+];
+const HOUSE_TREES=[
+  {id:'oak',label:'橡樹',e:'🌳'},
+  {id:'cherry',label:'櫻花樹',e:'🌸'},
+  {id:'pine',label:'松樹',e:'🌲'}
+];
+function petLevelOf(exp){
+  const level=1+Math.floor((exp||0)/100);
+  return {level,pct:(exp||0)%100};
+}
+function defaultWorlds(){
+  return {
+    forest:{id:'forest',name:'森林',order:1,unlocked:true,unlockRule:null},
+    desert:{id:'desert',name:'沙漠',order:2,unlocked:false,unlockRule:{completedAdventures:10}},
+    ocean:{id:'ocean',name:'海洋',order:3,unlocked:false,unlockRule:{completedAdventures:25}},
+    snow:{id:'snow',name:'雪地',order:4,unlocked:false,unlockRule:{completedAdventures:45}},
+    sky:{id:'sky',name:'天空',order:5,unlocked:false,unlockRule:{completedAdventures:70}},
+    space:{id:'space',name:'太空',order:6,unlocked:false,unlockRule:{completedAdventures:100}}
+  };
+}
+function defaultTaskTemplates(){
+  return {
+    toddler:[
+      {title:'刷牙',category:'life',points:5,coins:5,exp:5},
+      {title:'收玩具',category:'chores',points:10,coins:8,exp:10},
+      {title:'聽故事 10 分鐘',category:'reading',points:10,coins:8,exp:10}
+    ],
+    elementary:[
+      {title:'閱讀 20 分鐘',category:'reading',points:20,coins:15,exp:20},
+      {title:'英文 10 分鐘',category:'english',points:20,coins:15,exp:20},
+      {title:'數學 10 分鐘',category:'math',points:20,coins:15,exp:20},
+      {title:'整理書包',category:'chores',points:10,coins:8,exp:10}
+    ],
+    juniorHigh:[
+      {title:'閱讀 30 分鐘',category:'reading',points:30,coins:20,exp:30},
+      {title:'英文複習 20 分鐘',category:'english',points:30,coins:20,exp:30},
+      {title:'數學練習 20 分鐘',category:'math',points:30,coins:20,exp:30},
+      {title:'運動 30 分鐘',category:'exercise',points:30,coins:20,exp:30}
+    ]
+  };
+}
+function taskFromLegacy(cat,t,source){
+  const xp=parseInt(t.x)||0;
+  return {
+    id:v3TaskId(cat,t.n), title:t.n, legacyCategory:cat, category:v3Category(cat),
+    points:xp, coins:Math.max(0,Math.round(xp*0.6)), exp:Math.max(0,xp),
+    assignedChildIds:[], schedule:{type:'daily',weekdays:[],dates:[],deadlineTime:'',
+      autoReset:true}, proof:{photoRequired:false}, approval:{required:false},
+    active:true, source:source||'builtin'
+  };
+}
+function buildV3Tasks(s){
+  const tasks=Object.assign({}, s.tasks||{});
+  const add=(cat,t,source)=>{
+    const exists=Object.values(tasks).some(x=>x.title===t.n && (x.legacyCategory===cat || x.category===v3Category(cat)));
+    if(exists) return;
+    const task=taskFromLegacy(cat,t,source);
+    tasks[task.id]=Object.assign(task,tasks[task.id]||{});
+  };
+  Object.keys(DEFAULT_TASKS).forEach(cat=>(DEFAULT_TASKS[cat]||[]).forEach(t=>add(cat,t,'builtin')));
+  Object.keys(SPORT_TASKS).forEach(cat=>(SPORT_TASKS[cat]||[]).forEach(t=>add(cat,t,'builtin')));
+  Object.keys(QUICK_TASKS).forEach(k=>(QUICK_TASKS[k]||[]).forEach(t=>add(t.cat,t,'builtin_quick')));
+  Object.keys(s.customTasks||{}).forEach(cat=>(s.customTasks[cat]||[]).forEach(t=>add(cat,t,'custom')));
+  return tasks;
+}
+function buildV3ShopItems(s){
+  const items=Object.assign({}, s.shopItems||{});
+  const add=(tier,it,source,type)=>{
+    const exists=Object.values(items).some(x=>x.title===it.n && (x.tier===tier || x.source===source));
+    if(exists) return;
+    const id=v3ShopId(tier,it.n);
+    const base={id,type:type||'wish',title:it.n,image:'',emoji:it.e||'🎁',
+      costPoints:parseInt(it.x)||0,costCoins:0,stock:null,redeemable:true,rarity:'common',
+      tier,source:source||'builtin'};
+    items[id]=Object.assign(base,items[id]||{});
+  };
+  Object.keys(DEFAULT_SHOP).forEach(tier=>(DEFAULT_SHOP[tier]||[]).forEach(it=>add(tier,it,'builtin','wish')));
+  Object.keys(s.customRewards||{}).forEach(tier=>(s.customRewards[tier]||[]).forEach(it=>add(tier,it,'custom','wish')));
+  return items;
+}
+function ledgerFromRecord(r,i){
+  const positive=Math.max(0,parseInt(r.xp)||0);
+  const xp=parseInt(r.xp)||0;
+  const coins=typeof r.coins==='number'?r.coins:(positive?Math.round(positive*0.6):0);
+  const typeMap={score:'task_complete',apply:'task_complete',special:'achievement_reward',
+    reminder:'penalty',redeem:'wish_redeem',coopredeem:'wish_redeem',tablet:'tablet_exchange',
+    big:'big_reward',challenge:'family_challenge',settlement:'daily_note'};
+  return {
+    id:r.id||('legacy_'+(r.time||0)+'_'+i), source:'legacy-record', legacyIndex:i,
+    time:r.time||Date.now(), childId:r.kid||'', actorUserId:r.parent||'',
+    type:typeMap[r.type]||r.type||'event', category:v3Category((r.cat||'').replace('特殊成就-','')),
+    title:r.task||'', pointsDelta:xp, coinsDelta:coins,
+    expDelta:positive, reason:r.note||'', refId:r.task||''
+  };
+}
+function syncV3Model(s){
+  s.schemaVersion=SCHEMA_VERSION;
+  s.app=Object.assign({familyId:'family_default',name:'Family Growth Adventure',
+    locale:'zh-TW',timezone:'Asia/Taipei'},s.app||{});
+  s.users=Object.assign({
+    parent_1:{id:'parent_1',role:'parent',name:'爸爸',pinHash:s.parentPin||'',avatar:'👨'},
+    parent_2:{id:'parent_2',role:'parent',name:'媽媽',pinHash:s.parentPin||'',avatar:'👩'}
+  },s.users||{});
+  s.children=s.children||{};
+  Object.keys(KIDS).forEach(k=>{
+    const legacy=s.kids[k]||freshKid(), info=KIDS[k];
+    const cur=s.children[k]||{};
+    s.children[k]=Object.assign({
+      id:k,name:info.name,birthday:'',grade:'elementary',avatar:info.emoji,
+      theme:{c1:info.c1,c2:info.c2},petId:'pet_'+k,houseId:'house_'+k,activeWorldId:'forest',
+      stats:{exp:legacy.lifetime||0,level:v3LevelFromXp(legacy.lifetime||0),
+        points:legacy.xp||0,coins:legacy.coins||0,lifetimeExp:legacy.lifetime||0,
+        streakDays:0,loginStreakDays:0,lastLoginDate:''},
+      preferences:{petType:(s.pets&&s.pets['pet_'+k]&&s.pets['pet_'+k].type)||'dog',colorTheme:''}
+    },cur);
+    s.children[k].name=info.name;
+    s.children[k].avatar=info.emoji;
+    s.children[k].theme={c1:info.c1,c2:info.c2};
+    s.children[k].stats=Object.assign({},s.children[k].stats||{},{
+      exp:legacy.lifetime||0,level:v3LevelFromXp(legacy.lifetime||0),
+      points:legacy.xp||0,lifetimeExp:legacy.lifetime||0,streakDays:streakOfSafe(s,k)
+    });
+    s.users['child_'+k]=Object.assign({id:'child_'+k,role:'child',childId:k,
+      loginCode:'',avatar:info.emoji},s.users['child_'+k]||{});
+  });
+  s.taskTemplates=Object.assign(defaultTaskTemplates(),s.taskTemplates||{});
+  s.tasks=buildV3Tasks(s);
+  s.adventureDays=s.adventureDays||{};
+  s.taskInstances=s.taskInstances||{};
+  s.pets=s.pets||{};
+  s.houses=s.houses||{};
+  s.inventory=s.inventory||{};
+  s.learning=s.learning||{};
+  Object.keys(KIDS).forEach(k=>{
+    s.pets['pet_'+k]=defaultPetFor(k,s.pets['pet_'+k]);
+    if(!s.pets['pet_'+k].type && s.children[k].preferences.petType) s.pets['pet_'+k].type=s.children[k].preferences.petType;
+    s.houses['house_'+k]=defaultHouseFor(k,s.houses['house_'+k]);
+    s.inventory[k]=defaultInventoryFor(s.inventory[k]);
+    s.learning[k]=defaultLearningFor(k,s.learning[k]);
+  });
+  s.shopItems=buildV3ShopItems(s);
+  s.wishRewards=s.wishRewards||{};
+  s.worlds=Object.assign(defaultWorlds(),s.worlds||{});
+  s.achievements=s.achievements||{};
+  s.childAchievements=s.childAchievements||{};
+  const customLedger=(s.ledger||[]).filter(x=>x.source!=='legacy-record');
+  s.ledger=(s.records||[]).map((r,i)=>ledgerFromRecord(r,i)).concat(customLedger)
+    .sort((a,b)=>(b.time||0)-(a.time||0));
+  s.aiMessages=s.aiMessages||{};
+  return s;
+}
+function streakOfSafe(s,kid){
+  const recs=(s.records||[]).filter(r=>r.kid===kid && r.xp>0 &&
+    (r.type==='score'||r.type==='special'||r.type==='reminder'||(r.type==='apply'&&r.status==='approved')));
+  const days=new Set(recs.map(r=>todayStr(new Date(r.time))));
+  let streak=0, d=new Date();
+  while(days.has(todayStr(d))){streak++;d.setDate(d.getDate()-1);}
+  return streak;
 }
 function normalize(s){
   if(!s) s={};
   s.kids=s.kids||{};
   s.customKids=s.customKids||{};
+  s.childOverrides=s.childOverrides||{};
+  s.archivedKids=s.archivedKids||{};
   syncKids(s);                 // 先把自訂角色併入 KIDS / SISTERS
   for(const k in KIDS){ s.kids[k]=Object.assign(freshKid(), s.kids[k]||{}); }
   s.records=s.records||[];
@@ -808,11 +1633,13 @@ function normalize(s){
   s.usedBigRewards=s.usedBigRewards||[];
   s.customSpecial=s.customSpecial||{};
   s.parentPin=s.parentPin||'';
+  s.reminders=Array.isArray(s.reminders)?s.reminders:[];
+  s.noticeReads=Object.assign({parent:0,child:{}}, s.noticeReads||{});
   s.weeklyChallenge=Object.assign(defaultChallenge(), s.weeklyChallenge||{});
   s.weeklyChallenge.dates=s.weeklyChallenge.dates||[];
   s.weeklyChallenge.achievedWeeks=s.weeklyChallenge.achievedWeeks||[];
   s.updatedAt=s.updatedAt||0;
-  return s;
+  return syncV3Model(s);
 }
 function load(){
   let s;
@@ -820,6 +1647,7 @@ function load(){
   return normalize(s);
 }
 function save(localOnly){
+  state=syncV3Model(state);
   if(!localOnly) state.updatedAt=Date.now();
   localStorage.setItem(LS_KEY, JSON.stringify(state));
   if(!localOnly && cloud.url) schedulePush();
@@ -885,6 +1713,1718 @@ function getShop(){
   const s=JSON.parse(JSON.stringify(DEFAULT_SHOP));
   for(const tier in state.customRewards){ s[tier]=(s[tier]||[]).concat(state.customRewards[tier]); }
   return s;
+}
+function coinBalanceOf(childId){
+  return (state.kids[childId] && typeof state.kids[childId].coins==='number')
+    ? state.kids[childId].coins
+    : (childStats(childId)?.coins||0);
+}
+function coinSpend(childId, amount, reason, refId){
+  const k=state.kids[childId];
+  if(!k) return false;
+  if((k.coins||0)<amount) return false;
+  k.coins=Math.max(0,k.coins-amount);
+  const stats=childStats(childId);
+  if(stats) stats.coins=k.coins;
+  createLedgerEntry({childId,type:'shop_purchase',category:'shop',title:reason||'購買',pointsDelta:0,coinsDelta:-amount,expDelta:0,reason:reason||'',refId:refId||''});
+  return true;
+}
+function shopCatalog(category){
+  return (SHOP_CATALOG[category]||[]).slice();
+}
+function shopItemCount(childId, category, itemId){
+  const inv=state.inventory[childId]||defaultInventoryFor();
+  return (inv[category]&&inv[category][itemId])||0;
+}
+function addInventoryItem(childId, category, item){
+  state.inventory[childId]=defaultInventoryFor(state.inventory[childId]);
+  const bag=state.inventory[childId][category];
+  bag[item.id]=(bag[item.id]||0)+1;
+}
+function removeInventoryItem(childId, category, itemId){
+  const inv=state.inventory[childId];
+  if(!inv||!inv[category]||!inv[category][itemId]) return false;
+  inv[category][itemId]-=1;
+  if(inv[category][itemId]<=0) delete inv[category][itemId];
+  return true;
+}
+function buyShopItem(childId, category, itemId){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const item=shopCatalog(category).find(x=>x.id===itemId);
+  if(!item){toast('找不到商品');return;}
+  if(!coinSpend(childId,item.cost,`購買 ${item.name}`,item.id)){toast('金幣不足');return;}
+  addInventoryItem(childId,category,item);
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'商店購買',task:item.name,
+    xp:0,coins:-item.cost,note:'已放入背包',status:'done',type:'shop',shopCategory:category,shopItemId:item.id});
+  save(); toast(`🛍️ 已購買 ${item.name}`);
+  renderAll();
+}
+function inventoryListOf(childId){
+  const inv=state.inventory[childId]||defaultInventoryFor();
+  const out=[];
+  Object.keys(inv).forEach(cat=>{
+    Object.keys(inv[cat]||{}).forEach(id=>{
+      const def=(SHOP_CATALOG[cat]||[]).find(x=>x.id===id);
+      out.push({category:cat,id,count:inv[cat][id],def});
+    });
+  });
+  return out;
+}
+function useInventoryItem(childId, category, itemId){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const def=(SHOP_CATALOG[category]||[]).find(x=>x.id===itemId);
+  if(!def){toast('找不到道具');return;}
+  if(category!=='rareItems' && !removeInventoryItem(childId,category,itemId)){toast('背包沒有這個道具');return;}
+  if(category==='food'){
+    addPetGrowth(childId,{exp:def.exp,hunger:def.hunger,happiness:def.happy});
+    const pet=petState(childId); if(pet) pet.favoriteFood=def.name;
+    state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'道具使用',task:'餵食 '+def.name,
+      xp:0,coins:0,note:'使用背包食物',status:'done',type:'item'});
+    toast(`🍽️ ${KIDS[childId].name} 使用了 ${def.name}`);
+  }else if(category==='toys'){
+    addPetGrowth(childId,{exp:def.exp,hunger:def.hunger,happiness:def.happy});
+    const pet=petState(childId); if(pet) pet.favoriteToy=def.name;
+    state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'道具使用',task:'玩 '+def.name,
+      xp:0,coins:0,note:'使用背包玩具',status:'done',type:'item'});
+    toast(`🎾 ${KIDS[childId].name} 使用了 ${def.name}`);
+  }else if(category==='clothing' || category==='hat'){
+    equipPetItem(childId, category, def);
+    toast(`✨ ${KIDS[childId].name} 穿戴了 ${def.name}`);
+  }else if(category==='wallpaper' || category==='floor' || category==='furniture' || category==='decorations'){
+    applyHouseItem(childId, category, def);
+    toast(`🏠 已放入 ${def.name}`);
+  }else if(category==='rareItems'){
+    state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'收藏',task:def.name,
+      xp:0,coins:0,note:'珍藏背包道具',status:'done',type:'item'});
+    toast(`💎 ${def.name} 很稀有，已收藏`);
+  }
+  save(); renderAll();
+}
+function equipPetItem(childId, category, def){
+  const pet=petState(childId); if(!pet) return;
+  pet.equippedItems=pet.equippedItems||[];
+  const key=category+':'+def.id;
+  if(!pet.equippedItems.includes(key)) pet.equippedItems.push(key);
+  pet.happiness=Math.min(100,(pet.happiness||80)+3);
+  pet.lastCareAt=Date.now();
+}
+function applyHouseItem(childId, category, def){
+  const house=state.houses['house_'+childId]||defaultHouseFor(childId);
+  state.houses['house_'+childId]=house;
+  if(category==='wallpaper') house.wallpaper=def.id;
+  else if(category==='floor') house.floor=def.id;
+  else if(category==='furniture') house.furniture.push(def.id);
+  else if(category==='decorations') house.garden.flowers.push(def.id);
+  refreshHouseLevel(house);
+}
+
+function hashSeed(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){
+    h^=str.charCodeAt(i);
+    h=(h*16777619)>>>0;
+  }
+  return h>>>0;
+}
+function seededPick(list, seed, count){
+  const arr=list.slice();
+  const out=[];
+  let s=hashSeed(seed);
+  while(arr.length&&out.length<count){
+    s=(s*1664525+1013904223)>>>0;
+    const idx=s%arr.length;
+    out.push(arr.splice(idx,1)[0]);
+  }
+  return out;
+}
+function shuffleBySeed(list, seed){
+  return seededPick(list, seed, list.length);
+}
+function houseOf(childId){
+  const key='house_'+childId;
+  state.houses[key]=defaultHouseFor(childId,state.houses[key]);
+  return state.houses[key];
+}
+function houseMetaWallpaper(id){
+  return HOUSE_WALLPAPER_THEME[id]||{label:id||'預設壁紙',c1:'#f3f8ff',c2:'#ffffff',e:'🖼️'};
+}
+function houseMetaFloor(id){
+  return HOUSE_FLOOR_THEME[id]||{label:id||'預設地板',c1:'#f8f1e6',c2:'#ffffff',e:'🧱'};
+}
+function houseFlowerMeta(id){
+  return HOUSE_FLOWERS.find(x=>x.id===id)||{id,label:'花朵',e:'🌷'};
+}
+function houseTreeMeta(id){
+  return HOUSE_TREES.find(x=>x.id===id)||{id,label:'樹木',e:'🌳'};
+}
+function refreshHouseLevel(house){
+  const base=1+Math.floor(((house.furniture||[]).length+(house.garden?.flowers||[]).length+(house.garden?.trees||[]).length)/3);
+  house.upgradeLevel=house.upgradeLevel||0;
+  house.level=Math.min(20, base+house.upgradeLevel);
+  return house.level;
+}
+function houseUpgradeCost(house){
+  return 25 + ((house.level||1)-1)*15;
+}
+function housePlantCost(kind){
+  return kind==='tree'?18:10;
+}
+function housePlant(childId, kind){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const house=houseOf(childId);
+  const cost=housePlantCost(kind);
+  if(!coinSpend(childId,cost,kind==='tree'?'種樹':'種花',kind)){toast('金幣不足');return;}
+  const pool=kind==='tree'?HOUSE_TREES:HOUSE_FLOWERS;
+  const pick=pool[(kind==='tree'?house.garden.trees.length:house.garden.flowers.length)%pool.length];
+  if(kind==='tree') house.garden.trees.push(pick.id);
+  else house.garden.flowers.push(pick.id);
+  refreshHouseLevel(house);
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'房屋建設',task:(kind==='tree'?'種樹 ':'種花 ')+pick.label,
+    xp:0,coins:-cost,note:'房屋花園成長',status:'done',type:'house'});
+  createLedgerEntry({childId,type:'house_plant',category:'house',title:(kind==='tree'?'種樹':'種花'),pointsDelta:0,coinsDelta:-cost,expDelta:0,reason:pick.label,refId:pick.id});
+  save(); toast(`🌱 已種下 ${pick.label}`);
+  renderAll();
+}
+function petTap(childId){
+  const pet=petState(childId); if(!pet) return;
+  if((pet.hunger||80)<55) feedPet(childId,'kibble');
+  else playPet(childId,'ball');
+}
+function houseTap(childId){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const house=houseOf(childId);
+  if((house.furniture||[]).length<3) switchTab('rewards');
+  else upgradeHouse(childId);
+}
+function upgradeHouse(childId){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const house=houseOf(childId);
+  const cost=houseUpgradeCost(house);
+  if(!coinSpend(childId,cost,'升級小屋',house.id)){toast('金幣不足');return;}
+  house.upgradeLevel=(house.upgradeLevel||0)+1;
+  house.lastUpgradeAt=Date.now();
+  refreshHouseLevel(house);
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'房屋升級',task:`小屋升到 Lv.${house.level}`,
+    xp:0,coins:-cost,note:'房屋空間更大了',status:'done',type:'house'});
+  createLedgerEntry({childId,type:'house_upgrade',category:'house',title:'升級小屋',pointsDelta:0,coinsDelta:-cost,expDelta:0,reason:'house upgrade',refId:house.id});
+  save(); celebrate('🏠','小屋升級！',`${KIDS[childId].name} 的家升到 Lv.${house.level}`);
+  renderAll();
+}
+
+function shopCategoryMeta(category){
+  return SHOP_CATEGORIES.find(x=>x.id===category)||{id:category,label:category,e:'🪙'};
+}
+function coinShopActionLabel(category){
+  if(category==='food') return '餵寵物';
+  if(category==='toys') return '玩耍';
+  if(category==='clothing' || category==='hat') return '穿戴';
+  if(category==='wallpaper' || category==='floor' || category==='furniture' || category==='decorations') return '放入家中';
+  if(category==='rareItems') return '收藏';
+  return '使用';
+}
+function coinShopIconFor(category){
+  return shopCategoryMeta(category).e||'🪙';
+}
+function learningProfileOf(childId){
+  state.learning=state.learning||{};
+  state.learning[childId]=defaultLearningFor(childId,state.learning[childId]);
+  const l=state.learning[childId];
+  l.english=Object.assign({grade:'elementary',generatedSets:{},progress:{}},l.english||{});
+  l.math=Object.assign({grade:'elementary',generatedSets:{},progress:{}},l.math||{});
+  l.reading=Object.assign({dailyMinutesTarget:20,logs:[],completedDates:{}},l.reading||{});
+  if(Array.isArray(l.english.generatedSets)) l.english.generatedSets={};
+  if(Array.isArray(l.math.generatedSets)) l.math.generatedSets={};
+  if(Array.isArray(l.reading.logs)) l.reading.logs=l.reading.logs.map(x=>typeof x==='number'?{date:todayStr(),minutes:x}:x);
+  if(!l.reading.completedDates || Array.isArray(l.reading.completedDates)) l.reading.completedDates={};
+  return l;
+}
+function setLearningGrade(childId, grade){
+  const l=learningProfileOf(childId);
+  l.english.grade=grade;
+  l.math.grade=grade;
+  const child=state.children[childId];
+  if(child){ child.grade=grade; child.learningGrade=grade; }
+  save();
+}
+function setReadingTarget(childId, minutes){
+  const l=learningProfileOf(childId);
+  l.reading.dailyMinutesTarget=Math.max(10,Math.min(60,parseInt(minutes)||20));
+  save();
+}
+function learningGradeLabel(grade){
+  return LEARNING_GRADE_LABELS[grade]||grade||'國小';
+}
+function learningGradeOf(childId){
+  const child=state.children&&state.children[childId];
+  return learningProfileOf(childId).english.grade || child?.grade || 'elementary';
+}
+function englishPoolOf(grade){
+  return ENGLISH_BANK[grade]||ENGLISH_BANK.elementary;
+}
+function mathPoolOf(grade){
+  return MATH_BANK[grade]||MATH_BANK.elementary;
+}
+function dailyLearningKey(){
+  return todayStr();
+}
+function learningEnglishSet(childId){
+  const l=learningProfileOf(childId);
+  const grade=learningGradeOf(childId);
+  const key=dailyLearningKey();
+  l.english.grade=grade;
+  l.english.generatedSets=l.english.generatedSets||{};
+  if(!l.english.generatedSets[key]){
+    const pool=englishPoolOf(grade);
+    const picks=seededPick(pool, childId+'|english|'+key, 4);
+    const q1=picks[0], q2=picks[1], q3=picks[2], q4=picks[3];
+    const words=picks.map(x=>x.word);
+    const zh=picks.map(x=>x.zh);
+    l.english.generatedSets[key]=[
+      {
+        id:'match',
+        type:'choice',
+        label:'配對',
+        title:`哪一個是「${q1.zh}」？`,
+        prompt:`找出正確單字`,
+        answer:q1.word,
+        choices:shuffleBySeed(words, childId+'|match|'+key)
+      },
+      {
+        id:'spell',
+        type:'spell',
+        label:'拼字',
+        title:`請拼出「${q2.zh}」`,
+        prompt:q2.hint,
+        answer:q2.word,
+        choices:[]
+      },
+      {
+        id:'listen',
+        type:'choice',
+        label:'聽力',
+        title:`聽單字後選出正確答案`,
+        prompt:q3.hint,
+        answer:q3.word,
+        choices:shuffleBySeed([q3.word, ...shuffleBySeed(pool.filter(x=>x.word!==q3.word).map(x=>x.word), childId+'|listen|'+key).slice(0,3)], childId+'|listen2|'+key)
+      },
+      {
+        id:'read',
+        type:'choice',
+        label:'閱讀',
+        title:q4.sentence,
+        prompt:`這句英文的意思是？`,
+        answer:q4.zh,
+        choices:shuffleBySeed(zh, childId+'|read|'+key)
+      }
+    ];
+  }
+  return l.english.generatedSets[key];
+}
+function learningMathSet(childId){
+  const l=learningProfileOf(childId);
+  const grade=learningGradeOf(childId);
+  const key=dailyLearningKey();
+  l.math.grade=grade;
+  l.math.generatedSets=l.math.generatedSets||{};
+  if(!l.math.generatedSets[key]){
+    let questions=[];
+    const seed=childId+'|math|'+key;
+    if(grade==='toddler'){
+      const add=seededPick(MATH_BANK.toddler.add, seed+'a', 2);
+      const sub=seededPick(MATH_BANK.toddler.sub, seed+'s', 2);
+      questions=[...add.map(x=>({id:'m'+x.a+'+'+x.b,type:'choice',label:'加法',title:`${x.a} + ${x.b} = ?`,answer:String(x.a+x.b),choices:shuffleBySeed([x.a+x.b,x.a+x.b+1,Math.max(0,x.a+x.b-1),x.a+x.b+2].map(String), seed+x.a+x.b)})),
+        ...sub.map(x=>({id:'m'+x.a+'-'+x.b,type:'choice',label:'減法',title:`${x.a} - ${x.b} = ?`,answer:String(x.a-x.b),choices:shuffleBySeed([x.a-x.b,Math.max(0,x.a-x.b+1),Math.max(0,x.a-x.b-1),Math.max(0,x.a-x.b+2)].map(String), seed+x.a+x.b+'s')}))];
+    }else if(grade==='juniorHigh'){
+      const pool=[...MATH_BANK.juniorHigh.fraction.map(x=>({...x,kind:'分數'})),...MATH_BANK.juniorHigh.time.map(x=>({...x,kind:'時間'})),...MATH_BANK.juniorHigh.geometry.map(x=>({...x,kind:'幾何'}))];
+      const picks=seededPick(pool, seed, 4);
+      questions=picks.map((x,i)=>{
+        let choices=[];
+        if(x.kind==='時間'){
+          const [h,m]=String(x.answer).split(':').map(n=>parseInt(n));
+          const alt1=`${h}:${String((m+5)%60).padStart(2,'0')}`;
+          const alt2=`${h}:${String((m+10)%60).padStart(2,'0')}`;
+          const alt3=`${Math.max(1,h-1)}:${String(m).padStart(2,'0')}`;
+          choices=shuffleBySeed([String(x.answer),alt1,alt2,alt3], seed+i+x.answer);
+        }else if(x.kind==='分數'||x.kind==='幾何'){
+          const ans=parseInt(x.answer)||0;
+          choices=shuffleBySeed([String(ans),String(ans+1),String(Math.max(0,ans-1)),String(ans+2)], seed+i+x.answer);
+        }else{
+          choices=shuffleBySeed([String(x.answer),String(x.answer)+'0',String(x.answer).slice(0,1),String(x.answer).slice(-1)], seed+i+x.answer);
+        }
+        return {id:'jh'+i,type:'choice',label:x.kind,title:x.text,answer:String(x.answer),choices};
+      });
+    }else{
+      const add=seededPick(MATH_BANK.elementary.add, seed+'a', 1);
+      const sub=seededPick(MATH_BANK.elementary.sub, seed+'s', 1);
+      const mul=seededPick(MATH_BANK.elementary.mul, seed+'m', 1);
+      const div=seededPick(MATH_BANK.elementary.div, seed+'d', 1);
+      const build=(x,op)=>({id:`${op}${x.a}${x.b}`,type:'choice',label:op==='mul'?'乘法':op==='div'?'除法':op==='sub'?'減法':'加法',title:`${x.a} ${op==='mul'?'×':op==='div'?'÷':op==='sub'?'-':'+'} ${x.b} = ?`,answer:String(op==='mul'?x.a*x.b:op==='div'?x.a/x.b:op==='sub'?x.a-x.b:x.a+x.b),choices:shuffleBySeed([String(op==='mul'?x.a*x.b:op==='div'?x.a/x.b:op==='sub'?x.a-x.b:x.a+x.b),String((op==='mul'?x.a*x.b:op==='div'?x.a/x.b:op==='sub'?x.a-x.b:x.a+x.b)+1),String(Math.max(0,(op==='mul'?x.a*x.b:op==='div'?x.a/x.b:op==='sub'?x.a-x.b:x.a+x.b)-1)),String((op==='mul'?x.a*x.b:op==='div'?x.a/x.b:op==='sub'?x.a-x.b:x.a+x.b)+2)], seed+x.a+x.b+op)});
+      questions=[build(add[0],'add'),build(sub[0],'sub'),build(mul[0],'mul'),build(div[0],'div')];
+    }
+    l.math.generatedSets[key]=questions;
+  }
+  return l.math.generatedSets[key];
+}
+function todayReadingMinutes(childId){
+  const l=learningProfileOf(childId);
+  const key=todayStr();
+  return (l.reading.logs||[]).filter(x=>(x.date||todayStr())===key).reduce((sum,x)=>sum+(parseInt(x.minutes)||0),0);
+}
+function awardLearning(childId, kind, label, points, coins, exp, note){
+  awardGrowth(childId,{type:'learning',category:kind,title:label,points,coins,exp,reason:note||label,refId:todayStr()});
+  addPetGrowth(childId,{exp:Math.max(1,Math.round(exp/2)),happiness:2});
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:kind==='english'?'英文':kind==='math'?'數學':'閱讀',task:label,
+    xp:points,coins,note:note||'學習完成',status:'done',type:'learning'});
+}
+function markLearningSolved(childId, kind, qid, success, rewardLabel, points, coins, exp){
+  const l=learningProfileOf(childId);
+  const date=dailyLearningKey();
+  const box=l[kind].generatedSets[date]||[];
+  const q=box.find(x=>x.id===qid);
+  if(!q || q.done) return;
+  q.done=success;
+  q.lastAnsweredAt=Date.now();
+  if(success){
+    q.solved=true;
+    q.rewarded=true;
+    awardLearning(childId, kind, rewardLabel||q.title, points||5, coins||4, exp||5, '學習答對');
+  }
+  save();
+}
+function checkLearningCompletion(childId, kind){
+  const l=learningProfileOf(childId);
+  const date=todayStr();
+  if(kind==='reading'){
+    const target=l.reading.dailyMinutesTarget||20;
+    const total=todayReadingMinutes(childId);
+    if(total>=target && !l.reading.completedDates[date]){
+      l.reading.completedDates[date]=true;
+      awardLearning(childId,'reading',`閱讀 ${target} 分鐘`,10,8,10,'完成今日閱讀');
+      save();
+      return true;
+    }
+  }
+  return false;
+}
+function speakEnglishWord(word){
+  try{
+    if(window.speechSynthesis && window.SpeechSynthesisUtterance){
+      const u=new SpeechSynthesisUtterance(word);
+      u.lang='en-US';
+      u.rate=0.9;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+  }catch(e){}
+}
+function pickLearningKid(k){ sel.learningKid=k; renderLearningTab(); renderLearningHomePanel(); }
+function learningProgressSummary(childId){
+  const eng=learningEnglishSet(childId);
+  const math=learningMathSet(childId);
+  const l=learningProfileOf(childId);
+  const eDone=eng.filter(x=>x.done).length;
+  const mDone=math.filter(x=>x.done).length;
+  const rToday=todayReadingMinutes(childId);
+  const rTarget=l.reading.dailyMinutesTarget||20;
+  const rClaimed=!!l.reading.completedDates[todayStr()];
+  return {eDone,eTotal:eng.length,mDone,mTotal:math.length,rToday,rTarget,rClaimed};
+}
+function learningSummaryCard(childId){
+  const info=KIDS[childId]||{};
+  const grade=learningGradeOf(childId);
+  const s=learningProgressSummary(childId);
+  return `
+    <div class="learnhero">
+      <div class="learnhero-top">
+        <div class="learnavatar" style="background:linear-gradient(135deg,${info.c1||'#ddd'},${info.c2||'#fff'})">${info.emoji||'🎓'}</div>
+        <div>
+          <div class="learntitle">${escHtml(info.name||'孩子')} 的學習中心</div>
+          <div class="learnsub">${learningGradeLabel(grade)}・今天可以拿金幣與寵物經驗</div>
+        </div>
+      </div>
+      <div class="learnstats">
+        <div class="learnstat"><b>${s.eDone}/${s.eTotal}</b><span>英文</span></div>
+        <div class="learnstat"><b>${s.mDone}/${s.mTotal}</b><span>數學</span></div>
+        <div class="learnstat"><b>${s.rToday}/${s.rTarget}</b><span>閱讀分鐘</span></div>
+        <div class="learnstat"><b>${s.rClaimed?'已領':'未領'}</b><span>閱讀獎勵</span></div>
+      </div>
+    </div>`;
+}
+function aiKindLabel(kind){
+  return {child:'孩子 AI',parent:'家長 AI',report:'週報 AI',family:'全家 AI'}[kind]||'AI';
+}
+const aiCloud={pending:{}, configured:false, model:'gpt-4.1', status:'本機 AI'};
+function todayAiContext(childId){
+  const today=todayStr();
+  const info=KIDS[childId]||{};
+  const kid=state.kids[childId]||freshKid();
+  const child=state.children[childId]||{};
+  const pet=petState(childId)||defaultPetFor(childId);
+  const house=houseOf(childId);
+  const adv=getTodayAdventure(childId);
+  const advRecs=(state.records||[]).filter(r=>r.kid===childId && todayStr(new Date(r.time))===today);
+  const learning=learningProgressSummary(childId);
+  const completedAdv=advRecs.filter(r=>r.type==='score'&&r.instanceId).length;
+  const petActs=advRecs.filter(r=>r.type==='pet').length;
+  const houseActs=advRecs.filter(r=>r.type==='house').length;
+  const learningActs=advRecs.filter(r=>r.type==='learning').length;
+  const topCatMap={};
+  advRecs.filter(r=>r.xp>0).forEach(r=>{const c=(r.cat||'').replace('特殊成就-',''); if(c) topCatMap[c]=(topCatMap[c]||0)+1;});
+  let topCat='任務';
+  let max=0;
+  Object.keys(topCatMap).forEach(c=>{ if(topCatMap[c]>max){max=topCatMap[c];topCat=c;} });
+  const sig=[
+    today,completedAdv,learning.eDone,learning.mDone,learning.rToday,learning.rTarget,
+    pet.type,Math.round(pet.hunger||0),Math.round(pet.happiness||0),house.level||1,
+    houseActs,petActs,learningActs,topCat,streakOf(childId),kid.coins||0
+  ].join('|');
+  return {today,info,kid,child,pet,house,adv,learning,completedAdv,petActs,houseActs,learningActs,topCat,max,sig};
+}
+function buildAiMessage(childId, kind, ctx){
+  ctx=ctx||todayAiContext(childId);
+  const n=ctx.info.name;
+  const petName=ctx.pet.name||'夥伴';
+  const mood=petMoodLabel(ctx.pet);
+  const advCount=ctx.completedAdv;
+  const streak=streakOf(childId);
+  const learnDone=ctx.learning.eDone+ctx.learning.mDone;
+  const readLine=ctx.learning.rToday>=ctx.learning.rTarget
+    ? `閱讀已達標 ${ctx.learning.rToday}/${ctx.learning.rTarget} 分鐘`
+    : `閱讀再 ${Math.max(0,ctx.learning.rTarget-ctx.learning.rToday)} 分鐘就達標`;
+  const tags=[
+    `${advCount} 個 Adventure`,
+    `${learnDone} 個學習題`,
+    `${ctx.petActs} 次寵物互動`,
+    `${ctx.houseActs} 次家園行動`
+  ];
+  const familyTag=ctx.topCat && ctx.topCat!=='任務' ? `今天最常出現的是 ${ctx.topCat}` : '今天的節奏很均衡';
+  const seeds=[
+    `${n}，你今天已經往前走了不少。${advCount?`Adventure 完成 ${advCount} 個，`:'Adventure 還沒開始，'}${learnDone?`學習也完成 ${learnDone} 題，`:''}${readLine}。`,
+    `${n}，${petName} 目前是「${mood}」，這代表你正在把照顧和責任做得越來越好。`,
+    `${n}，${ctx.house.level||1} 級小屋、${ctx.houseActs} 次家園行動，讓你的世界越來越像自己的家。`,
+    streak>0?`${n}，你已經連續努力 ${streak} 天了，這份穩定就是成長的證明。`:`${n}，今天先完成一個小目標，就能把節奏接起來。`
+  ];
+  if(kind==='parent'){
+    return `${n} 今天完成了 ${advCount} 個 Adventure、${learnDone} 個學習題，${readLine}。${familyTag}。`;
+  }
+  if(kind==='report'){
+    return `${n} 今天完成了 ${advCount} 個 Adventure、${learnDone} 個學習題、${ctx.petActs} 次寵物互動。本週整體也有持續往前走，${familyTag}。`;
+  }
+  if(kind==='family'){
+    return `${n} 今天的成長很完整：${advCount} 個 Adventure、${learnDone} 個學習題、${ctx.petActs} 次寵物互動、${ctx.houseActs} 次家園行動。${familyTag}。`;
+  }
+  const pick=seeds[hashSeed(ctx.sig+'|'+kind)%seeds.length];
+  return `${pick} ${familyTag}。`;
+}
+function cacheAiMessage(childId, kind, text, sig, source){
+  state.aiMessages=state.aiMessages||{};
+  state.aiMessages[childId]=state.aiMessages[childId]||{};
+  state.aiMessages[childId][kind]={sig,text,time:Date.now(),source:source||'local'};
+  return text;
+}
+function aiMessage(childId, kind){
+  const ctx=todayAiContext(childId);
+  const cached=state.aiMessages&&state.aiMessages[childId]&&state.aiMessages[childId][kind];
+  if(cached && cached.sig===ctx.sig) return cached.text;
+  return cacheAiMessage(childId, kind, buildAiMessage(childId, kind, ctx), ctx.sig, 'local');
+}
+function aiSourceLabel(childId, kind){
+  const cached=state.aiMessages&&state.aiMessages[childId]&&state.aiMessages[childId][kind];
+  if(cached && cached.source==='remote') return `☁️ 雲端 AI`;
+  return cloud.url ? '🧠 本機 AI' : '🧠 本機 AI';
+}
+const reminderState={timer:null,lastKey:''};
+function reminderDateKey(d){
+  d=d||new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+function reminderTimeMinutes(v){
+  const m=String(v||'').trim().match(/^(\d{1,2}):(\d{2})$/);
+  if(!m) return null;
+  const hh=Math.max(0,Math.min(23,parseInt(m[1],10)||0));
+  const mm=Math.max(0,Math.min(59,parseInt(m[2],10)||0));
+  return hh*60+mm;
+}
+function reminderWeekdayMatch(rem, d){
+  const days=Array.isArray(rem.weekdays)?rem.weekdays:[];
+  if(!days.length) return true;
+  return days.includes(d.getDay());
+}
+function reminderChildNameList(rem){
+  return (rem.childIds||[]).map(k=>KIDS[k]&&KIDS[k].name).filter(Boolean).join('、');
+}
+function reminderChipText(rem){
+  const repeat=rem.repeat==='weekly'?'每週':rem.repeat==='once'?'一次':'每日';
+  const time=rem.time||'07:30';
+  const kids=reminderChildNameList(rem);
+  return `${repeat}・${time}${kids?'・'+kids:''}`;
+}
+function reminderPermStatus(){
+  return typeof Notification!=='undefined' ? Notification.permission : 'unsupported';
+}
+function sendReminderNotice(rem){
+  const title=rem.title||'成長提醒';
+  const body=[rem.note||'', reminderChildNameList(rem), rem.time?`預定 ${rem.time}`:''].filter(Boolean).join(' ・ ');
+  if(typeof Notification!=='undefined' && Notification.permission==='granted'){
+    try{ new Notification(title,{body,icon:'./成長logo.png'}); }catch(e){}
+  }
+  toast(`🌱 ${title}${body?'｜'+body:''}`);
+}
+function scheduleReminderPoll(){
+  clearTimeout(reminderState.timer);
+  reminderState.timer=setTimeout(checkReminders, 60000);
+}
+async function enableReminderNotifications(){
+  if(typeof Notification==='undefined'){ toast('這個瀏覽器不支援通知'); return; }
+  const perm=await Notification.requestPermission();
+  toast(perm==='granted'?'已開啟通知':'通知尚未允許');
+  renderReminderSettings();
+}
+function reminderDueList(now){
+  now=now||new Date();
+  const mins=now.getHours()*60+now.getMinutes();
+  const key=reminderDateKey(now);
+  return (state.reminders||[]).filter(rem=>{
+    if(!rem || rem.enabled===false) return false;
+    const t=reminderTimeMinutes(rem.time||'07:30');
+    if(t===null || mins<t) return false;
+    if(rem.repeat==='weekly' && !reminderWeekdayMatch(rem, now)) return false;
+    if(rem.repeat==='once' && rem.fireDate && reminderDateKey(new Date(rem.fireDate))!==key) return false;
+    if(rem.lastFireKey===key) return false;
+    if(rem.childIds && rem.childIds.length && !rem.childIds.some(k=>KIDS[k])) return false;
+    return true;
+  });
+}
+function checkReminders(){
+  const now=new Date();
+  const key=reminderDateKey(now);
+  const due=reminderDueList(now);
+  if(due.length){
+    due.slice(0,3).forEach(rem=>{
+      rem.lastFireKey=key;
+      rem.lastFireAt=Date.now();
+      sendReminderNotice(rem);
+    });
+    save();
+    renderReminderSettings();
+    renderChildDashboard();
+  }
+  scheduleReminderPoll();
+}
+function renderReminderPanel(childId){
+  const box=document.getElementById('reminderPanel'); if(!box) return;
+  const now=new Date();
+  const list=(state.reminders||[]).filter(rem=>rem.enabled!==false)
+    .filter(rem=>!rem.childIds || !rem.childIds.length || rem.childIds.includes(childId))
+    .filter(rem=>rem.repeat!=='weekly' || reminderWeekdayMatch(rem, now))
+    .sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  box.innerHTML=list.length?list.map(rem=>`
+    <div class="rec">
+      <div class="body">
+        <div class="l1">${escHtml(rem.title||'成長提醒')}</div>
+        <div class="l2">${escHtml(rem.note||'')}・${escHtml(reminderChipText(rem))}</div>
+      </div>
+      <span class="tag done">${rem.enabled===false?'停用':'進行中'}</span>
+    </div>`).join('')
+    :'<div class="card"><p class="muted" style="margin:0;">今天沒有排程提醒。</p></div>';
+}
+function renderReminderSettings(){
+  const box=document.getElementById('reminderManage'); if(!box) return;
+  const perm=document.getElementById('reminderPerm');
+  if(perm){
+    const st=reminderPermStatus();
+    perm.textContent=st==='granted'
+      ?'✅ 已允許瀏覽器通知'
+      :st==='denied'
+        ?'⚠️ 通知已被封鎖，請到瀏覽器設定開啟'
+        :st==='unsupported'
+          ?'⚠️ 這個瀏覽器不支援通知'
+          :'尚未允許瀏覽器通知';
+  }
+  const list=(state.reminders||[]).slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  box.innerHTML=list.length?list.map(rem=>`
+    <div class="rec">
+      <div class="body">
+        <div class="l1">${escHtml(rem.title||'成長提醒')} ${rem.enabled===false?'<span class="tag no">停用</span>':''}</div>
+        <div class="l2">${escHtml(rem.note||'')}・${escHtml(reminderChipText(rem))}</div>
+      </div>
+      <div class="btnrow" style="gap:6px;">
+        <button class="btn sky sm" onclick="toggleReminder('${rem.id}')">${rem.enabled===false?'啟用':'停用'}</button>
+        <button class="btn bad sm" onclick="deleteReminder('${rem.id}')">刪除</button>
+      </div>
+    </div>`).join('')
+    :'<p class="muted">目前還沒有排程提醒。</p>';
+}
+function renderReminderPickers(){
+  const childBox=document.getElementById('remChilds');
+  if(childBox){
+    childBox.innerHTML=Object.keys(KIDS).map((k,i)=>`
+      <button type="button" class="pill ${i===0?'on':''}" data-kid="${k}" onclick="this.classList.toggle('on')">${KIDS[k].emoji} ${KIDS[k].name}</button>
+    `).join('');
+  }
+  const weekBox=document.getElementById('remWeekdays');
+  if(weekBox){
+    const days=['日','一','二','三','四','五','六'];
+    weekBox.innerHTML=days.map((d,i)=>`
+      <button type="button" class="pill" data-day="${i}" onclick="this.classList.toggle('on')">${d}</button>
+    `).join('');
+  }
+}
+function addReminder(){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const title=(document.getElementById('remTitle')?.value||'').trim();
+  if(!title){ toast('請輸入提醒名稱'); return; }
+  const note=(document.getElementById('remNote')?.value||'').trim();
+  const time=(document.getElementById('remTime')?.value||'07:30').trim();
+  const repeat=document.getElementById('remRepeat')?.value||'daily';
+  const childIds=Array.from(document.querySelectorAll('#remChilds .pill.on')).map(b=>b.dataset.kid);
+  const weekdays=Array.from(document.querySelectorAll('#remWeekdays .pill.on')).map(b=>parseInt(b.dataset.day,10));
+  state.reminders=state.reminders||[];
+  state.reminders.unshift({
+    id:'rem_'+Date.now(),
+    title,note,time,repeat,
+    weekdays:repeat==='weekly'?weekdays:[],
+    childIds,
+    enabled:true,
+    lastFireKey:'',
+    lastFireAt:0,
+    createdAt:Date.now()
+  });
+  save();
+  renderReminderSettings();
+  renderChildDashboard();
+  if(document.getElementById('remTitle')) document.getElementById('remTitle').value='';
+  if(document.getElementById('remNote')) document.getElementById('remNote').value='';
+  toast('✅ 已新增提醒');
+}
+function toggleReminder(id){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const rem=(state.reminders||[]).find(r=>r.id===id);
+  if(!rem) return;
+  rem.enabled=!rem.enabled;
+  save();
+  renderReminderSettings();
+  renderChildDashboard();
+}
+function deleteReminder(id){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  if(!confirm('確定刪除這個提醒？')) return;
+  state.reminders=(state.reminders||[]).filter(r=>r.id!==id);
+  save();
+  renderReminderSettings();
+  renderChildDashboard();
+}
+function noticeScopeKey(scope, childId){
+  return scope==='child' ? `child:${childId||activeChildId()||''}` : 'parent';
+}
+function noticeReadAt(scope, childId){
+  const key=noticeScopeKey(scope, childId);
+  if(key==='parent') return state.noticeReads?.parent||0;
+  const kid=key.slice(6);
+  return (state.noticeReads?.child||{})[kid]||0;
+}
+function noticeUnreadCount(scope, childId){
+  const rows=noticeRecords(scope, childId);
+  const readAt=noticeReadAt(scope, childId);
+  return rows.filter(r=>r.time>readAt).length;
+}
+function markNoticeRead(scope, childId){
+  state.noticeReads=state.noticeReads||{parent:0,child:{}};
+  const key=noticeScopeKey(scope, childId);
+  const now=Date.now();
+  if(key==='parent') state.noticeReads.parent=now;
+  else{
+    const kid=key.slice(6);
+    state.noticeReads.child[kid]=now;
+  }
+  save(true);
+}
+function noticeIconFor(r){
+  return {score:'⭐',apply:'🙋',redeem:'🎁',coopredeem:'🌈',reminder:'🌱',tablet:'📱',special:'🏆',big:'🎉',challenge:'🏅',settlement:'🧾',pet:'🐾',house:'🏠',learning:'🎓',login:'🔑'}[r.type]||'🔔';
+}
+function noticeLabelFor(r){
+  return {score:'快速加分',apply:'孩子申請',redeem:'商城兌換',coopredeem:'共同兌換',reminder:'成長提醒',tablet:'平板調整',special:'特殊成就',big:'大型獎勵',challenge:'家庭挑戰',settlement:'今日結算',pet:'寵物互動',house:'家園行動',learning:'學習完成',login:'登入'}[r.type]||'通知';
+}
+function noticeRecords(scope, childId){
+  const base=(state.records||[]).filter(r=>!!r && r.time);
+  const kid=scope==='child' ? (childId||activeChildId()) : '';
+  return base.filter(r=>{
+    if(scope==='child' && kid && r.kid && r.kid!==kid) return false;
+    if(scope==='parent' && sel.noticeKid && sel.noticeKid!=='all' && r.kid && r.kid!==sel.noticeKid) return false;
+    if(scope==='parent' && r.type==='login' && r.kid && !KIDS[r.kid]) return false;
+    return true;
+  }).slice(0,20);
+}
+function buildNoticeDigest(scope, childId){
+  const now=new Date();
+  const today=noticeRecords(scope, childId).filter(r=>todayStr(new Date(r.time))===todayStr(now));
+  const kid=scope==='child' ? (childId||activeChildId()) : '';
+  const lines=[];
+  if(scope==='child' && kid){
+    const info=KIDS[kid];
+    const done=today.filter(r=>r.type==='score' || r.type==='apply' || r.type==='learning' || r.type==='pet' || r.type==='house').length;
+    const coins=today.filter(r=>r.coins>0).reduce((s,r)=>s+r.coins,0);
+    lines.push(`${info.name} 今天已累積 ${done} 筆成長事件，金幣變化 ${coins>=0?'+':''}${coins}。`);
+    lines.push(aiMessage(kid,'report'));
+  }else{
+    const kids=Object.keys(KIDS);
+    const complete=today.filter(r=>r.type==='score' || r.type==='apply' || r.type==='learning').length;
+    const reminders=(state.reminders||[]).filter(rem=>rem.enabled!==false).length;
+    lines.push(`今天共有 ${complete} 筆成長事件、${state.records.filter(r=>r.type==='reminder' && todayStr(new Date(r.time))===todayStr(now)).length} 筆提醒完成紀錄。`);
+    lines.push(`目前啟用提醒 ${reminders} 則，孩子數量 ${kids.length} 位。`);
+    lines.push(buildSettlement().split('\n').slice(0,4).join(' '));
+  }
+  return lines.filter(Boolean).join('\n');
+}
+function renderNoticeCards(scope, childId){
+  const box=document.getElementById('noticeFeed'); if(!box) return;
+  const readAt=noticeReadAt(scope, childId);
+  const rows=noticeRecords(scope, childId);
+  const unread=rows.filter(r=>r.time>readAt).length;
+  const todayCount=rows.filter(r=>todayStr(new Date(r.time))===todayStr()).length;
+  const digest=buildNoticeDigest(scope, childId);
+  const digestBox=document.getElementById('noticeDigest');
+  if(digestBox) digestBox.textContent=digest;
+  const unreadBox=document.getElementById('noticeUnread');
+  if(unreadBox) unreadBox.textContent=String(unread);
+  const todayBox=document.getElementById('noticeToday');
+  if(todayBox) todayBox.textContent=String(todayCount);
+  const countBox=document.getElementById('noticeCount');
+  if(countBox) countBox.textContent=String(rows.length);
+  box.innerHTML=rows.length?rows.map(r=>`
+    <div class="rec ${r.time>readAt?'new':''}">
+      <div class="body">
+        <div class="l1">${noticeIconFor(r)} ${escHtml(noticeLabelFor(r))}</div>
+        <div class="l2">${escHtml(r.task||r.note||'')}・${r.kid?(escHtml(KIDS[r.kid]?.name||r.kid)+'・'):''}${escHtml(fmtTime(r.time))}</div>
+      </div>
+      <div style="text-align:right;">
+        ${r.xp!==0?`<div class="rxp ${r.xp>0?'plus':'minus'}">${r.xp>0?'+':''}${r.xp}</div>`:''}
+      </div>
+    </div>`).join('')
+    :'<p class="muted">目前沒有通知。</p>';
+}
+function renderNoticePreview(childId){
+  const box=document.getElementById('noticePreview'); if(!box) return;
+  const unread=noticeUnreadCount('child', childId);
+  const digest=buildNoticeDigest('child', childId).split('\n').filter(Boolean).slice(0,2).join(' ');
+  box.innerHTML=`<div class="card">
+    <div class="pdrow">
+      <div class="pdmain"><b>🔔 今日通知</b><small>${unread} 則未讀・${KIDS[childId]?.name||'孩子'} 專屬</small></div>
+      <div class="pdactions"><button class="btn sky sm" onclick="switchTab('notice')">看通知</button></div>
+    </div>
+    <div class="subnote" style="margin-top:8px;line-height:1.6;">${escHtml(digest||'今天還沒有新的通知。')}</div>
+  </div>`;
+}
+function renderNoticeTab(){
+  const parentScope=isUnlocked();
+  const scope=parentScope?'parent':'child';
+  const child=activeChildId() || sel.noticeKid || sel.reportKid || Object.keys(KIDS)[0];
+  markNoticeRead(scope, child);
+  const scopeName=document.getElementById('noticeScope');
+  if(scopeName) scopeName.textContent=scope==='child' ? (KIDS[child]?.name||'孩子')+' 的通知' : '家庭通知中心';
+  const pills=document.getElementById('noticeKidPills');
+  if(pills){
+    if(scope==='child'){
+      pills.innerHTML=`<button class="pill on">${KIDS[child]?.emoji||'🧒'} ${KIDS[child]?.name||'孩子'}</button>`;
+    }else{
+      pills.innerHTML=`<button class="pill ${sel.noticeKid==='all'?'on':''}" onclick="pickNoticeScope('all')">全部</button>`+Object.keys(KIDS).map(k=>`<button class="pill ${sel.noticeKid===k?'on':''}" onclick="pickNoticeScope('${k}')">${KIDS[k].emoji} ${KIDS[k].name}</button>`).join('');
+    }
+  }
+  renderNoticeCards(scope, child);
+}
+function pickNoticeScope(k){
+  sel.noticeKid=k;
+  renderNoticeTab();
+}
+function copyNoticeDigest(){
+  const t=document.getElementById('noticeDigest')?.textContent||'';
+  if(!t){ toast('目前沒有可複製的摘要'); return; }
+  if(navigator.clipboard&&navigator.clipboard.writeText)
+    navigator.clipboard.writeText(t).then(()=>toast('📋 已複製通知摘要'),()=>fallbackCopy(t));
+  else fallbackCopy(t);
+}
+async function refreshOpenAiStatus(){
+  const box=document.getElementById('openAiStatus');
+  const modelInput=document.getElementById('openAiModel');
+  if(!cloud.url){
+    aiCloud.configured=false;
+    aiCloud.status='請先設定 GAS 網址';
+    if(box) box.textContent=aiCloud.status;
+    if(modelInput && !modelInput.value) modelInput.value='gpt-4.1';
+    return;
+  }
+  if(box) box.textContent='☁️ 讀取 AI 設定中...';
+  try{
+    const res=await fetch(cloud.url+'?action=aiConfig&t='+Date.now());
+    const data=await res.json();
+    aiCloud.configured=!!(data&&data.ok&&data.configured);
+    aiCloud.model=(data&&data.model)||'gpt-4.1';
+    aiCloud.status=aiCloud.configured
+      ? `✅ 雲端 AI 已啟用，模型：${aiCloud.model}`
+      : '尚未設定 OpenAI API Key，將使用本機 AI';
+    if(modelInput) modelInput.value=aiCloud.model;
+    if(box) box.textContent=aiCloud.status;
+    if(aiCloud.configured) renderAll();
+  }catch(e){
+    aiCloud.configured=false;
+    aiCloud.status='⚠️ 無法讀取 AI 設定';
+    if(box) box.textContent=aiCloud.status;
+  }
+}
+async function saveOpenAiConfig(){
+  if(!cloud.url){ toast('請先設定 GAS 網址'); return; }
+  const apiKey=(document.getElementById('openAiKey')?.value||'').trim();
+  const model=(document.getElementById('openAiModel')?.value||'gpt-4.1').trim() || 'gpt-4.1';
+  const box=document.getElementById('openAiStatus');
+  if(box) box.textContent='☁️ 儲存 AI 設定中...';
+  try{
+    const res=await fetch(cloud.url,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'setAiConfig', apiKey, model})
+    });
+    const data=await res.json();
+    if(data&&data.ok){
+      aiCloud.configured=!!(data.config&&data.config.configured);
+      aiCloud.model=(data.config&&data.config.model)||model;
+      if(document.getElementById('openAiKey')) document.getElementById('openAiKey').value='';
+      if(document.getElementById('openAiModel')) document.getElementById('openAiModel').value=aiCloud.model;
+      if(box) box.textContent=aiCloud.configured
+        ? `✅ 已儲存，模型：${aiCloud.model}`
+        : '已清除 OpenAI API Key，改用本機 AI';
+      toast('✅ AI 設定已更新');
+      renderAll();
+    }else{
+      if(box) box.textContent='⚠️ 儲存失敗';
+      toast('儲存 AI 設定失敗');
+    }
+  }catch(e){
+    if(box) box.textContent='⚠️ 儲存失敗';
+    toast('儲存 AI 設定失敗');
+  }
+}
+let deferredInstallPrompt=null;
+function refreshInstallStatus(){
+  const box=document.getElementById('installStatus');
+  const btn=document.getElementById('installBtn');
+  if(btn) btn.style.display=deferredInstallPrompt?'':'none';
+  if(box){
+    if(deferredInstallPrompt) box.textContent='✅ 這個 App 可以安裝到手機主畫面';
+    else box.textContent='若瀏覽器支援，會在稍後出現安裝提示；也可以用瀏覽器選單安裝。';
+  }
+}
+async function installApp(){
+  if(!deferredInstallPrompt){ toast('目前還沒有安裝提示，請用瀏覽器選單安裝'); return; }
+  deferredInstallPrompt.prompt();
+  const choice=await deferredInstallPrompt.userChoice.catch(()=>null);
+  deferredInstallPrompt=null;
+  refreshInstallStatus();
+  if(choice && choice.outcome==='accepted') toast('✅ 已開始安裝');
+  else toast('已取消安裝');
+}
+async function testOpenAiConfig(){
+  if(!cloud.url){ toast('請先設定 GAS 網址'); return; }
+  const box=document.getElementById('openAiStatus');
+  if(box) box.textContent='🧪 測試雲端 AI 中...';
+  try{
+    const sample=todayAiContext(activeChildId()||Object.keys(KIDS)[0]||'weining');
+    const res=await fetch(cloud.url,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'ai', kind:'child', context:sample})
+    });
+    const data=await res.json();
+    if(data&&data.ok&&data.text){
+      if(box) box.textContent=`✅ 測試成功：${data.text}`;
+      toast('✅ 雲端 AI 測試成功');
+    }else{
+      if(box) box.textContent=`⚠️ 測試失敗：${(data&&data.error)||'unknown_error'}`;
+      toast('雲端 AI 測試失敗');
+    }
+  }catch(e){
+    if(box) box.textContent='⚠️ 測試失敗';
+    toast('雲端 AI 測試失敗');
+  }
+}
+async function requestRemoteAiMessage(childId, kind, ctx){
+  if(!cloud.url || !aiCloud.configured) return null;
+  ctx=ctx||todayAiContext(childId);
+  const key=`${childId}|${kind}|${ctx.sig}`;
+  if(aiCloud.pending[key]) return aiCloud.pending[key];
+  const cached=state.aiMessages&&state.aiMessages[childId]&&state.aiMessages[childId][kind];
+  if(cached && cached.sig===ctx.sig && cached.source==='remote') return cached.text;
+  aiCloud.pending[key]=(async()=>{
+    try{
+      const res=await fetch(cloud.url,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify({action:'ai', kind, context:ctx})
+      });
+      const data=await res.json();
+      if(data&&data.ok&&data.text){
+        cacheAiMessage(childId, kind, data.text, ctx.sig, 'remote');
+        if(document.visibilityState!=='hidden') renderAll();
+        return data.text;
+      }
+    }catch(e){}
+    return null;
+  })();
+  try{ return await aiCloud.pending[key]; }
+  finally{ delete aiCloud.pending[key]; }
+}
+async function ensureRemoteAiMessage(childId, kind, ctx){
+  if(!cloud.url || !aiCloud.configured) return null;
+  ctx=ctx||todayAiContext(childId);
+  const cached=state.aiMessages&&state.aiMessages[childId]&&state.aiMessages[childId][kind];
+  if(cached && cached.sig===ctx.sig && cached.source==='remote') return cached.text;
+  return requestRemoteAiMessage(childId, kind, ctx);
+}
+function renderAiPanel(childId){
+  const ctx=todayAiContext(childId);
+  const text=aiMessage(childId,'child');
+  if(cloud.url && aiCloud.configured) ensureRemoteAiMessage(childId,'child',ctx);
+  const info=ctx.info;
+  const tags=[
+    `${ctx.completedAdv} 個 Adventure`,
+    `${ctx.learning.eDone+ctx.learning.mDone} 個學習題`,
+    `${ctx.petActs} 次寵物互動`,
+    `${ctx.houseActs} 次家園行動`
+  ];
+  return `
+    <div class="card aicard">
+      <div class="aitop">
+        <div class="aihero">
+          <div class="aiemoji">🤖</div>
+          <div>
+            <div class="aititle">${info.name} 的今日 AI 鼓勵</div>
+            <div class="aisub">${aiKindLabel('child')}・每天依今天完成內容自動生成</div>
+          </div>
+        </div>
+        <div class="aibadge">${aiSourceLabel(childId,'child')}・${todayStr()}</div>
+      </div>
+      <div class="aibody">${escHtml(text)}</div>
+      <div class="aitags">
+        ${tags.map(t=>`<span class="chip unlock">${escHtml(t)}</span>`).join('')}
+      </div>
+    </div>`;
+}
+function renderLearningHomePanel(){
+  const box=document.getElementById('learningHomePanel'); if(!box) return;
+  const child=activeChildId() || sel.learningKid;
+  const s=learningProgressSummary(child);
+  box.innerHTML=`
+    ${learningSummaryCard(child)}
+    <div class="btnrow" style="margin-top:10px;">
+      <button class="btn sky sm" style="flex:1;" onclick="switchTab('learning')">📚 進入學習中心</button>
+      <button class="btn mint sm" style="flex:1;" onclick="recordReadingMinutes('${child}',10)">📖 +10 分鐘</button>
+    </div>
+    <div class="subnote" style="margin-top:8px;">今天已完成 ${s.eDone + s.mDone} 個題目，閱讀 ${s.rToday}/${s.rTarget} 分鐘。</div>
+  `;
+}
+function renderLearningParentSummary(){
+  const box=document.getElementById('learningParentSummary'); if(!box) return;
+  const child=sel.learningKid;
+  const s=learningProgressSummary(child);
+  const l=learningProfileOf(child);
+  box.innerHTML=`
+    <div class="pdrow">
+      <div class="pdmain"><b>${escHtml(KIDS[child].name)}</b><small>${learningGradeLabel(l.english.grade)}・閱讀目標 ${l.reading.dailyMinutesTarget} 分鐘</small></div>
+      <div class="pdactions">
+        <button class="btn sky sm" onclick="pickLearningKid('${child}')">查看</button>
+      </div>
+    </div>
+    <div class="barlist" style="margin-top:8px;">
+      <div class="barrow"><span>英文</span><div class="bartrack"><i style="width:${Math.round((s.eDone/Math.max(1,s.eTotal))*100)}%"></i></div><b>${s.eDone}/${s.eTotal}</b></div>
+      <div class="barrow"><span>數學</span><div class="bartrack"><i style="width:${Math.round((s.mDone/Math.max(1,s.mTotal))*100)}%"></i></div><b>${s.mDone}/${s.mTotal}</b></div>
+      <div class="barrow"><span>閱讀</span><div class="bartrack"><i style="width:${Math.min(100,Math.round((s.rToday/Math.max(1,s.rTarget))*100))}%"></i></div><b>${s.rToday}/${s.rTarget}</b></div>
+    </div>`;
+}
+function saveLearningSettings(){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const kid=sel.learningKid;
+  if(!KIDS[kid]){toast('請先選擇孩子');return;}
+  const grade=document.getElementById('learnGrade').value;
+  const target=parseInt(document.getElementById('learnTarget').value)||20;
+  setLearningGrade(kid,grade);
+  setReadingTarget(kid,target);
+  save();
+  renderAll();
+  toast(`📚 已更新 ${KIDS[kid].name} 的學習設定`);
+}
+function renderLearningTab(){
+  const child=sel.learningKid;
+  if(!KIDS[child]) return;
+  const summary=document.getElementById('learningSummaryPanel');
+  if(summary) summary.innerHTML=learningSummaryCard(child)+
+    `<div class="btnrow" style="margin-top:10px;">
+      <button class="btn mint sm" style="flex:1;" onclick="recordReadingMinutes('${child}',10)">📖 +10 分鐘</button>
+      <button class="btn sun sm" style="flex:1;" onclick="recordReadingMinutes('${child}',20)">📖 +20 分鐘</button>
+    </div>`;
+  const eBox=document.getElementById('learningEnglishPanel');
+  if(eBox) eBox.innerHTML=renderEnglishLearningCard(child);
+  const mBox=document.getElementById('learningMathPanel');
+  if(mBox) mBox.innerHTML=renderMathLearningCard(child);
+  const rBox=document.getElementById('learningReadingPanel');
+  if(rBox) rBox.innerHTML=renderReadingLearningCard(child);
+  const lk=document.getElementById('learningKid');
+  if(lk) lk.innerHTML=kidPills(child,'pickLearningKid');
+  const g=document.getElementById('learnGrade');
+  if(g) g.value=learningGradeOf(child);
+  const t=document.getElementById('learnTarget');
+  if(t) t.value=String(learningProfileOf(child).reading.dailyMinutesTarget||20);
+  renderLearningParentSummary();
+}
+function renderQuizOptionButtons(childId, kind, q){
+  const answerId=`${kind}_${q.id}`;
+  return q.choices.map((c,i)=>`<button class="quizopt" onclick="submitLearningChoice('${childId}','${kind}','${q.id}','${esc(c)}')">${String.fromCharCode(65+i)}. ${escHtml(c)}</button>`).join('');
+}
+function renderEnglishLearningCard(childId){
+  const set=learningEnglishSet(childId);
+  const s=learningProgressSummary(childId);
+  return `
+    <div class="card learncard">
+      <div class="learncardhead">
+        <div>
+          <h3>🔤 英文</h3>
+          <div class="subnote">依 ${learningGradeLabel(learningGradeOf(childId))} 自動生成單字題、拼字題、聽力題與閱讀題。</div>
+        </div>
+        <div class="learnbadge">${s.eDone}/${s.eTotal}</div>
+      </div>
+      <div class="quizgrid">
+        ${set.map(q=>{
+          const done=q.done;
+          return `<div class="quizitem ${done?'done':''}">
+            <div class="quiztop">
+              <span class="quiztag">${q.label}</span>
+              ${q.id==='listen'?`<button class="btn gray sm" onclick="speakEnglishWord('${esc(q.answer)}')">🔊 播放</button>`:''}
+            </div>
+            <b>${escHtml(q.title)}</b>
+            <small>${escHtml(q.prompt||'')}</small>
+            <div class="quizbody">
+              ${q.type==='spell'
+                ?`<input type="text" id="ans_${q.id}" class="searchbox" placeholder="輸入英文單字">
+                  <button class="btn mint sm" style="margin-top:8px;width:100%;" onclick="submitLearningSpell('${childId}','english','${q.id}')">確認答案</button>`
+                :renderQuizOptionButtons(childId,'english',q)}
+            </div>
+            ${done?`<div class="learnnote ok">已完成 ${escHtml(q.answer)}</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+function renderMathLearningCard(childId){
+  const set=learningMathSet(childId);
+  const s=learningProgressSummary(childId);
+  return `
+    <div class="card learncard">
+      <div class="learncardhead">
+        <div>
+          <h3>➗ 數學</h3>
+          <div class="subnote">依年級自動生成計算題，完成後可拿金幣與 EXP。</div>
+        </div>
+        <div class="learnbadge">${s.mDone}/${s.mTotal}</div>
+      </div>
+      <div class="quizgrid">
+        ${set.map(q=>`
+          <div class="quizitem ${q.done?'done':''}">
+            <div class="quiztop">
+              <span class="quiztag">${q.label}</span>
+            </div>
+            <b>${escHtml(q.title)}</b>
+            <small>選出正確答案</small>
+            <div class="quizbody">
+              ${renderQuizOptionButtons(childId,'math',q)}
+            </div>
+            ${q.done?`<div class="learnnote ok">已完成</div>`:''}
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+function recordReadingMinutes(childId, minutes){
+  const l=learningProfileOf(childId);
+  const m=Math.max(1,parseInt(minutes)||0);
+  const key=todayStr();
+  l.reading.logs.push({date:key,minutes:m,time:Date.now()});
+  save();
+  const total=todayReadingMinutes(childId);
+  toast(`📖 已記錄 ${m} 分鐘，今天共 ${total} 分鐘`);
+  if(checkLearningCompletion(childId,'reading')) celebrate('📚','閱讀完成！',`${KIDS[childId].name} 達成今日閱讀目標`);
+  renderAll();
+}
+function submitLearningChoice(childId, kind, qid, value){
+  const set=kind==='english'?learningEnglishSet(childId):learningMathSet(childId);
+  const q=set.find(x=>x.id===qid);
+  if(!q) return;
+  if(q.done){toast('這題已完成');return;}
+  const ok=String(value)===String(q.answer);
+  markLearningSolved(childId,kind,qid,ok,`${kind==='english'?'英文':'數學'}：${q.title}`,ok?6:0,ok?5:0,ok?6:0);
+  if(ok) toast(`✅ 答對了：${q.answer}`);
+  else toast(`再想想，正確答案是 ${q.answer}`);
+  renderAll();
+}
+function submitLearningSpell(childId, kind, qid){
+  const set=learningEnglishSet(childId);
+  const q=set.find(x=>x.id===qid);
+  if(!q) return;
+  const input=document.getElementById('ans_'+qid);
+  const value=(input&&input.value||'').trim().toLowerCase();
+  const ok=value===String(q.answer).toLowerCase();
+  markLearningSolved(childId,kind,qid,ok,`英文拼字：${q.title}`,ok?8:0,ok?6:0,ok?8:0);
+  if(ok) toast(`✅ 拼字正確：${q.answer}`);
+  else toast(`再試一次，答案是 ${q.answer}`);
+  renderAll();
+}
+function renderReadingLearningCard(childId){
+  const l=learningProfileOf(childId);
+  const total=todayReadingMinutes(childId);
+  const target=l.reading.dailyMinutesTarget||20;
+  const done=!!l.reading.completedDates[todayStr()];
+  return `
+    <div class="card learncard">
+      <div class="learncardhead">
+        <div>
+          <h3>📚 閱讀</h3>
+          <div class="subnote">家長可設定每天閱讀 10 / 20 / 30 分鐘，完成後直接拿金幣。</div>
+        </div>
+        <div class="learnbadge">${done?'已領':'未領'}</div>
+      </div>
+      <div class="learnstats" style="margin-bottom:10px;">
+        <div class="learnstat"><b>${total}</b><span>今天已讀</span></div>
+        <div class="learnstat"><b>${target}</b><span>目標分鐘</span></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn mint sm" style="flex:1;" onclick="recordReadingMinutes('${childId}',10)">+10 分</button>
+        <button class="btn sun sm" style="flex:1;" onclick="recordReadingMinutes('${childId}',20)">+20 分</button>
+        <button class="btn purple sm" style="flex:1;" onclick="recordReadingMinutes('${childId}',30)">+30 分</button>
+      </div>
+      <div class="btnrow" style="margin-top:8px;">
+        <input type="number" id="readInput_${childId}" class="searchbox" placeholder="自訂分鐘數" style="flex:1;min-width:0;">
+        <button class="btn gray sm" onclick="recordReadingCustom('${childId}')">記錄</button>
+      </div>
+      ${done?'<div class="learnnote ok" style="margin-top:10px;">今天已達成閱讀目標，獎勵已發放。</div>':''}
+    </div>`;
+}
+function recordReadingCustom(childId){
+  const input=document.getElementById(`readInput_${childId}`);
+  recordReadingMinutes(childId, parseInt(input&&input.value)||0);
+}
+function pickCoinShopCategory(category){
+  sel.coinShopCat=category;
+  renderCoinShop();
+}
+function renderCoinShopTabs(){
+  const box=document.getElementById('coinShopTabs'); if(!box) return;
+  box.innerHTML=SHOP_CATEGORIES.map(c=>`<button class="pill ${sel.coinShopCat===c.id?'on cat':''}" onclick="pickCoinShopCategory('${esc(c.id)}')">${c.e} ${c.label}</button>`).join('');
+}
+function renderCoinShop(){
+  const child=sel.shopKid;
+  const k=state.kids[child];
+  const balance=coinBalanceOf(child);
+  const bal=document.getElementById('coinBalance');
+  if(bal) bal.textContent=balance;
+  renderCoinShopTabs();
+  const panel=document.getElementById('coinShopPanel');
+  if(!panel) return;
+  const category=SHOP_CATALOG[sel.coinShopCat]?sel.coinShopCat:'food';
+  sel.coinShopCat=category;
+  const meta=shopCategoryMeta(category);
+  const list=shopCatalog(category);
+  panel.innerHTML=list.length?`
+    <div class="shoptier">${meta.e} ${meta.label}</div>
+    <div class="coinshopgrid">
+      ${list.map(item=>{
+        const afford=balance>=item.cost;
+        return `<div class="coinitem">
+          <div class="top">
+            <div class="coinicon">${item.e}</div>
+            <div class="coinmeta">
+              <b>${item.name}</b>
+              <small>${item.desc}</small>
+            </div>
+            <div class="coincost">${item.cost} 🪙</div>
+          </div>
+          <p>${(KIDS[child]&&KIDS[child].name)||'這位孩子'} 可購買的 ${meta.label}。</p>
+          <button class="btn ${afford?'sun':'gray'} sm" style="width:100%;margin-top:10px;" onclick="buyShopItem('${esc(child)}','${esc(category)}','${esc(item.id)}')">
+            ${afford?'購買並放入背包':'金幣不足'}
+          </button>
+        </div>`;
+      }).join('')}
+    </div>`:'<div class="shopempty">這個分類目前沒有商品。</div>';
+}
+function renderInventoryPanel(){
+  const panel=document.getElementById('inventoryPanel'); if(!panel) return;
+  const child=sel.shopKid;
+  const items=inventoryListOf(child);
+  if(!items.length){
+    panel.innerHTML='<div class="shopempty">背包目前是空的。先去金幣商店買一些東西。</div>';
+    return;
+  }
+  const order=SHOP_CATEGORIES.map(c=>c.id);
+  const groups=order.map(cat=>({
+    category:cat,
+    meta:shopCategoryMeta(cat),
+    items:items.filter(x=>x.category===cat)
+  })).filter(g=>g.items.length);
+  panel.innerHTML=groups.map(group=>`
+    <div class="shoptier">${group.meta.e} ${group.meta.label}</div>
+    <div class="invgrid">
+      ${group.items.map(it=>{
+        const action=coinShopActionLabel(it.category);
+        const icon=it.def?.e||group.meta.e;
+        const label=it.def?.name||it.id;
+        const desc=it.def?.desc||'背包道具';
+        return `<div class="invitem">
+          <div class="top">
+            <div class="invicon">${icon}</div>
+            <div class="invmeta">
+              <b>${label}</b>
+              <small>${desc}</small>
+            </div>
+            <div class="invcount">x${it.count}</div>
+          </div>
+          <p>${action==='收藏'?'可保留收藏，點擊查看紀錄。':'點擊可消耗 1 個並立即使用。'}</p>
+          <button class="btn mint sm" onclick="useInventoryItem('${esc(child)}','${esc(it.category)}','${esc(it.id)}')">${action}</button>
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+/* ============ Family Growth Adventure domain helpers ============ */
+function childProfile(childId){ return state.children && state.children[childId]; }
+function childStats(childId){
+  const c=childProfile(childId);
+  if(!c) return null;
+  c.stats=Object.assign({exp:0,level:1,points:0,coins:0,lifetimeExp:0,
+    streakDays:0,loginStreakDays:0,lastLoginDate:''},c.stats||{});
+  return c.stats;
+}
+function createLedgerEntry(d){
+  state.ledger=state.ledger||[];
+  const entry=Object.assign({
+    id:'evt_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+    time:Date.now(), childId:'', actorUserId:'', type:'event', category:'life',
+    title:'', pointsDelta:0, coinsDelta:0, expDelta:0, reason:'', refId:''
+  },d||{});
+  state.ledger.unshift(entry);
+  return entry;
+}
+function applyCurrency(childId,deltas){
+  const legacy=state.kids[childId], stats=childStats(childId);
+  if(!legacy||!stats) return;
+  const points=deltas.points||0, coins=deltas.coins||0, exp=deltas.exp||0;
+  legacy.xp=Math.max(0,(legacy.xp||0)+points);
+  legacy.coins=Math.max(0,(legacy.coins||0)+coins);
+  if(exp){ legacy.lifetime=Math.max(0,(legacy.lifetime||0)+exp); }
+  stats.points=legacy.xp||0;
+  stats.coins=legacy.coins||0;
+  stats.exp=legacy.lifetime||0;
+  stats.lifetimeExp=legacy.lifetime||0;
+  stats.level=v3LevelFromXp(stats.lifetimeExp);
+  stats.streakDays=streakOfSafe(state,childId);
+}
+function awardGrowth(childId,opts){
+  opts=opts||{};
+  const exp=parseInt(opts.exp ?? opts.points ?? 0)||0;
+  const points=parseInt(opts.points ?? exp)||0;
+  const coins=parseInt(opts.coins ?? Math.max(0,Math.round(exp*0.6)))||0;
+  applyCurrency(childId,{points,coins,exp});
+  return createLedgerEntry({
+    childId, actorUserId:opts.actorUserId||'', type:opts.type||'task_complete',
+    category:opts.category||'life', title:opts.title||'', pointsDelta:points,
+    coinsDelta:coins, expDelta:exp, reason:opts.reason||'', refId:opts.refId||''
+  });
+}
+function spendGrowth(childId,opts){
+  opts=opts||{};
+  const points=Math.abs(parseInt(opts.points)||0), coins=Math.abs(parseInt(opts.coins)||0);
+  applyCurrency(childId,{points:-points,coins:-coins,exp:0});
+  return createLedgerEntry({
+    childId, actorUserId:opts.actorUserId||'', type:opts.type||'shop_purchase',
+    category:opts.category||'shop', title:opts.title||'', pointsDelta:-points,
+    coinsDelta:-coins, expDelta:0, reason:opts.reason||'', refId:opts.refId||''
+  });
+}
+function taskAppliesToday(task,date){
+  date=date||new Date();
+  const sched=task.schedule||{type:'daily'};
+  const day=date.getDay();
+  const iso=todayStr(date);
+  if(!task.active) return false;
+  if(sched.type==='daily') return true;
+  if(sched.type==='weekday') return (sched.weekdays||[]).includes(day);
+  if(sched.type==='weekly') return (sched.weekdays||[1]).includes(day);
+  if(sched.type==='monthly') return date.getDate()===parseInt(sched.monthDay||1);
+  if(sched.type==='date') return (sched.dates||[]).includes(iso);
+  return true;
+}
+function getTodayAdventure(childId,date){
+  date=date||new Date();
+  const iso=todayStr(date);
+  const dayKey=childId+':'+iso;
+  state.adventureDays=state.adventureDays||{};
+  state.taskInstances=state.taskInstances||{};
+  const tasks=Object.values(state.tasks||{}).filter(t=>{
+    const assigned=t.assignedChildIds||[];
+    return (!assigned.length||assigned.includes(childId)) && taskAppliesToday(t,date);
+  });
+  const instanceIds=tasks.map(t=>{
+    const id='inst_'+childId+'_'+iso+'_'+t.id;
+    if(!state.taskInstances[id]){
+      state.taskInstances[id]={id,taskId:t.id,childId,date:iso,status:'todo',
+        submittedAt:0,approvedAt:0,proofPhotoUrl:'',note:''};
+    }
+    return id;
+  });
+  const totalAvailableCoins=tasks.reduce((sum,t)=>sum+(parseInt(t.coins)||0),0);
+  const completedCount=instanceIds.filter(id=>['completed','approved'].includes(state.taskInstances[id].status)).length;
+  state.adventureDays[dayKey]=Object.assign(state.adventureDays[dayKey]||{},{
+    childId,date:iso,taskInstanceIds:instanceIds,totalAvailableCoins,
+    completedCount,allCompleted:instanceIds.length>0&&completedCount===instanceIds.length,
+    chestOpened:!!(state.adventureDays[dayKey]&&state.adventureDays[dayKey].chestOpened)
+  });
+  return state.adventureDays[dayKey];
+}
+function weeklyCategoryStats(childId,weekStart){
+  weekStart=weekStart||thisWeekStart();
+  const out={reading:0,english:0,math:0,exercise:0,chores:0,life:0,total:0};
+  (state.ledger||[]).forEach(e=>{
+    if(e.childId!==childId || !e.expDelta || weekKeyOf(e.time)!==weekStart) return;
+    const c=e.category||'life';
+    out[c]=(out[c]||0)+1;
+    out.total++;
+  });
+  return out;
+}
+
+/* ============ Child Dashboard ============ */
+function activeChildId(){
+  if(childSession && KIDS[childSession]) return childSession;
+  return '';
+}
+function childVisibleKids(){
+  const active=activeChildId();
+  return active && !isUnlocked() ? [active] : Object.keys(KIDS);
+}
+function petIcon(type){
+  return {dog:'🐶',cat:'🐱',chick:'🐥',panda:'🐼',dino:'🦖',fox:'🦊',rabbit:'🐰'}[type]||'🐶';
+}
+function worldIcon(id){
+  return {forest:'🌳',desert:'🏜️',ocean:'🌊',snow:'❄️',sky:'☁️',space:'🪐'}[id]||'🌳';
+}
+function coinsToday(childId){
+  const t=todayStr();
+  return (state.ledger||[]).filter(e=>e.childId===childId && e.coinsDelta>0 &&
+    todayStr(new Date(e.time))===t).reduce((sum,e)=>sum+e.coinsDelta,0);
+}
+function petState(childId){
+  const c=childProfile(childId);
+  if(!c) return null;
+  const pid=c.petId||('pet_'+childId);
+  state.pets=state.pets||{};
+  state.pets[pid]=defaultPetFor(childId,state.pets[pid]);
+  if(!state.pets[pid].type) state.pets[pid].type=(c.preferences&&c.preferences.petType)||'dog';
+  const pet=state.pets[pid];
+  const now=Date.now();
+  const last=pet.lastTickAt||0;
+  const days=last?Math.floor((now-last)/86400000):0;
+  if(days>0){
+    pet.hunger=Math.max(20,(pet.hunger||80)-days*7);
+    pet.happiness=Math.max(20,(pet.happiness||80)-days*6);
+    pet.lastTickAt=now;
+    save(true);
+  }else if(!pet.lastTickAt){
+    pet.lastTickAt=now;
+  }
+  return state.pets[pid];
+}
+function petMoodLabel(pet){
+  const hunger=pet.hunger||0, happy=pet.happiness||0;
+  if(hunger<35) return '肚子餓了';
+  if(happy<40) return '想玩耍';
+  if(happy>85 && hunger>60) return '很開心';
+  return '精神不錯';
+}
+function syncPetChildType(childId,type){
+  const c=childProfile(childId); if(!c) return;
+  const pet=petState(childId); if(!pet) return;
+  pet.type=type;
+  c.preferences=c.preferences||{};
+  c.preferences.petType=type;
+}
+function petLevelProgress(pet){
+  const lvl=petLevelOf(pet.exp||0);
+  return {level:lvl.level,pct:lvl.pct,base:(lvl.level-1)*100,next:lvl.level*100};
+}
+function addPetGrowth(childId,delta){
+  const pet=petState(childId); if(!pet) return;
+  const before=pet.level||1;
+  pet.exp=Math.max(0,(pet.exp||0)+Math.max(0,delta.exp||0));
+  pet.hunger=Math.max(0,Math.min(100,(pet.hunger||80)+(delta.hunger||0)));
+  pet.happiness=Math.max(0,Math.min(100,(pet.happiness||80)+(delta.happiness||0)));
+  pet.lastCareAt=Date.now();
+  pet.lastTickAt=Date.now();
+  const next=petLevelOf(pet.exp||0);
+  pet.level=next.level;
+  if(next.level>before){
+    celebrate(PET_TYPES[pet.type]?.e||'🐾',`寵物升級！Lv.${next.level}`,`${KIDS[childId].name} 的寵物變強了`);
+  }
+}
+function feedPet(childId,foodId){
+  const pet=petState(childId); if(!pet) return;
+  const item=PET_FOODS.find(x=>x.id===foodId); if(!item) return;
+  const k=state.kids[childId];
+  if((k.coins||0)<item.cost){toast('金幣不夠，先完成 Adventure 再來餵食');return;}
+  k.coins=Math.max(0,(k.coins||0)-item.cost);
+  childStats(childId).coins=k.coins;
+  addPetGrowth(childId,{exp:item.exp,hunger:item.hunger,happiness:item.happy});
+  createLedgerEntry({childId,type:'pet_feed',category:'pet',title:item.name,pointsDelta:0,coinsDelta:-item.cost,expDelta:0,reason:'feed pet',refId:item.id});
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'寵物照顧',task:'餵食 '+item.name,
+    xp:0,coins:-item.cost,note:'寵物吃飽了',status:'done',type:'pet'});
+  save(); toast(`🍽️ ${KIDS[childId].name} 餵了寵物 ${item.name}`);
+  renderAll();
+}
+function playPet(childId,toyId){
+  const pet=petState(childId); if(!pet) return;
+  const item=PET_TOYS.find(x=>x.id===toyId); if(!item) return;
+  const k=state.kids[childId];
+  if((k.coins||0)<item.cost){toast('金幣不夠，先完成 Adventure 再來玩耍');return;}
+  k.coins=Math.max(0,(k.coins||0)-item.cost);
+  childStats(childId).coins=k.coins;
+  addPetGrowth(childId,{exp:item.exp,hunger:item.hunger,happiness:item.happy});
+  createLedgerEntry({childId,type:'pet_play',category:'pet',title:item.name,pointsDelta:0,coinsDelta:-item.cost,expDelta:0,reason:'play with pet',refId:item.id});
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'寵物互動',task:'玩 '+item.name,
+    xp:0,coins:-item.cost,note:'寵物很開心',status:'done',type:'pet'});
+  save(); toast(`🎾 ${KIDS[childId].name} 跟寵物玩了 ${item.name}`);
+  renderAll();
+}
+function renamePet(childId){
+  const pet=petState(childId); if(!pet) return;
+  const name=prompt('替你的寵物取新名字', pet.name||'夥伴');
+  if(name===null) return;
+  pet.name=(name||'夥伴').trim()||'夥伴';
+  save(); renderAll(); toast('已更新寵物名字');
+}
+function cyclePetType(childId, type){
+  syncPetChildType(childId,type);
+  save();
+  renderAll();
+  toast(`${KIDS[childId].name} 的寵物現在是 ${PET_TYPES[type]?.name||type}`);
+}
+function houseFurnitureSummary(house){
+  const map={};
+  (house.furniture||[]).forEach(id=>{ map[id]=(map[id]||0)+1; });
+  return Object.keys(map).map(id=>{
+    const meta=(SHOP_CATALOG.furniture||[]).find(x=>x.id===id)||{id,name:id,e:'🛋️'};
+    return {id,count:map[id],meta};
+  });
+}
+function renderHousePanel(active, house){
+  const wallpaper=houseMetaWallpaper(house.wallpaper);
+  const floor=houseMetaFloor(house.floor);
+  const furniture=houseFurnitureSummary(house);
+  const flowerCount=(house.garden?.flowers||[]).length;
+  const treeCount=(house.garden?.trees||[]).length;
+  const latestFlower=flowerCount?houseFlowerMeta(house.garden.flowers[flowerCount-1]):null;
+  const latestTree=treeCount?houseTreeMeta(house.garden.trees[treeCount-1]):null;
+  const upgradeCost=houseUpgradeCost(house);
+  const flowerCost=housePlantCost('flower');
+  const treeCost=housePlantCost('tree');
+  const lastUpgrade=house.lastUpgradeAt?new Date(house.lastUpgradeAt).toLocaleDateString('zh-TW',{month:'2-digit',day:'2-digit'}):'尚未升級';
+  return `
+    <div class="card housecard">
+      <div class="househead">
+        <div>
+          <div class="housetitle">🏠 我的家園</div>
+          <div class="housemeta">Lv.${house.level||1} ・ ${wallpaper.label} ・ ${floor.label}</div>
+        </div>
+        <div class="housechips">
+          <span class="chip ok">家具 ${furniture.reduce((s,x)=>s+x.count,0)}</span>
+          <span class="chip unlock">花朵 ${flowerCount}</span>
+          <span class="chip no">樹木 ${treeCount}</span>
+        </div>
+      </div>
+      <div class="housescene" style="background:linear-gradient(180deg,${wallpaper.c1} 0%,${wallpaper.c2} 52%,${floor.c1} 52%,${floor.c2} 100%);">
+        <div class="housewindow">🌈</div>
+        <div class="housefloorbar"></div>
+        <div class="houseobjects">
+          <div class="houseplant">${latestFlower?latestFlower.e:'🌷'}</div>
+          <div class="houseplant">${latestTree?latestTree.e:'🌳'}</div>
+          <div class="housepet">${petIcon((state.pets['pet_'+active]||{}).type||'dog')}</div>
+          <div class="housefurniture">${furniture.length?furniture.slice(0,3).map(it=>`<span>${it.meta.e} x${it.count}</span>`).join(''):'<span>還沒有家具</span>'}</div>
+        </div>
+      </div>
+      <div class="housegrid">
+        <div class="housestat"><b>${wallpaper.e}</b><span>${wallpaper.label}</span></div>
+        <div class="housestat"><b>${floor.e}</b><span>${floor.label}</span></div>
+        <div class="housestat"><b>${house.upgradeLevel||0}</b><span>升級次數</span></div>
+        <div class="housestat"><b>${lastUpgrade}</b><span>最近升級</span></div>
+      </div>
+      <div class="houseactions">
+        <button class="btn purple sm" onclick="upgradeHouse('${active}')">🏗️ 升級小屋 ${upgradeCost}🪙</button>
+        <button class="btn mint sm" onclick="housePlant('${active}','flower')">🌷 種花 ${flowerCost}🪙</button>
+        <button class="btn sun sm" onclick="housePlant('${active}','tree')">🌳 種樹 ${treeCost}🪙</button>
+        <button class="btn gray sm" onclick="switchTab('rewards')">🛍️ 去裝潢</button>
+      </div>
+      <div class="divider"></div>
+      <div class="housebags">
+        <div>
+          <div class="houselabel">已擺放家具</div>
+          <div class="housebaglist">${furniture.length?furniture.map(it=>`<span class="bagchip">${it.meta.e} ${it.meta.name} x${it.count}</span>`).join(''):'<span class="muted">目前沒有家具</span>'}</div>
+        </div>
+        <div>
+          <div class="houselabel">花園</div>
+          <div class="housebaglist">${flowerCount||treeCount?[
+            ...((house.garden?.flowers||[]).map(id=>`<span class="bagchip">${houseFlowerMeta(id).e} ${houseFlowerMeta(id).label}</span>`)),
+            ...((house.garden?.trees||[]).map(id=>`<span class="bagchip">${houseTreeMeta(id).e} ${houseTreeMeta(id).label}</span>`))
+          ].join(''):'<span class="muted">還沒有花園</span>'}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function registerChildLogin(childId){
+  if(!KIDS[childId]) return;
+  childSession=childId;
+  localStorage.setItem(CHILD_SESSION_KEY,childId);
+  const stats=childStats(childId);
+  if(stats){
+    const today=todayStr(), last=stats.lastLoginDate||'';
+    if(last!==today){
+      const y=new Date(); y.setDate(y.getDate()-1);
+      stats.loginStreakDays=(last===todayStr(y))?((stats.loginStreakDays||0)+1):1;
+      stats.lastLoginDate=today;
+      createLedgerEntry({childId,type:'login',category:'life',title:'每日登入',reason:'Child Dashboard login'});
+      save();
+    }
+  }
+}
+function childLogin(childId){
+  registerChildLogin(childId);
+  renderAll();
+  toast('歡迎回來，'+KIDS[childId].name+'！');
+}
+function childLogout(){
+  childSession='';
+  localStorage.removeItem(CHILD_SESSION_KEY);
+  renderAll();
+}
+function renderChildDashboard(){
+  const box=document.getElementById('childWorld'); if(!box) return;
+  const active=activeChildId();
+  if(!active){
+    box.innerHTML=`<div class="card"><p class="subnote" style="text-align:center;margin-bottom:12px;">選擇自己的帳號，這台裝置會記住你的世界。</p>
+      <div class="childlogin">${Object.keys(KIDS).map(k=>`<button class="childpick" onclick="childLogin('${k}')">
+        <div class="face" style="background:linear-gradient(135deg,${KIDS[k].c1},${KIDS[k].c2})">${KIDS[k].emoji}</div>
+        <b>${escHtml(KIDS[k].name)}</b>
+      </button>`).join('')}</div></div>`;
+    return;
+  }
+  const info=KIDS[active], legacy=state.kids[active], child=state.children[active]||{}, stats=childStats(active)||{};
+  const pet=petState(active)||defaultPetFor(active);
+  const house=state.houses[child.houseId||('house_'+active)]||defaultHouseFor(active);
+  const adv=getTodayAdventure(active);
+  const completed=adv.completedCount||0, total=adv.taskInstanceIds.length||quickListOf(active).length;
+  const pct=total?Math.round(completed/total*100):0;
+  const available=adv.totalAvailableCoins||quickListOf(active).reduce((sum,t)=>sum+Math.round(t.x*.6),0);
+  const L=levelOf(legacy.lifetime||0);
+  const dateLabel=new Date().toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'long'});
+  const goalText=total?`完成 ${Math.min(total,Math.max(3,total))} 個 Adventure，讓寵物更開心。`:'今天先建立一個 Adventure。';
+  const mood=petMoodLabel(pet);
+  const petProg=petLevelProgress(pet);
+  box.innerHTML=`
+    <div class="card worldhero">
+      <div class="worldsky"></div>
+      <div class="worldtop">
+        <div class="worldavatar" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+        <div>
+          <div class="worldname">${escHtml(info.name)}的世界</div>
+          <div class="worlddate">${dateLabel}・Lv.${L.cur.lv} ${L.cur.name}</div>
+        </div>
+        <div class="coinbubble"><b>${stats.coins||legacy.coins||0}</b><span>金幣</span></div>
+      </div>
+      <div class="worldscene">
+        <div class="worldtile">
+          <div class="big">${petIcon(pet.type)}</div>
+          <b>${escHtml(pet.name||'夥伴')}</b>
+          <span>快樂 ${pet.happiness||80}・飽食 ${pet.hunger||80}</span>
+        </div>
+        <div class="worldtile houseclick" onclick="houseTap('${active}')">
+          <div class="big">🏠</div>
+          <b>Lv.${house.level||1} 小屋</b>
+          <span>${worldIcon(child.activeWorldId||'forest')} 點我升級 / 去裝潢</span>
+        </div>
+      </div>
+      <div class="goalstrip">
+        <b>今日目標</b>
+        <span>${goalText}</span>
+        <div class="progress" style="margin-bottom:0;"><i style="width:${pct}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
+      </div>
+    </div>
+    ${renderAiPanel(active)}
+    <div id="reminderPanel" style="margin-top:10px;"></div>
+    <div id="noticePreview" style="margin-top:10px;"></div>
+    <div class="petroom">
+      <div class="petcard">
+        <div class="petstage housepetbtn" onclick="petTap('${active}')" title="點擊可餵食或玩耍">
+          <div class="petface">${petIcon(pet.type)}</div>
+          <div class="petmeta">
+            <b>${escHtml(pet.name||'夥伴')}</b>
+            <small>${PET_TYPES[pet.type]?.name||'寵物'}・${PET_TYPES[pet.type]?.mood||''}・${mood}</small>
+          </div>
+        </div>
+        <div class="petbars">
+          <div class="petbarrow hunger"><span>飽食</span><div class="track"><i style="width:${pet.hunger||0}%"></i></div><b>${pet.hunger||0}</b></div>
+          <div class="petbarrow happy"><span>快樂</span><div class="track"><i style="width:${pet.happiness||0}%"></i></div><b>${pet.happiness||0}</b></div>
+          <div class="petbarrow exp"><span>EXP</span><div class="track"><i style="width:${petProg.pct}%"></i></div><b>Lv.${petProg.level}</b></div>
+        </div>
+        <div class="petmoods">
+          ${mood==='肚子餓了'?'<span class="chip no">需要餵食</span>':''}
+          ${mood==='想玩耍'?'<span class="chip unlock">想玩耍</span>':''}
+          ${mood==='很開心'?'<span class="chip ok">超開心</span>':''}
+        </div>
+        <div class="petactions">
+          <button class="btn mint sm" onclick="feedPet('${active}','kibble')">🥣 餵飼料</button>
+          <button class="btn sun sm" onclick="playPet('${active}','ball')">⚽ 一起玩</button>
+          <button class="btn sky sm" onclick="renamePet('${active}')">✏️ 改名字</button>
+          <button class="btn purple sm" onclick="renderAll()">🔄 重新整理</button>
+        </div>
+        <div class="petnote">完成 Adventure、餵食、玩耍都會讓寵物成長。金幣可直接拿來照顧牠。</div>
+      </div>
+      <div class="petcard">
+        <div style="font-weight:900;font-size:16px;margin-bottom:6px;">選擇寵物種類</div>
+        <div class="petchips">${Object.entries(PET_TYPES).map(([id,p])=>`
+          <button class="petchip ${pet.type===id?'on':''}" onclick="cyclePetType('${active}','${id}')">
+            <span class="e">${p.e}</span>${p.name}
+          </button>`).join('')}</div>
+        <div class="divider"></div>
+        <div style="font-weight:900;font-size:16px;margin-bottom:6px;">寵物小檔案</div>
+        <div class="subnote">目前名字：<b>${escHtml(pet.name||'夥伴')}</b></div>
+        <div class="subnote">喜好狀態：<b>${PET_TYPES[pet.type]?.mood||'可愛'}</b></div>
+        <div class="subnote">最後照顧：<b>${pet.lastCareAt?new Date(pet.lastCareAt).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}):'今天還沒照顧'}</b></div>
+        <div class="subnote">家長可在後台孩子管理區一起設定預設寵物種類。</div>
+      </div>
+    </div>
+    ${renderHousePanel(active, house)}
+    <div class="parentdash">
+      <div class="pdstat"><b>${stats.loginStreakDays||0}</b><span>連續登入天數</span></div>
+      <div class="pdstat"><b>${completed}/${total}</b><span>今日 Adventure</span></div>
+      <div class="pdstat"><b>${available}</b><span>今天可得金幣</span></div>
+      <div class="pdstat"><b>${coinsToday(active)}</b><span>今天已得金幣</span></div>
+    </div>
+    <div class="worldactions">
+      <button class="btn mint sm" onclick="switchTab('home')">Adventure</button>
+      <button class="btn sky sm" onclick="housePlant('${active}','flower')">種花</button>
+      <button class="btn mint sm" onclick="switchTab('learning')">學習</button>
+      <button class="btn sun sm" onclick="switchTab('rewards')">商店</button>
+      <button class="btn purple sm" onclick="switchTab('achieve')">成就</button>
+    </div>
+    <button class="btn gray sm" style="width:100%;margin-top:10px;" onclick="childLogout()">切換孩子</button>
+  `;
+  renderReminderPanel(active);
+  renderNoticePreview(active);
+  renderLearningHomePanel();
 }
 
 /* ============ 工具 ============ */
@@ -994,19 +3534,24 @@ function celebrate(emoji,title,desc){
 /* ============ 選擇器狀態 ============ */
 const sel={scoreKid:'weining',scoreParent:'爸爸',scoreCat:'讀書',scoreTask:null,
   remKid:'weining', applyKid:'weining',applyCat:'讀書',applyTask:null,
-  shopKid:'weining', tabletKid:'weining',
+  shopKid:'weining', coinShopCat:'food', tabletKid:'weining',
+  learningKid:'weining',
   spKid:'weining',spParent:'爸爸',spCat:'學業', badgeKid:'weining',
-  reportKid:'weining', recFilter:'all', rankMode:'level'};
+  reportKid:'weining', recFilter:'all', rankMode:'level', noticeKid:'all'};
 
 // 角色被刪除時，把指向不存在角色的選擇器重設為第一位
 function ensureSel(){
-  const first=Object.keys(KIDS)[0];
-  ['scoreKid','remKid','applyKid','shopKid','tabletKid','spKid','badgeKid','reportKid'].forEach(s=>{
-    if(!KIDS[sel[s]]) sel[s]=first;
+  const active=activeChildId();
+  const childOnly=active && !isUnlocked();
+  const first=childOnly?active:Object.keys(KIDS)[0];
+  ['scoreKid','remKid','applyKid','shopKid','tabletKid','learningKid','spKid','badgeKid','reportKid'].forEach(s=>{
+    if(childOnly || !KIDS[sel[s]]) sel[s]=first;
   });
+  if(!SHOP_CATALOG[sel.coinShopCat]) sel.coinShopCat='food';
 }
 function kidPills(active,onclick){
-  return Object.keys(KIDS).map(k=>{
+  const visible=childVisibleKids();
+  return Object.keys(KIDS).filter(k=>visible.includes(k)).map(k=>{
     const sty=k===active?`style="color:#fff;border-color:transparent;background:linear-gradient(135deg,${KIDS[k].c1},${KIDS[k].c2})"`:'';
     return `<button class="pill ${k===active?'on':''}" ${sty} onclick="${onclick}('${k}')">${KIDS[k].emoji} ${KIDS[k].name}</button>`;
   }).join('');
@@ -1015,7 +3560,8 @@ function kidPills(active,onclick){
 /* ============ 渲染：首頁儀表板 ============ */
 function renderHome(){
   const wrap=document.getElementById('homeCards');
-  const order=SISTERS.concat(Object.keys(KIDS).filter(k=>!KIDS[k].sister));
+  const visible=childVisibleKids();
+  const order=SISTERS.concat(Object.keys(KIDS).filter(k=>!KIDS[k].sister)).filter(k=>visible.includes(k));
   wrap.innerHTML=order.map(k=>{
     const kid=state.kids[k], info=KIDS[k];
     const L=levelOf(kid.lifetime);
@@ -1149,7 +3695,8 @@ function saveChallengeEdit(){
 /* ============ 今日快速任務面板（打卡式） ============ */
 function renderQuickPanel(){
   const box=document.getElementById('quickPanel'); if(!box) return;
-  const order=SISTERS.concat(Object.keys(KIDS).filter(k=>!KIDS[k].sister));
+  const visible=childVisibleKids();
+  const order=SISTERS.concat(Object.keys(KIDS).filter(k=>!KIDS[k].sister)).filter(k=>visible.includes(k));
   box.innerHTML=order.map(k=>{
     const info=KIDS[k], list=quickListOf(k), st=quickStatusOf(k);
     const done=st.filter(s=>s==='done').length;
@@ -1196,6 +3743,110 @@ function setQuick(kid,i,status){
     if(ri>=0) state.records.splice(ri,1);
   }
   st[i]=status; save(); initPrevLevels(); renderAll();
+}
+
+/* ============ Adventure ============ */
+function adventureIcon(cat){
+  return {reading:'📚',english:'🔤',math:'➗',exercise:'🏃',chores:'🧹',life:'🌱'}[cat]||'🎯';
+}
+function adventureKids(){
+  const active=activeChildId();
+  if(active) return [active];
+  return childVisibleKids().slice(0,1);
+}
+function renderAdventurePanel(){
+  const box=document.getElementById('adventurePanel'); if(!box) return;
+  const kid=adventureKids()[0];
+  if(!kid){
+    box.innerHTML='<div class="card adventure-head"><p class="muted" style="text-align:center;">先到「我的世界」選擇孩子，就能開始今天的 Adventure。</p></div>';
+    const chest=document.getElementById('dailyChestPanel'); if(chest) chest.innerHTML='';
+    return;
+  }
+  const info=KIDS[kid], adv=getTodayAdventure(kid), ids=adv.taskInstanceIds||[];
+  const done=adv.completedCount||0, total=ids.length;
+  const pct=total?Math.round(done/total*100):0;
+  box.innerHTML=`<div class="card adventure-head">
+    <div class="adventure-title">
+      <div class="map">${worldIcon((state.children[kid]||{}).activeWorldId||'forest')}</div>
+      <div><b>${escHtml(info.name)}今天的冒險</b><small>${done}/${total} 完成・可得 ${adv.totalAvailableCoins||0} 金幣</small></div>
+    </div>
+    <div class="progress"><i style="width:${pct}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
+  </div>
+  <div class="adventure-grid">${ids.map(id=>adventureCard(kid,id)).join('') || '<div class="card"><p class="muted" style="text-align:center;">今天還沒有 Adventure，請家長到後台建立任務。</p></div>'}</div>`;
+  renderDailyChest(kid);
+}
+function adventureCard(kid,instanceId){
+  const inst=state.taskInstances[instanceId], task=state.tasks[inst.taskId]||{};
+  const status=inst.status||'todo';
+  const locked=status==='submitted'||status==='pending';
+  const done=['completed','approved'].includes(status);
+  const cls=done?'done':locked?'pending':'';
+  const rejected=status==='rejected';
+  const label=done?'完成':locked?'待審核':rejected?'再挑戰':'完成';
+  const stClass=done?'done':locked?'pending':'todo';
+  return `<div class="advcard ${cls}" id="adv-${instanceId}">
+    <div class="advicon">${adventureIcon(task.category)}</div>
+    <div class="advmain">
+      <b>${escHtml(task.title||'Adventure')}</b>
+      <small>${task.proof&&task.proof.photoRequired?'需要拍照・':''}${task.approval&&task.approval.required?'完成後給爸爸媽媽審核':'完成後立即獲得獎勵'}</small>
+      <div class="advreward"><span class="xp">+${task.points||0} XP</span><span>+${task.coins||0} 金幣</span></div>
+    </div>
+    <button class="advstatus ${stClass}" ${done||locked?'disabled':''} onclick="completeAdventure('${kid}','${instanceId}',this)">${label}</button>
+  </div>`;
+}
+function completeAdventure(kid,instanceId,btn){
+  const inst=state.taskInstances[instanceId], task=inst && state.tasks[inst.taskId];
+  if(!inst||!task||!['todo','rejected'].includes(inst.status)) return;
+  const needsApproval=!!(task.approval&&task.approval.required);
+  if(needsApproval){
+    inst.status='submitted';
+    inst.submittedAt=Date.now();
+    state.records.unshift({time:Date.now(),kid,parent:'',cat:task.legacyCategory||legacyCatFromV3(task.category),
+      task:task.title,xp:task.points||0,coins:task.coins||0,note:'Adventure 送審',status:'pending',type:'apply',instanceId});
+    save(); toast('📨 Adventure 已送給爸爸媽媽審核');
+    renderAll(); return;
+  }
+  inst.status='completed';
+  inst.approvedAt=Date.now();
+  addXp(kid,task.points||0,true);
+  const defaultCoins=Math.round((task.points||0)*0.6), coinDiff=(task.coins||0)-defaultCoins;
+  if(coinDiff){ state.kids[kid].coins=Math.max(0,(state.kids[kid].coins||0)+coinDiff); childStats(kid).coins=state.kids[kid].coins; }
+  bumpPet(kid);
+  state.records.unshift({time:Date.now(),kid,parent:'',cat:task.legacyCategory||legacyCatFromV3(task.category),
+    task:task.title,xp:task.points||0,coins:task.coins||0,note:'Adventure 完成',status:'done',type:'score',instanceId});
+  save(); checkLevelUp(kid);
+  if(btn){ btn.closest('.advcard')?.classList.add('done','petpop'); flyCoins(task.coins||0,btn); flyXp(task.points||0,btn); }
+  toast('✅ Adventure 完成！寵物很開心');
+  setTimeout(()=>renderAll(),650);
+}
+function renderDailyChest(kid){
+  const box=document.getElementById('dailyChestPanel'); if(!box) return;
+  const adv=getTodayAdventure(kid);
+  const cls=adv.chestOpened?'opened':adv.allCompleted?'':'locked';
+  const title=adv.chestOpened?'今日寶箱已開啟':adv.allCompleted?'每日寶箱已解鎖':'完成全部 Adventure 可開寶箱';
+  const desc=adv.chestOpened?'明天再來開新的寶箱。':adv.allCompleted?'裡面可能有金幣、家具或稀有道具。':`${adv.completedCount||0}/${adv.taskInstanceIds.length||0} Adventure 完成`;
+  box.innerHTML=`<div class="card chestbox ${cls}">
+    <div class="chest">${adv.chestOpened?'🎊':'🧰'}</div>
+    <b>${title}</b>
+    <p class="subnote">${desc}</p>
+    ${adv.allCompleted&&!adv.chestOpened?`<button class="btn sun sm" style="margin-top:10px;width:100%;" onclick="openDailyChest('${kid}')">開啟寶箱</button>`:''}
+  </div>`;
+}
+function openDailyChest(kid){
+  const adv=getTodayAdventure(kid);
+  if(!adv.allCompleted){toast('完成全部 Adventure 才能開寶箱');return;}
+  if(adv.chestOpened){toast('今天已經開過寶箱');return;}
+  const rewardCoins=20+Math.floor(Math.random()*31);
+  adv.chestOpened=true;
+  awardGrowth(kid,{points:0,coins:rewardCoins,exp:0,category:'life',title:'每日寶箱',
+    type:'chest_reward',reason:'完成全部 Adventure'});
+  const inv=state.inventory[kid]||{};
+  inv.rareItems=inv.rareItems||{};
+  if(Math.random()<0.25) inv.rareItems['mystery_seed']=(inv.rareItems['mystery_seed']||0)+1;
+  state.inventory[kid]=inv;
+  save();
+  celebrate('🧰','每日寶箱！',`${KIDS[kid].name} 獲得 ${rewardCoins} 金幣`);
+  renderAll();
 }
 
 /* ============ 渲染：加分 ============ */
@@ -1261,6 +3912,16 @@ function flyXp(x,btn){
   else { f.style.left=(innerWidth/2-26)+'px'; f.style.top=(innerHeight/2)+'px'; }
   document.body.appendChild(f); setTimeout(()=>f.remove(),950);
 }
+function flyCoins(x,btn){
+  const f=document.createElement('div');
+  f.className='coinburst'; f.textContent='+'+x+' 🪙';
+  if(btn){ const r=btn.getBoundingClientRect(); f.style.left=(r.left+r.width/2-28)+'px'; f.style.top=(r.top-4)+'px'; }
+  else { f.style.left=(innerWidth/2-28)+'px'; f.style.top=(innerHeight/2)+'px'; }
+  document.body.appendChild(f); setTimeout(()=>f.remove(),1050);
+}
+function bumpPet(childId){
+  addPetGrowth(childId,{exp:8,hunger:2,happiness:10});
+}
 // 點任務 = 立即加分
 function quickScore(cat,n,x,btn){
   if(!isUnlocked()){ if(!promptUnlock()) return; }
@@ -1296,7 +3957,19 @@ function confirmReminder(){
 function addXp(kid,amt,affectLifetime){
   const k=state.kids[kid];
   k.xp=Math.max(0,k.xp+amt);
-  if(affectLifetime){ k.lifetime=Math.max(0,k.lifetime+amt); }
+  if(affectLifetime){
+    k.lifetime=Math.max(0,k.lifetime+amt);
+    k.coins=Math.max(0,(k.coins||0)+Math.round(amt*0.6));
+  }
+  const stats=childStats(kid);
+  if(stats){
+    stats.points=k.xp||0;
+    stats.coins=k.coins||0;
+    stats.exp=k.lifetime||0;
+    stats.lifetimeExp=k.lifetime||0;
+    stats.level=v3LevelFromXp(stats.lifetimeExp);
+    stats.streakDays=streakOfSafe(state,kid);
+  }
 }
 let prevLevels={};
 function checkLevelUp(kid){
@@ -1372,7 +4045,17 @@ function approveApply(idx){
   if(!isUnlocked()){ if(!promptUnlock()) return; }
   const r=state.records[idx]; if(!r||r.status!=='pending')return;
   r.status='approved'; r.time=Date.now(); r.parent='核准';
-  addXp(r.kid,r.xp,true); save();
+  if(r.instanceId && state.taskInstances[r.instanceId]){
+    state.taskInstances[r.instanceId].status='approved';
+    state.taskInstances[r.instanceId].approvedAt=Date.now();
+    bumpPet(r.kid);
+  }
+  addXp(r.kid,r.xp,true);
+  if(typeof r.coins==='number'){
+    const defaultCoins=Math.round((r.xp||0)*0.6), coinDiff=r.coins-defaultCoins;
+    if(coinDiff){ state.kids[r.kid].coins=Math.max(0,(state.kids[r.kid].coins||0)+coinDiff); childStats(r.kid).coins=state.kids[r.kid].coins; }
+  }
+  save();
   checkLevelUp(r.kid);
   toast(`✅ 已核准 ${KIDS[r.kid].name} +${r.xp} XP`);
   renderAll();
@@ -1380,6 +4063,7 @@ function approveApply(idx){
 function rejectApply(idx){
   if(!isUnlocked()){ if(!promptUnlock()) return; }
   const r=state.records[idx]; if(!r)return;
+  if(r.instanceId && state.taskInstances[r.instanceId]) state.taskInstances[r.instanceId].status='rejected';
   r.status='rejected'; save();
   toast('已拒絕此申請');renderAll();
 }
@@ -1779,6 +4463,8 @@ function renderReport(){
     ['redeem','tablet'].includes(r.type));
   const L=levelOf(state.kids[kid].lifetime);
   const title=recommendTitle(kid);
+  const ai=aiMessage(kid,'report');
+  if(cloud.url && aiCloud.configured) ensureRemoteAiMessage(kid,'report');
   document.getElementById('reportBox').innerHTML=`
     <div class="reportstat"><span>👑 推薦稱號</span><b>${title.e} ${title.n}</b></div>
     <div class="reportstat"><span>📈 本週總 XP</span><b>${wXp} XP</b></div>
@@ -1787,7 +4473,7 @@ function renderReport(){
     <div class="reportstat"><span>🔥 連續完成天數</span><b>${streak} 天</b></div>
     <div class="reportstat"><span>🎁 本週兌換獎勵</span><b>${redeems.length} 次</b></div>
     <div class="reportstat"><span>${L.cur.ic} 目前等級</span><b>Lv.${L.cur.lv} ${L.cur.name}</b></div>
-    <div class="encourage" style="margin-top:14px;">${parentCheer(kid,wXp,taskCount,streak)}</div>
+    <div class="encourage" style="margin-top:14px;">${ai}</div>
     ${redeems.length?`<div style="margin-top:12px;"><b style="font-size:14px;">本週兌換明細</b>${redeems.map(r=>`<div class="muted" style="padding:4px 0;">🎁 ${r.task}（${r.xp} XP）</div>`).join('')}</div>`:''}
   `;
 }
@@ -1835,36 +4521,31 @@ function fallbackCopy(txt){
   document.body.removeChild(ta);
 }
 function parentCheer(kid,wXp,cnt,streak){
-  const n=KIDS[kid].name;
-  if(wXp>=1500) return `${n}，這一週你超級閃耀，累積了 ${wXp} XP！爸爸媽媽以你為榮 🌟`;
-  if(streak>=5) return `${n}，你已經連續努力 ${streak} 天了，這份堅持就是長大的力量 💪`;
-  if(cnt>=10) return `${n}，這週完成了 ${cnt} 個任務，你越來越能管理自己了，繼續加油 💛`;
-  if(wXp>0) return `${n}，這週你有努力，每一個小任務都是成長，下週我們再前進一點點 🌱`;
-  return `${n}，新的一週開始囉，完成第一個小任務，就能讓自己更棒一點 😊`;
+  return aiMessage(kid,'parent');
 }
 
 /* ============ 鼓勵語 ============ */
 function genEncourage(){
-  const lines=[];
-  Object.keys(KIDS).forEach(k=>{
-    const wXp=weekXpOf(k), cnt=weekTaskCountOf(k), n=KIDS[k].name;
-    const recs=earnRecordsOf(k).filter(r=>weekKeyOf(r.time)===thisWeekStart()&&r.xp>0);
-    const catCount={};recs.forEach(r=>{const c=(r.cat||'').replace('特殊成就-','');catCount[c]=(catCount[c]||0)+1;});
-    let topCat='',max=0;for(const c in catCount){if(catCount[c]>max){max=catCount[c];topCat=c;}}
-    if(cnt===0){lines.push(`${n}，新的一週，期待看到你完成第一個任務喔 😊`);return;}
-    const pool=[
-      `${n}，這週你很努力完成${topCat||'任務'}，代表你越來越能管理自己。`,
-      `${n}，這週累積了 ${wXp} XP，你的每一份努力爸爸媽媽都看見了 💛`,
-      `${n}，你願意主動完成任務，這就是長大的表現。`
-    ];
-    lines.push(pool[Math.floor(Math.random()*pool.length)]);
-  });
+  const runId=Date.now();
+  genEncourage._runId=runId;
+  const keys=Object.keys(KIDS);
+  const lines=keys.map(k=>aiMessage(k,'family'));
   if(bothStreak()>=1||weekXpOf('weining')>0&&weekXpOf('xinying')>0){
     lines.push('姊妹今天有合作，爸爸媽媽看到你們互相幫忙，真的很開心 🤝');
   }
   const box=document.getElementById('encourageBox');
   box.style.display='block';
-  box.innerHTML=lines.map(l=>`<div style="margin:8px 0;">💬 ${l}</div>`).join('');
+  box.innerHTML=lines.map((l,i)=>`<div style="margin:8px 0;"><b>${aiKindLabel('family')} ${i+1}</b><div>💬 ${escHtml(l)}</div></div>`).join('');
+  if(!cloud.url || !aiCloud.configured) return;
+  Promise.all(keys.map(k=>ensureRemoteAiMessage(k,'family'))).then(results=>{
+    if(genEncourage._runId!==runId) return;
+    const fresh=keys.map(k=>aiMessage(k,'family'));
+    const freshLines=fresh.slice();
+    if(bothStreak()>=1||weekXpOf('weining')>0&&weekXpOf('xinying')>0){
+      freshLines.push('姊妹今天有合作，爸爸媽媽看到你們互相幫忙，真的很開心 🤝');
+    }
+    box.innerHTML=freshLines.map((l,i)=>`<div style="margin:8px 0;"><b>${aiKindLabel('family')} ${i+1}</b><div>💬 ${escHtml(l)}</div></div>`).join('');
+  });
 }
 
 /* ============ 設定 / 資料管理 ============ */
@@ -1873,9 +4554,13 @@ function fillSettingSelects(){
   const nt=document.getElementById('nkTheme');
   if(nt) nt.innerHTML=KID_THEMES.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
   renderKidManage();
+  renderLearningTab();
   const gu=document.getElementById('gasUrl'); if(gu) gu.value=cloud.url;
   const hint=document.getElementById('cloudHint');
   if(hint) hint.textContent=cloud.url?'✅ 已設定雲端，多裝置會自動同步':'尚未設定，目前為本機模式';
+  refreshOpenAiStatus();
+  renderReminderPickers();
+  renderReminderSettings();
   const ph=document.getElementById('pinHint');
   if(ph) ph.textContent=getPin()?'✅ 已設定密碼（目前'+(isUnlocked()?'已解鎖':'已上鎖')+'）':'尚未設定密碼，目前所有人都能操作';
   renderCustomManage();
@@ -1885,7 +4570,7 @@ function saveGasUrl(){
   const u=document.getElementById('gasUrl').value.trim();
   setCloudUrl(u);
   fillSettingSelects();
-  if(u){ toast('☁️ 已連線，開始同步'); pullRemote({pushIfNewer:true}); }
+  if(u){ toast('☁️ 已連線，開始同步'); pullRemote({pushIfNewer:true}); refreshOpenAiStatus(); }
   else { toast('已切回本機模式'); cloudStatus('💾 本機模式（尚未連雲端）'); }
 }
 function addCustomTask(){
@@ -1895,6 +4580,9 @@ function addCustomTask(){
   if(!name||isNaN(xp)){toast('請填寫任務名稱與 XP');return;}
   state.customTasks[cat]=state.customTasks[cat]||[];
   state.customTasks[cat].push({n:name,x:xp});
+  createTaskFromParentPayload({title:name,category:v3Category(cat),legacyCategory:cat,points:xp,
+    coins:Math.round(xp*.6),assignedChildIds:[],scheduleType:'daily',weekdays:[],dates:[],
+    deadlineTime:'',photoRequired:false,approvalRequired:false,autoReset:true},'custom');
   save();document.getElementById('ctName').value='';
   toast('✅ 已新增自訂任務');renderScore();renderApply();renderCustomManage();
 }
@@ -1948,6 +4636,9 @@ function addCustomReward(){
   if(!name||isNaN(xp)){toast('請填寫獎勵名稱與 XP');return;}
   state.customRewards[tier]=state.customRewards[tier]||[];
   state.customRewards[tier].push({n:name,x:xp,e:'🎁'});
+  const id='reward_'+Date.now();
+  state.shopItems[id]={id,type:'wish',title:name,image:'🎁',emoji:'🎁',costPoints:xp,costCoins:0,
+    stock:null,redeemable:true,rarity:'common',tier,source:'custom'};
   save();document.getElementById('crName').value='';
   toast('✅ 已新增自訂獎勵');renderShop();renderCustomManage();
 }
@@ -2005,7 +4696,17 @@ function delCustomKid(id){
   if(!confirm('確定刪除角色「'+KIDS[id].name+'」？\n該角色的 XP / 平板 / 徽章 / 紀錄將一併移除！')) return;
   delete state.customKids[id];
   delete state.kids[id];
+  if(state.children) delete state.children[id];
+  if(state.users) delete state.users['child_'+id];
+  if(state.pets) delete state.pets['pet_'+id];
+  if(state.houses) delete state.houses['house_'+id];
+  if(state.inventory) delete state.inventory[id];
+  if(state.learning) delete state.learning[id];
+  if(state.childAchievements) delete state.childAchievements[id];
   state.records=state.records.filter(r=>r.kid!==id);
+  state.ledger=(state.ledger||[]).filter(e=>e.childId!==id);
+  Object.keys(state.taskInstances||{}).forEach(key=>{ if(state.taskInstances[key].childId===id) delete state.taskInstances[key]; });
+  Object.keys(state.adventureDays||{}).forEach(key=>{ if((state.adventureDays[key]||{}).childId===id) delete state.adventureDays[key]; });
   normalize(state);          // 重新同步 KIDS / SISTERS
   ensureSel(); initPrevLevels();
   save(); renderAll(); fillSettingSelects();
@@ -2027,9 +4728,19 @@ function importJSON(e){
   r.readAsText(f);e.target.value='';
 }
 function clearKid(k){
+  if(!KIDS[k]){toast('找不到這個孩子');return;}
   if(!confirm('確定清除 '+KIDS[k].name+' 的所有資料嗎？')) return;
   state.kids[k]=freshKid();
   state.records=state.records.filter(r=>r.kid!==k);
+  if(state.children && state.children[k]) delete state.children[k];
+  if(state.pets) delete state.pets['pet_'+k];
+  if(state.houses) delete state.houses['house_'+k];
+  if(state.inventory) delete state.inventory[k];
+  if(state.learning) delete state.learning[k];
+  if(state.childAchievements) delete state.childAchievements[k];
+  state.ledger=(state.ledger||[]).filter(e=>e.childId!==k);
+  Object.keys(state.taskInstances||{}).forEach(key=>{ if(state.taskInstances[key].childId===k) delete state.taskInstances[key]; });
+  Object.keys(state.adventureDays||{}).forEach(key=>{ if((state.adventureDays[key]||{}).childId===k) delete state.adventureDays[key]; });
   save();initPrevLevels();renderAll();toast('已清除 '+KIDS[k].name+' 資料');
 }
 function resetAll(){
@@ -2067,10 +4778,222 @@ function renderRank(){
 }
 function pickRankMode(m){sel.rankMode=m;renderRank();}
 
+/* ============ Parent Dashboard ============ */
+function legacyCatFromV3(c){
+  return {reading:'讀書',english:'英文',math:'數學',exercise:'運動',chores:'家事',life:'品格'}[c]||'品格';
+}
+function escHtml(s){
+  return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function renderParentDashboard(){
+  const kids=Object.keys(KIDS);
+  const todayDone=kids.reduce((sum,k)=>sum+todayTaskCountOf(k),0);
+  const pending=state.records.filter(r=>r.type==='apply'&&r.status==='pending').length;
+  const activeTasks=Object.values(state.tasks||{}).filter(t=>t.active).length;
+  const wishCount=Object.values(state.shopItems||{}).filter(i=>i.type==='wish'&&i.redeemable).length;
+  const unread=noticeUnreadCount('parent');
+  const sum=document.getElementById('parentSummary');
+  if(sum) sum.innerHTML=`
+    <div class="pdstat"><b>${kids.length}</b><span>孩子</span></div>
+    <div class="pdstat"><b>${activeTasks}</b><span>任務規則</span></div>
+    <div class="pdstat"><b>${todayDone}</b><span>今日完成</span></div>
+    <div class="pdstat"><b>${pending}</b><span>待審核</span></div>
+    <div class="pdstat"><b>${wishCount}</b><span>願望獎品</span></div>
+    <div class="pdstat"><b>${unread}</b><span>未讀通知</span></div>
+    <div class="pdstat"><b>${state.ledger.length}</b><span>帳本事件</span></div>`;
+  renderParentChildControls();
+  renderParentTaskControls();
+  renderParentAdjustControls();
+  renderParentWishList();
+  renderParentWeeklyReport();
+}
+function renderParentChildControls(){
+  const th=document.getElementById('pcTheme');
+  if(th) th.innerHTML=KID_THEMES.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
+  const pt=document.getElementById('pcPetType');
+  if(pt) pt.innerHTML=Object.entries(PET_TYPES).map(([id,p])=>`<option value="${id}">${p.e} ${p.name}</option>`).join('');
+  const box=document.getElementById('parentChildren');
+  if(!box) return;
+  box.innerHTML=Object.keys(KIDS).map(k=>{
+    const info=KIDS[k], child=state.children[k]||{}, stats=(child.stats||{});
+    return `<div class="pdrow">
+      <div class="pdavatar" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
+      <div class="pdmain"><b>${escHtml(info.name)}</b><small>${child.grade||'elementary'}・點數 ${stats.points||0}・金幣 ${stats.coins||0}</small></div>
+      <div class="pdactions">
+        <button class="btn sky sm" onclick="editParentChild('${k}')">編輯</button>
+        <button class="btn bad sm" onclick="deleteParentChild('${k}')">刪除</button>
+      </div>
+    </div>`;
+  }).join('')||'<p class="muted">目前沒有孩子。</p>';
+}
+function resetParentChildForm(){
+  ['pcId','pcName'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';});
+  const e=document.getElementById('pcEmoji'); if(e) e.value='🙂';
+  const g=document.getElementById('pcGrade'); if(g) g.value='elementary';
+  const s=document.getElementById('pcSport'); if(s) s.value='運動';
+  const p=document.getElementById('pcPetType'); if(p) p.value='dog';
+  const t=document.getElementById('pcTheme'); if(t) t.value='0';
+}
+function editParentChild(id){
+  const info=KIDS[id], child=state.children[id]||{};
+  if(!info) return;
+  document.getElementById('pcId').value=id;
+  document.getElementById('pcName').value=info.name||'';
+  document.getElementById('pcEmoji').value=info.emoji||'🙂';
+  document.getElementById('pcGrade').value=child.grade||'elementary';
+  document.getElementById('pcSport').value=info.sport||'運動';
+  document.getElementById('pcPetType').value=(child.preferences&&child.preferences.petType)||((state.pets&&state.pets['pet_'+id]&&state.pets['pet_'+id].type)||'dog');
+  const idx=KID_THEMES.findIndex(t=>t.c1===info.c1&&t.c2===info.c2);
+  document.getElementById('pcTheme').value=String(Math.max(0,idx));
+}
+function saveParentChild(){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const idEl=document.getElementById('pcId');
+  const id=idEl.value||('kid'+Date.now());
+  const name=document.getElementById('pcName').value.trim();
+  if(!name){toast('請輸入孩子名字');return;}
+  const emoji=(document.getElementById('pcEmoji').value||'🙂').trim()||'🙂';
+  const grade=document.getElementById('pcGrade').value;
+  const sport=document.getElementById('pcSport').value;
+  const petType=document.getElementById('pcPetType').value||'dog';
+  const theme=KID_THEMES[parseInt(document.getElementById('pcTheme').value)||0]||KID_THEMES[0];
+  const data={name,emoji,c1:theme.c1,c2:theme.c2,sister:false,sport,petType};
+  if(BUILTIN_KIDS[id]) state.childOverrides[id]=data;
+  else state.customKids[id]=Object.assign({},state.customKids[id]||{},data);
+  if(state.archivedKids) delete state.archivedKids[id];
+  normalize(state);
+  if(state.children[id]) state.children[id].grade=grade;
+  if(state.children[id]) state.children[id].preferences=Object.assign({},state.children[id].preferences||{},{petType});
+  if(state.pets && state.pets['pet_'+id]) state.pets['pet_'+id].type=petType;
+  setLearningGrade(id, grade);
+  save(); resetParentChildForm(); initPrevLevels(); renderAll(); fillSettingSelects();
+  toast('✅ 已儲存孩子');
+}
+function deleteParentChild(id){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  if(!KIDS[id]) return;
+  if(!confirm('確定刪除「'+KIDS[id].name+'」？相關任務紀錄與世界資料會一併移除。')) return;
+  state.archivedKids[id]=true;
+  delete state.customKids[id]; delete state.childOverrides[id]; delete state.kids[id];
+  if(state.children) delete state.children[id];
+  if(state.users) delete state.users['child_'+id];
+  if(state.pets) delete state.pets['pet_'+id];
+  if(state.houses) delete state.houses['house_'+id];
+  if(state.inventory) delete state.inventory[id];
+  if(state.learning) delete state.learning[id];
+  if(state.childAchievements) delete state.childAchievements[id];
+  state.records=state.records.filter(r=>r.kid!==id);
+  state.ledger=(state.ledger||[]).filter(e=>e.childId!==id);
+  Object.keys(state.taskInstances||{}).forEach(key=>{ if(state.taskInstances[key].childId===id) delete state.taskInstances[key]; });
+  Object.keys(state.adventureDays||{}).forEach(key=>{ if((state.adventureDays[key]||{}).childId===id) delete state.adventureDays[key]; });
+  normalize(state); ensureSel(); save(); resetParentChildForm(); renderAll(); fillSettingSelects();
+  toast('已刪除孩子');
+}
+function renderParentTaskControls(){
+  const kids=Object.keys(KIDS);
+  const childBox=document.getElementById('ptChildren');
+  if(childBox) childBox.innerHTML=kids.map(k=>`<label class="checkitem"><input type="checkbox" name="ptChild" value="${k}" checked> ${KIDS[k].emoji} ${escHtml(KIDS[k].name)}</label>`).join('');
+  const weekBox=document.getElementById('ptWeekdays');
+  if(weekBox) weekBox.innerHTML=[['1','一'],['2','二'],['3','三'],['4','四'],['5','五'],['6','六'],['0','日']]
+    .map(([v,l])=>`<label class="checkitem"><input type="checkbox" name="ptWeekday" value="${v}"> 週${l}</label>`).join('');
+  renderParentTaskList();
+}
+function createTaskFromParentPayload(p,source){
+  const id='task_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  const task={id,title:p.title,legacyCategory:p.legacyCategory,category:p.category,points:p.points,
+    coins:p.coins,exp:p.points,assignedChildIds:p.assignedChildIds||[],
+    schedule:{type:p.scheduleType,weekdays:p.weekdays||[],dates:p.dates||[],deadlineTime:p.deadlineTime||'',autoReset:p.autoReset},
+    proof:{photoRequired:p.photoRequired},approval:{required:p.approvalRequired},active:true,source:source||'custom'};
+  state.tasks[id]=task;
+  state.customTasks[p.legacyCategory]=state.customTasks[p.legacyCategory]||[];
+  if(!state.customTasks[p.legacyCategory].some(t=>t.n===p.title)) state.customTasks[p.legacyCategory].push({n:p.title,x:p.points});
+  return task;
+}
+function createParentTask(){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const title=document.getElementById('ptTitle').value.trim();
+  if(!title){toast('請輸入任務名稱');return;}
+  const category=document.getElementById('ptCategory').value;
+  const points=parseInt(document.getElementById('ptPoints').value)||0;
+  const coins=parseInt(document.getElementById('ptCoins').value)||Math.round(points*.6);
+  const assignedChildIds=[...document.querySelectorAll('input[name="ptChild"]:checked')].map(x=>x.value);
+  const weekdays=[...document.querySelectorAll('input[name="ptWeekday"]:checked')].map(x=>parseInt(x.value));
+  const dates=(document.getElementById('ptDates').value||'').split(',').map(x=>x.trim()).filter(Boolean);
+  createTaskFromParentPayload({title,category,legacyCategory:legacyCatFromV3(category),points,coins,
+    assignedChildIds,scheduleType:document.getElementById('ptSchedule').value,weekdays,dates,
+    deadlineTime:document.getElementById('ptDeadline').value.trim(),photoRequired:document.getElementById('ptPhoto').checked,
+    approvalRequired:document.getElementById('ptApproval').checked,autoReset:document.getElementById('ptAutoReset').checked},'parent');
+  save(); document.getElementById('ptTitle').value=''; renderAll(); toast('✅ 已建立任務');
+}
+function importTaskTemplate(kind){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const list=(state.taskTemplates&&state.taskTemplates[kind])||[];
+  list.forEach(t=>createTaskFromParentPayload({title:t.title,category:t.category,legacyCategory:legacyCatFromV3(t.category),
+    points:t.points,coins:t.coins,assignedChildIds:[],scheduleType:'daily',weekdays:[],dates:[],
+    deadlineTime:'',photoRequired:false,approvalRequired:false,autoReset:true},'template_'+kind));
+  save(); renderAll(); toast('✅ 已匯入 '+list.length+' 個模板任務');
+}
+function renderParentTaskList(){
+  const box=document.getElementById('parentTaskList'); if(!box) return;
+  const tasks=Object.values(state.tasks||{}).filter(t=>t.source&&t.source!=='builtin').slice(-12).reverse();
+  box.innerHTML=tasks.length?tasks.map(t=>`<div class="pdrow"><div class="pdmain"><b>${escHtml(t.title)}</b><small>${t.category}・${t.points} 點・${t.coins} 金幣・${(t.schedule||{}).type||'daily'}</small></div><span class="tag done">${t.source}</span></div>`).join('')
+    :'<p class="muted">尚未建立家長任務。</p>';
+}
+function renderParentAdjustControls(){
+  const sel=document.getElementById('paChild');
+  if(sel) sel.innerHTML=Object.keys(KIDS).map(k=>`<option value="${k}">${KIDS[k].emoji} ${escHtml(KIDS[k].name)}</option>`).join('');
+}
+function parentAdjust(amount){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const kid=document.getElementById('paChild').value;
+  const reason=document.getElementById('paReason').value.trim() || (amount>0?'家長快速加分':'家長扣分');
+  if(!kid){toast('請先選擇孩子');return;}
+  addXp(kid,amount,true);
+  state.records.unshift({time:Date.now(),kid,parent:'家長',cat:amount>0?'家長加分':'扣分',
+    task:reason,xp:amount,note:reason,status:'done',type:amount>0?'score':'reminder'});
+  save(); checkLevelUp(kid); renderAll(); toast((amount>0?'✅ +':'已扣 ')+Math.abs(amount)+'：'+reason);
+}
+function createWishReward(){
+  if(!isUnlocked()){ if(!promptUnlock()) return; }
+  const title=document.getElementById('pwTitle').value.trim();
+  if(!title){toast('請輸入獎品名稱');return;}
+  const id='wish_'+Date.now();
+  const image=(document.getElementById('pwImage').value||'🎁').trim()||'🎁';
+  const requiredPoints=parseInt(document.getElementById('pwPoints').value)||0;
+  const stock=parseInt(document.getElementById('pwStock').value);
+  const redeemable=document.getElementById('pwRedeemable').checked;
+  state.shopItems[id]={id,type:'wish',title,image,emoji:image,costPoints:requiredPoints,costCoins:0,
+    stock:isNaN(stock)?null:stock,redeemable,rarity:'common',tier:'願望商城',source:'parent'};
+  state.customRewards['願望商城']=state.customRewards['願望商城']||[];
+  state.customRewards['願望商城'].push({n:title,x:requiredPoints,e:image});
+  save(); document.getElementById('pwTitle').value=''; renderAll(); toast('🎁 已新增願望獎品');
+}
+function renderParentWishList(){
+  const box=document.getElementById('parentWishList'); if(!box) return;
+  const items=Object.values(state.shopItems||{}).filter(i=>i.type==='wish').slice(-10).reverse();
+  box.innerHTML=items.length?items.map(i=>`<div class="pdrow"><div class="pdavatar">${i.emoji||i.image||'🎁'}</div><div class="pdmain"><b>${escHtml(i.title)}</b><small>${i.costPoints||0} 點・庫存 ${i.stock==null?'不限':i.stock}・${i.redeemable?'可兌換':'關閉'}</small></div></div>`).join('')
+    :'<p class="muted">尚未新增願望獎品。</p>';
+}
+function renderParentWeeklyReport(){
+  const box=document.getElementById('parentWeeklyReport'); if(!box) return;
+  const labels={reading:'閱讀',english:'英文',math:'數學',exercise:'運動',chores:'家事',life:'生活'};
+  box.innerHTML=Object.keys(KIDS).map(k=>{
+    const stats=weeklyCategoryStats(k);
+    const total=Math.max(1,stats.total);
+    const bars=Object.keys(labels).map(c=>{
+      const val=stats[c]||0, pct=Math.round(val/total*100);
+      return `<div class="barrow"><span>${labels[c]}</span><div class="bartrack"><i style="width:${pct}%"></i></div><b>${val}</b></div>`;
+    }).join('');
+    const adv=getTodayAdventure(k);
+    const completion=adv.taskInstanceIds.length?Math.round(adv.completedCount/adv.taskInstanceIds.length*100):0;
+    return `<div style="margin-bottom:16px;"><div class="pdrow"><div class="pdavatar" style="background:linear-gradient(135deg,${KIDS[k].c1},${KIDS[k].c2})">${KIDS[k].emoji}</div><div class="pdmain"><b>${KIDS[k].name}</b><small>今日 Adventure 完成率 ${completion}%・本週完成 ${stats.total}</small></div></div><div class="barlist">${bars}</div></div>`;
+  }).join('');
+}
+
 /* ============ 家長密碼鎖 ============ */
-const PARENT_TABS=['setting']; // 需要密碼才能進入的分頁（其餘分頁可瀏覽，動作另行上鎖）
+const PARENT_TABS=['parent','report','setting']; // 需要密碼才能進入的分頁（其餘分頁可瀏覽，動作另行上鎖）
 let sessionUnlocked=false;
-let currentTab='home';
+let currentTab='child';
 function getPin(){ return state.parentPin||''; }
 function isUnlocked(){ return sessionUnlocked || !getPin(); }
 function promptUnlock(){
@@ -2141,15 +5064,22 @@ function refreshAdminUI(){
   if(btn) btn.textContent=(show&&getPin())?'🔓 退出管理模式':(getPin()?'🔐 解鎖管理模式':'🔓 未設密碼（全部開放）');
 }
 
-/* ============ 導覽（五大分頁） ============ */
-function renderHomeTab(){ renderHome(); renderScore(); renderApply(); updateParentUI(); }
-function renderRewardsTab(){ renderShop(); renderTablet(); updateParentUI(); }
+/* ============ 導覽 ============ */
+function renderChildTab(){ renderChildDashboard(); updateParentUI(); }
+function renderHomeTab(){ renderAdventurePanel(); renderHome(); renderScore(); renderApply(); updateParentUI(); }
+function renderParentTab(){ renderParentDashboard(); updateParentUI(); }
+function renderRewardsTab(){ renderShop(); renderCoinShop(); renderInventoryPanel(); renderTablet(); updateParentUI(); }
+function renderLearningPageTab(){ renderLearningTab(); updateParentUI(); }
 function renderAchieveTab(){ renderSpecial(); renderRank(); renderTitles(); updateParentUI(); }
 function renderReportTab(){ renderSettlement(); renderReport(); renderRecord(); }
 
 const TABS=[
+  {id:'child',l:'我的世界',ic:'🏡',render:renderChildTab},
   {id:'home',l:'今日任務',ic:'📋',render:renderHomeTab},
+  {id:'notice',l:'家庭公告',ic:'🔔',render:renderNoticeTab},
+  {id:'parent',l:'家長後台',ic:'👪',render:renderParentTab},
   {id:'rewards',l:'獎勵中心',ic:'🎁',render:renderRewardsTab},
+  {id:'learning',l:'學習中心',ic:'🎓',render:renderLearningPageTab},
   {id:'achieve',l:'成就徽章',ic:'🏆',render:renderAchieveTab},
   {id:'report',l:'成長報告',ic:'📊',render:renderReportTab},
   {id:'setting',l:'家長設定',ic:'⚙️',render:fillSettingSelects}
@@ -2172,8 +5102,12 @@ function switchTab(id){
 /* ============ 全部渲染 ============ */
 function renderAll(){
   ensureSel();
+  renderChildDashboard();
+  renderParentDashboard();
+  renderAdventurePanel();
   renderHome();renderScore();renderApply();
-  renderShop();renderTablet();
+  renderNoticeCards(isUnlocked()?'parent':'child', activeChildId()||sel.noticeKid||sel.reportKid||Object.keys(KIDS)[0]);
+  renderShop();renderCoinShop();renderInventoryPanel();renderLearningHomePanel();renderLearningTab();renderTablet();
   renderSpecial();renderRank();renderTitles();
   renderSettlement();renderReport();renderRecord();
   updateParentUI();
@@ -2186,12 +5120,31 @@ function initPrevLevels(){
 buildTabs();
 fillSettingSelects();
 initPrevLevels();
+if(childSession && KIDS[childSession]) registerChildLogin(childSession);
 renderAll();
 updateLockUI();
+refreshInstallStatus();
 
 if(cloud.url){ cloudStatus('☁️ 連線中…'); pullRemote({pushIfNewer:true}); }
+checkReminders();
+setInterval(checkReminders, 60000);
 setInterval(()=>{ if(cloud.url && !document.hidden) pullRemote(); }, 12000);
 document.addEventListener('visibilitychange', ()=>{ if(cloud.url && !document.hidden) pullRemote(); });
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  refreshInstallStatus();
+});
+window.addEventListener('appinstalled', ()=>{
+  deferredInstallPrompt=null;
+  refreshInstallStatus();
+  toast('✅ App 已安裝完成');
+});
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>

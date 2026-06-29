@@ -1,0 +1,22 @@
+{
+  "name": "姊妹成長銀行 3.0",
+  "short_name": "成長銀行",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#a98cff",
+  "description": "Family Growth Adventure for children and parents.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
