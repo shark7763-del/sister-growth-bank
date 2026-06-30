@@ -627,6 +627,37 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .sw-dresshead b{font-size:16px;color:var(--ink);}
 .sw-hint{font-size:11.5px;color:var(--ink2);font-weight:700;margin:2px 0 0;}
 
+/* ========================================================================
+   Sister Block World — 方塊遊戲 HUD / 資源欄 / 材料 / 地形
+   ===================================================================== */
+.sw-terrain{position:absolute;left:0;right:0;bottom:0;height:62px;z-index:0;line-height:0;}
+.sw-terrain svg{display:block;width:100%;height:62px;}
+.sw-ground.block{background:none !important;border:none !important;height:62px;z-index:3;}
+.sw-ground.block::after{display:none !important;}
+/* 資源欄 */
+.bw-res{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 2px;}
+.bw-chip{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.82);border-radius:8px;
+  padding:4px 8px;font-weight:900;font-size:13px;color:#3a4a55;box-shadow:0 2px 0 rgba(120,130,150,.25);}
+.bw-chip .ic{font-size:14px;}
+.bw-chip b{color:#3a4a55;}
+/* 方塊大按鈕（有厚度、點擊下沉）*/
+.bw-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:10px 12px 12px;}
+.bw-btn{border:none;border-radius:12px;background:linear-gradient(180deg,#fff,#f0eaf6);
+  box-shadow:0 4px 0 #c9bcd9,0 6px 10px rgba(0,0,0,.12);padding:9px 2px 7px;cursor:pointer;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .06s,box-shadow .06s;}
+.bw-btn .be{font-size:22px;line-height:1;}
+.bw-btn .bl{font-size:10.5px;font-weight:900;color:#5a4a66;}
+.bw-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c9bcd9,0 2px 5px rgba(0,0,0,.12);}
+.bw-btn.alert{box-shadow:0 4px 0 #e0a83a,0 6px 10px rgba(0,0,0,.14);background:linear-gradient(180deg,#fff8e6,#ffefc4);}
+@media(max-width:380px){ .bw-actions{grid-template-columns:repeat(5,1fr);gap:5px;} .bw-btn .bl{font-size:9px;} }
+/* 材料庫 */
+.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.mat-cell{background:var(--cream);border-radius:12px;padding:8px 4px;text-align:center;box-shadow:0 2px 0 rgba(120,130,150,.18);}
+.mat-cell .me{font-size:24px;line-height:1.1;}
+.mat-cell b{display:block;font-size:15px;color:var(--ink);}
+.mat-cell small{font-size:10px;color:var(--ink2);}
+@media(max-width:360px){ .mat-grid{grid-template-columns:repeat(3,1fr);} }
+
 @media (prefers-reduced-motion: reduce){
   .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,
   .sw-pet-heart,.hl,.hl-new,
@@ -1708,6 +1739,73 @@ function defaultWorldFor(childId, existing){
   return w;
 }
 function homeLevelFromXp(lt){ let lv=1; for(let i=0;i<HOME_STAGE_XP.length;i++){ if((lt||0)>=HOME_STAGE_XP[i]) lv=i+1; } return lv; }
+// 方塊材料庫
+const MATERIAL_DEFS=[
+  {id:'wood',name:'木頭方塊',e:'🟫',c:'#b5833f'},
+  {id:'stone',name:'石頭方塊',e:'⬜',c:'#9aa0a8'},
+  {id:'glass',name:'玻璃方塊',e:'🔷',c:'#9fd8ef'},
+  {id:'grass',name:'草地方塊',e:'🟩',c:'#7bc86b'},
+  {id:'flower',name:'花朵方塊',e:'🌸',c:'#ff9ec4'},
+  {id:'roofTile',name:'屋頂方塊',e:'🧱',c:'#e8857f'},
+  {id:'rareBlock',name:'稀有方塊',e:'💎',c:'#b48cff'}
+];
+function defaultMaterialsFor(existing){
+  return Object.assign({wood:0,stone:0,glass:0,grass:0,flower:0,roofTile:0,rareBlock:0}, existing||{});
+}
+function materialsOf(childId){
+  state.materials=state.materials||{};
+  const cur=state.materials[childId]||(state.materials[childId]={});
+  const def=defaultMaterialsFor(cur);
+  Object.keys(def).forEach(k=>{ if(typeof cur[k]!=='number') cur[k]=def[k]; });
+  return cur;
+}
+function addMaterials(childId, mats){
+  if(!mats) return;
+  const m=materialsOf(childId);
+  Object.keys(mats).forEach(k=>{ if(typeof m[k]==='number') m[k]=Math.max(0,m[k]+(mats[k]||0)); });
+}
+// 任務分類 → 材料獎勵
+function calculateMaterialRewards(task){
+  const cat=(task&&(task.legacyCategory||task.cat||task.category))||task||'';
+  const c=String(cat);
+  const out={};
+  if(c.indexOf('讀')>-1||c==='reading'||c==='english') { out.wood=1; }
+  else if(c.indexOf('數')>-1||c==='math') { out.stone=1; }
+  else if(c.indexOf('家')>-1||c==='chores') { out.glass=1; }
+  else if(c.indexOf('跆')>-1||c.indexOf('運動')>-1||c==='exercise') { out.grass=1; }
+  else { out.flower=1; }
+  return out;
+}
+// 家園建造需求（XP + 材料）
+const BUILD_REQS={
+  2:{xp:60,  mats:{stone:2}},
+  3:{xp:180, mats:{wood:3,stone:2}},
+  4:{xp:360, mats:{wood:5}},
+  5:{xp:600, mats:{wood:6,roofTile:4}},
+  6:{xp:900, mats:{glass:5,wood:3}},
+  7:{xp:1300,mats:{grass:5,flower:3}},
+  8:{xp:1800,mats:{wood:6,stone:4}},
+  9:{xp:2500,mats:{glass:6,roofTile:5}},
+  10:{xp:3500,mats:{rareBlock:3,roofTile:6,glass:5}}
+};
+function getBuildRequirements(homeLevel){ return BUILD_REQS[homeLevel]||null; }
+function builtLevelOf(childId){
+  const w=worldOf(childId);
+  if(w.builtLevel==null){ w.builtLevel=homeLevelFromXp((state.kids[childId]&&state.kids[childId].lifetime)||0); }
+  return w.builtLevel;
+}
+function canBuildNextLevel(childId){
+  const cur=builtLevelOf(childId);
+  if(cur>=10) return {ok:false,maxed:true};
+  const req=getBuildRequirements(cur+1); if(!req) return {ok:false};
+  const lt=(state.kids[childId]&&state.kids[childId].lifetime)||0;
+  const m=materialsOf(childId);
+  const missing={};
+  let ok=lt>=req.xp;
+  if(lt<req.xp) missing.xp=req.xp-lt;
+  Object.keys(req.mats).forEach(k=>{ if((m[k]||0)<req.mats[k]){ ok=false; missing[k]=req.mats[k]-(m[k]||0); } });
+  return {ok, level:cur+1, req, missing, xpNeed:Math.max(0,req.xp-lt)};
+}
 const PET_TYPES={
   dog:{e:'🐶',name:'狗狗',mood:'忠誠'},
   cat:{e:'🐱',name:'貓貓',mood:'優雅'},
@@ -2042,6 +2140,9 @@ function normalize(s){
   s.parentSettings=Object.assign({allowRememberDevice:true, allowChildShop:true, allowChildRequestXP:true}, s.parentSettings||{});
   s.chestLog=s.chestLog||{};       // {childId:{date,small,big,streak}}
   s.streakClaims=s.streakClaims||{}; // {childId:{'3':true,...}}
+  // 方塊材料庫＋已建造家園等級
+  s.materials=s.materials||{};
+  Object.keys(KIDS).forEach(k=>{ s.materials[k]=defaultMaterialsFor(s.materials[k]); });
   s.reminders=Array.isArray(s.reminders)?s.reminders:[];
   s.noticeReads=Object.assign({parent:0,child:{}}, s.noticeReads||{});
   s.weeklyChallenge=Object.assign(defaultChallenge(), s.weeklyChallenge||{});
@@ -3782,8 +3883,13 @@ function avatarOf(childId){
 }
 function worldOf(childId){
   state.world=state.world||{};
-  state.world[childId]=defaultWorldFor(childId,state.world[childId]);
-  return state.world[childId];
+  // 保持「同一個物件參照」穩定：只補上缺少的預設欄位，不重建物件
+  const cur=state.world[childId]||(state.world[childId]={});
+  const def=defaultWorldFor(childId,cur);
+  Object.keys(def).forEach(k=>{ if(cur[k]===undefined) cur[k]=def[k]; });
+  cur.decorations=Array.isArray(cur.decorations)?cur.decorations:[];
+  cur.gardenItems=Array.isArray(cur.gardenItems)?cur.gardenItems:[];
+  return cur;
 }
 function shopDefOf(category,id){ return (SHOP_CATALOG[category]||[]).find(x=>x.id===id)||null; }
 function avatarItemDef(slot,id){
@@ -3796,7 +3902,7 @@ function avatarItemDef(slot,id){
 
 /* ---- 等級 / 家園 / 寵物心情 計算 ---- */
 function getAvatarLevel(childId){ return levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0).cur.lv; }
-function getHomeLevel(childId){ return homeLevelFromXp((state.kids[childId]&&state.kids[childId].lifetime)||0); }
+function getHomeLevel(childId){ return builtLevelOf(childId); }
 function adventureCompletionPct(childId){
   const adv=getTodayAdventure(childId);
   const total=(adv && adv.taskInstanceIds && adv.taskInstanceIds.length)||quickListOf(childId).length||0;
@@ -3829,14 +3935,17 @@ function petMoodMessage(childId){
 function calculateNextWorldGoal(childId){
   const lt=(state.kids[childId]&&state.kids[childId].lifetime)||0;
   const lv=getHomeLevel(childId);
-  if(lv<10){
-    const need=Math.max(0,HOME_STAGE_XP[lv]-lt);
-    const lvLabel=HOME_STAGE_NAMES[lv];
-    return {type:'home',level:lv,nextName:lvLabel,need,
-      text:need>0?`再 ${need} XP，家園就會蓋出「${lvLabel}」！`:`快完成任務，家園即將升級成「${lvLabel}」！`,
-      pct:Math.min(100,Math.round((lt-HOME_STAGE_XP[lv-1])/(HOME_STAGE_XP[lv]-HOME_STAGE_XP[lv-1])*100))};
-  }
-  return {type:'max',level:10,need:0,text:'夢想屋已完成 🎉 繼續完成任務照顧寵物、裝扮角色吧！',pct:100};
+  if(lv>=10) return {type:'max',level:10,need:0,text:'夢想屋已完成 🎉 繼續收集方塊、照顧寵物、裝扮角色吧！',pct:100};
+  const chk=canBuildNextLevel(childId);
+  const lvLabel=HOME_STAGE_NAMES[lv];
+  if(chk.ok) return {type:'home',level:lv+1,nextName:lvLabel,need:0,text:`材料齊全！點房子就能蓋出「${lvLabel}」🧱`,pct:100};
+  // 列出缺什麼
+  const parts=[];
+  if(chk.missing.xp) parts.push('XP '+chk.missing.xp);
+  MATERIAL_DEFS.forEach(d=>{ if(chk.missing[d.id]) parts.push(d.e+' '+chk.missing[d.id]); });
+  const req=chk.req;
+  const pct=Math.min(100,Math.round((lt-((BUILD_REQS[lv]&&BUILD_REQS[lv].xp)||0))/((req.xp-((BUILD_REQS[lv]&&BUILD_REQS[lv].xp)||0))||1)*100));
+  return {type:'home',level:lv+1,nextName:lvLabel,need:1,text:`蓋「${lvLabel}」還需要：${parts.join('、')}`,pct:Math.max(0,pct)};
 }
 
 /* ---- 積木角色 Avatar（純 CSS div）---- */
@@ -3903,72 +4012,59 @@ function renderAvatarOutfit(opt){
        <circle cx="89.5" cy="115" r="6" fill="url(#skin_${cid})" stroke="${ko}" stroke-width="1.6"/></g>
   </g>`;
 }
-function renderAvatar(childId){
+// 方塊立方體（頂面亮、正面中、側面暗）— 整個方塊世界的視覺基礎
+function voxel(x,y,w,h,d,color,ol){
+  const top=shadeHex(color,0.24), side=shadeHex(color,-0.26);
+  ol=ol||shadeHex(color,-0.5);
+  return '<g stroke="'+ol+'" stroke-width="1" stroke-linejoin="round">'
+    +'<polygon points="'+x+','+y+' '+(x+w)+','+y+' '+(x+w+d)+','+(y-d)+' '+(x+d)+','+(y-d)+'" fill="'+top+'"/>'
+    +'<polygon points="'+(x+w)+','+y+' '+(x+w+d)+','+(y-d)+' '+(x+w+d)+','+(y-d+h)+' '+(x+w)+','+(y+h)+'" fill="'+side+'"/>'
+    +'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+color+'"/>'
+    +'</g>';
+}
+// 方塊角色 Avatar（cubeHead/blockHair/face/body/arms/legs/shoes/shadow）
+function renderBlockAvatar(childId){
   const av=avatarOf(childId), info=KIDS[childId];
-  const outfit=avatarItemDef('outfit',av.avatarOutfit);
-  const hair=avatarItemDef('hair',av.avatarHair);
-  const shoes=avatarItemDef('shoes',av.avatarShoes);
-  const hat=av.avatarHat?avatarItemDef('hat',av.avatarHat):null;
-  const acc=av.avatarAccessory?avatarItemDef('accessory',av.avatarAccessory):null;
-  const bodyColor=(outfit&&outfit.color)||info.c1||'#7cc4ff';
-  const hairColor=(hair&&hair.color)||'#5a3b2a';
-  const shoeColor=(shoes&&shoes.color)||'#ff7a7a';
-  const longHair=!!(hair&&hair.long);
-  const cid=String(childId).replace(/[^a-zA-Z0-9_]/g,'');
+  const outfit=avatarItemDef('outfit',av.avatarOutfit), hair=avatarItemDef('hair',av.avatarHair), shoes=avatarItemDef('shoes',av.avatarShoes);
+  const hat=av.avatarHat?avatarItemDef('hat',av.avatarHat):null, acc=av.avatarAccessory?avatarItemDef('accessory',av.avatarAccessory):null;
+  const body=(outfit&&outfit.color)||info.c1||'#7cc4ff';
+  const hairC=(hair&&hair.color)||'#5a3b2a';
+  const shoeC=(shoes&&shoes.color)||'#ff5d6c';
+  const skin='#ffd9ad', leg='#5a6aa0', longHair=!!(hair&&hair.long);
   const lv=getAvatarLevel(childId);
   const title=av.avatarTitle||levelOf((state.kids[childId]&&state.kids[childId].lifetime)||0).cur.name;
   const name=escHtml(av.avatarName||info.name);
-  const sad=getPetMood && false; // 角色預設開心；sad 由動畫觸發
-  const defs=`<defs>
-    <radialGradient id="skin_${cid}" cx="40%" cy="32%" r="78%">
-      <stop offset="0" stop-color="#fff2e0"/><stop offset="0.55" stop-color="#ffd9b6"/><stop offset="1" stop-color="#f1b489"/>
-    </radialGradient>
-    <linearGradient id="body_${cid}" x1="0" y1="0" x2="0.4" y2="1">
-      <stop offset="0" stop-color="${shadeHex(bodyColor,0.32)}"/><stop offset="0.55" stop-color="${bodyColor}"/><stop offset="1" stop-color="${shadeHex(bodyColor,-0.22)}"/>
-    </linearGradient>
-    <linearGradient id="sleeve_${cid}" x1="0" y1="0" x2="1" y2="0.6">
-      <stop offset="0" stop-color="${shadeHex(bodyColor,0.12)}"/><stop offset="1" stop-color="${shadeHex(bodyColor,-0.3)}"/>
-    </linearGradient>
-    <linearGradient id="hair_${cid}" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0" stop-color="${shadeHex(hairColor,0.4)}"/><stop offset="0.5" stop-color="${hairColor}"/><stop offset="1" stop-color="${shadeHex(hairColor,-0.28)}"/>
-    </linearGradient>
-    <linearGradient id="shoe_${cid}" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0" stop-color="${shadeHex(shoeColor,0.28)}"/><stop offset="0.55" stop-color="${shoeColor}"/><stop offset="1" stop-color="${shadeHex(shoeColor,-0.3)}"/>
-    </linearGradient>
-    <linearGradient id="leg_${cid}" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0" stop-color="#9aa6d2"/><stop offset="1" stop-color="#5a6aa0"/>
-    </linearGradient>
-  </defs>`;
-  // 卡通描邊色（各部位取較深的同色系）
-  const skinOL='#e0a878', bodyOL=shadeHex(bodyColor,-0.42), hairOL=shadeHex(hairColor,-0.42), shoeOL=shadeHex(shoeColor,-0.5), legOL='#46527e';
-  const hairBack=longHair?`<g class="av-hair-back">
-      <rect x="26" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2"/>
-      <rect x="83" y="42" width="11" height="40" rx="5.5" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2"/>
-    </g>`:'';
-  const svg=`<svg class="av-svg" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
-    ${defs}
-    <ellipse class="av-shadow" cx="60" cy="144" rx="30" ry="6" fill="#2a2a45" opacity="0.16"/>
-    ${renderAvatarOutfit({cid, bodyDark:shadeHex(bodyColor,-0.28), shoeSole:shadeHex(shoeColor,-0.4), bodyOL, shoeOL, legOL, skinOL})}
-    ${hairBack}
-    <!-- 耳朵 -->
-    <circle cx="29" cy="55" r="6" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="1.8"/>
-    <circle cx="91" cy="55" r="6" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="1.8"/>
-    <!-- 頭（大、圓角方塊，柔和明暗）-->
-    <rect x="28" y="22" width="64" height="60" rx="24" fill="url(#skin_${cid})" stroke="${skinOL}" stroke-width="2.4"/>
-    <path d="M60 80 Q86 80 88 52 Q90 74 74 80 Z" fill="#000000" opacity="0.05"/>
-    ${renderAvatarFace({sad})}
-    <!-- 頭髮（瀏海＋描邊＋高光）-->
-    <path d="M26 56 Q21 24 60 17 Q99 24 94 56 Q89 39 78 44 Q72 33 60 36 Q48 33 42 44 Q31 39 26 56 Z" fill="url(#hair_${cid})" stroke="${hairOL}" stroke-width="2.2" stroke-linejoin="round"/>
-    <ellipse cx="47" cy="31" rx="14" ry="6" fill="#ffffff" opacity="0.38"/>
-    <ellipse cx="68" cy="29" rx="7" ry="3.4" fill="#ffffff" opacity="0.28"/>
-  </svg>`;
-  return `<div class="sw-avatar" data-child="${childId}" onclick="avatarTap('${childId}')" title="點我打招呼／到下方換裝">
-    <div class="sw-av-name">${name}<span class="ttl">Lv.${lv} ${escHtml(title)}</span></div>
-    ${hat?`<div style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);font-size:30px;z-index:6;line-height:1;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25));">${hat.emoji||'🎩'}</div>`:''}
-    ${acc?`<div style="position:absolute;top:64px;right:-3px;font-size:19px;z-index:6;filter:drop-shadow(0 2px 1px rgba(0,0,0,.2));">${acc.emoji||'⭐'}</div>`:''}
-    ${svg}
-  </div>`;
+  const eye=(x)=>'<g class="av-eye"><rect x="'+x+'" y="44" width="7" height="10" fill="#2b2622"/><rect x="'+x+'" y="44" width="3" height="3" fill="#fff"/></g>';
+  const svg='<svg class="av-svg" viewBox="0 0 120 162" xmlns="http://www.w3.org/2000/svg">'
+    +'<polygon class="av-shadow" points="34,156 86,156 96,148 24,148" fill="#243049" opacity="0.18"/>'
+    +(longHair?'<g class="av-hair-back">'+voxel(28,52,8,40,5,hairC)+voxel(84,52,8,40,5,hairC)+'</g>':'')
+    // 腿＋鞋
+    +'<g class="av-leg av-leg-l">'+voxel(45,120,12,20,6,leg)+voxel(43,138,16,9,6,shoeC)+'</g>'
+    +'<g class="av-leg av-leg-r">'+voxel(63,120,12,20,6,leg)+voxel(61,138,16,9,6,shoeC)+'</g>'
+    // 身體
+    +voxel(36,86,48,36,8,body)
+    +'<rect x="40" y="90" width="40" height="5" fill="#ffffff" opacity="0.22"/>'
+    // 手
+    +'<g class="av-arm-l">'+voxel(24,88,12,26,6,body)+voxel(25,112,10,9,5,skin)+'</g>'
+    +'<g class="av-arm-r">'+voxel(84,88,12,26,6,body)+voxel(85,112,10,9,5,skin)+'</g>'
+    // 頭
+    +voxel(30,26,60,50,9,skin)
+    // 瀏海／頭髮頂
+    +voxel(28,18,64,15,9,hairC)
+    +'<rect x="30" y="26" width="60" height="9" fill="'+hairC+'"/>'
+    +'<rect x="33" y="20" width="22" height="5" fill="#ffffff" opacity="0.25"/>'
+    // 臉
+    +'<rect x="40" y="58" width="7" height="5" fill="#ff9ec4" opacity="0.6"/><rect x="73" y="58" width="7" height="5" fill="#ff9ec4" opacity="0.6"/>'
+    +eye(45)+eye(68)
+    +'<rect x="54" y="63" width="12" height="3" rx="1" fill="#c8826a"/>'
+    +'</svg>';
+  return '<div class="sw-avatar" data-child="'+childId+'" onclick="avatarTap(\''+childId+'\')" title="點我打招呼／到下方換裝">'
+    +'<div class="sw-av-name">'+name+'<span class="ttl">Lv.'+lv+' '+escHtml(title)+'</span></div>'
+    +(hat?'<div style="position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:28px;z-index:6;line-height:1;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25));">'+(hat.emoji||'🎩')+'</div>':'')
+    +(acc?'<div style="position:absolute;top:66px;right:-2px;font-size:18px;z-index:6;">'+(acc.emoji||'⭐')+'</div>':'')
+    +svg+'</div>';
 }
+function renderAvatar(childId){ return renderBlockAvatar(childId); }
 // 向後相容：舊呼叫點仍可用
 function buildAvatarHtml(childId){ return renderAvatar(childId); }
 // 只重繪角色（換裝後即時更新，不必整頁重整）
@@ -4087,13 +4183,19 @@ function flyReward(targetEl,label,color){
   try{ requestAnimationFrame(()=>{ el.style.transform='translate(calc(-50% + '+dx+'px), calc(-50% + '+dy+'px)) scale(.6)'; el.style.opacity='0'; }); }catch(e){}
   setTimeout(()=>{ if(el&&el.remove) el.remove(); },1050);
 }
+function matsSummary(mats){
+  if(!mats) return '';
+  return MATERIAL_DEFS.filter(d=>mats[d.id]).map(d=>d.e+'+'+mats[d.id]).join(' ');
+}
 function showRewardPopup(childId,xp,coins,reward){
   const old=document.querySelector('.reward-pop'); if(old&&old.remove) old.remove();
   const pet=petState(childId), next=calculateNextWorldGoal(childId);
+  const matLine=matsSummary(reward&&reward.mats);
   const el=document.createElement('div'); el.className='reward-pop on';
   el.innerHTML='<div class="rp-emoji">🎉</div><h3>任務完成！</h3>'+
     (xp?'<div class="rp-line rp-xp">+'+xp+' XP</div>':'')+
     (coins?'<div class="rp-line rp-coin">+'+coins+' 金幣</div>':'')+
+    (matLine?'<div class="rp-line" style="color:#4a7a3a;">獲得方塊 '+matLine+'</div>':'')+
     '<div class="rp-line">'+escHtml((pet&&pet.name)||'夥伴')+'超開心！🐾</div>'+
     '<div class="rp-note">'+escHtml((reward&&reward.note)||next.text)+'</div>';
   document.body.appendChild(el);
@@ -4106,8 +4208,12 @@ function triggerRewardAnimation(childId,reward){
   const stats=document.querySelectorAll('#page-child .sw-stat b');
   if(xp) flyReward(stats[0]||null,'+'+xp+' XP','#7a4dba');
   if(coins) setTimeout(()=>flyReward(stats[1]||null,'+'+coins+' 🪙','#c8890a'),120);
+  // 材料方塊飛入
+  if(reward.mats){ let i=0; MATERIAL_DEFS.forEach(d=>{ if(reward.mats[d.id]){ const dd=240+i*130; setTimeout(()=>flyReward(null,d.e+'+'+reward.mats[d.id],d.c),dd); i++; } }); }
   showRewardPopup(childId,xp,coins,reward);
 }
+// 命名 API：方塊版獎勵動畫
+function triggerBlockRewardAnimation(childId,reward){ return triggerRewardAnimation(childId,reward); }
 
 /* =======================================================================
    Streak 連續完成
@@ -4127,16 +4233,17 @@ function updateStreak(childId){
   const s=streakOf(childId);
   state.streakClaims=state.streakClaims||{};
   const claims=state.streakClaims[childId]=state.streakClaims[childId]||{};
-  const rewards={3:{coins:15,xp:0},7:{coins:30,xp:20},14:{coins:60,xp:40},30:{coins:120,xp:80}};
+  const rewards={3:{coins:15,xp:0,rare:1},7:{coins:30,xp:20,rare:1},14:{coins:60,xp:40,rare:2},30:{coins:120,xp:80,rare:3}};
   let granted=null;
   [3,7,14,30].forEach(t=>{
     if(s>=t && !claims[t]){
       claims[t]=true; const r=rewards[t], k=state.kids[childId];
       if(k){ k.coins=(k.coins||0)+r.coins; if(r.xp){ k.xp+=r.xp; k.lifetime+=r.xp; } const st=childStats(childId); if(st){ st.coins=k.coins; st.points=k.xp; st.exp=k.lifetime; st.lifetimeExp=k.lifetime; } }
-      granted={tier:t,coins:r.coins,xp:r.xp};
+      if(r.rare) addMaterials(childId,{rareBlock:r.rare});  // 連續完成 → 稀有方塊
+      granted={tier:t,coins:r.coins,xp:r.xp,rare:r.rare};
     }
   });
-  if(granted){ save(); celebrate('🔥','連續 '+granted.tier+' 天！','+'+granted.coins+' 金幣'+(granted.xp?'・+'+granted.xp+' XP':'')); }
+  if(granted){ save(); celebrate('🔥','連續 '+granted.tier+' 天！','+'+granted.coins+' 金幣'+(granted.xp?'・+'+granted.xp+' XP':'')+(granted.rare?'・💎+'+granted.rare:'')); }
   return granted;
 }
 
@@ -4228,17 +4335,48 @@ function loginAsChild(childId,pin){ gateTarget=childId; gateInput=String(pin==nu
 function loginAsParent(password){ gateInput=String(password==null?'':password); gateSubmitParent(); }
 function renderChildApp(childId){ return renderChildDashboard(); }
 
-/* ---- 寵物 ---- */
-function buildSwPetHtml(childId){
+/* ---- 方塊寵物（blockHead/body/legs/tail/ears/shadow）---- */
+const PET_BLOCK={
+  dog:{c:'#c08a4e',ear:'floppy'}, cat:{c:'#9aa0a8',ear:'pointy'}, chick:{c:'#ffd45e',ear:'beak'},
+  panda:{c:'#eef0f2',ear:'round'}, dino:{c:'#6fc36b',ear:'spike'}, fox:{c:'#e7894a',ear:'pointy'},
+  rabbit:{c:'#efe4dc',ear:'long'}
+};
+function renderBlockPetSvg(type){
+  const def=PET_BLOCK[type]||PET_BLOCK.dog, c=def.c, d=6;
+  let ears='';
+  if(def.ear==='long'){ ears=voxel(48,4,6,14,4,c)+voxel(58,4,6,14,4,c); }
+  else if(def.ear==='pointy'){ ears='<polygon points="48,20 52,6 56,20" fill="'+shadeHex(c,-0.1)+'"/><polygon points="62,20 66,6 70,20" fill="'+shadeHex(c,-0.1)+'"/>'; }
+  else if(def.ear==='round'){ ears=voxel(47,8,9,9,3,'#3a3a3a')+voxel(63,8,9,9,3,'#3a3a3a'); }
+  else if(def.ear==='spike'){ ears='<polygon points="22,34 26,24 30,34" fill="'+shadeHex(c,-0.2)+'"/><polygon points="32,32 36,22 40,32" fill="'+shadeHex(c,-0.2)+'"/><polygon points="42,32 46,24 50,32" fill="'+shadeHex(c,-0.2)+'"/>'; }
+  else if(def.ear==='beak'){ ears='<polygon points="70,30 80,33 70,37" fill="#f0962a"/>'; }
+  else { ears=voxel(48,12,8,12,3,shadeHex(c,-0.12))+voxel(62,12,8,12,3,shadeHex(c,-0.12)); } // floppy
+  return '<svg width="66" height="58" viewBox="0 0 84 72" xmlns="http://www.w3.org/2000/svg">'
+    +'<polygon points="14,66 64,66 72,60 22,60" fill="#243049" opacity="0.16"/>'
+    // 尾巴
+    +voxel(8,40,10,8,5,shadeHex(c,-0.05))
+    // 腿
+    +voxel(22,52,9,10,4,shadeHex(c,-0.18))+voxel(48,52,9,10,4,shadeHex(c,-0.18))
+    // 身體
+    +voxel(18,34,40,20,7,c)
+    // 頭
+    +ears
+    +voxel(46,20,26,24,7,c)
+    // 眼睛＋鼻子
+    +'<rect x="52" y="28" width="5" height="6" fill="#2b2622"/><rect x="63" y="28" width="5" height="6" fill="#2b2622"/>'
+    +'<rect x="58" y="36" width="6" height="4" fill="#3a2e2a"/>'
+    +'</svg>';
+}
+function buildSwPetHtml(childId){ return renderBlockPet(childId); }
+function renderBlockPet(childId){
   const pet=petState(childId), mood=getPetMood(childId), w=worldOf(childId);
   const acc=w.petAccessory?shopDefOf('petAccessory',w.petAccessory):null;
-  return `<div class="sw-pet ${mood}" data-child="${childId}" onclick="petTapReact('${childId}')" title="點我跟我玩">
-    <div class="sw-pet-z">Zzz</div>
-    ${acc?`<div class="sw-pet-acc">${acc.emoji||acc.e}</div>`:''}
-    <div class="sw-pet-face">${petIcon(pet.type)}</div>
-    <div class="sw-pet-shadow"></div>
-    <div class="sw-pet-name">${escHtml(pet.name||'夥伴')}</div>
-  </div>`;
+  return '<div class="sw-pet '+mood+'" data-child="'+childId+'" onclick="petTapReact(\''+childId+'\')" title="點我跟我玩">'
+    +'<div class="sw-pet-z">Zzz</div>'
+    +(acc?'<div class="sw-pet-acc">'+(acc.emoji||acc.e)+'</div>':'')
+    +'<div class="sw-pet-face">'+renderBlockPetSvg(pet.type)+'</div>'
+    +'<div class="sw-pet-shadow"></div>'
+    +'<div class="sw-pet-name">'+escHtml(pet.name||'夥伴')+'</div>'
+  +'</div>';
 }
 
 /* ---- 家園：SVG 分層建造（10 階）---- */
@@ -4257,6 +4395,69 @@ function buildHouseSvg(level,newStage){
   if(level>=10) L.push(`<g class="${on(10)}"><rect x="89" y="28" width="2.5" height="20" fill="#9a7b5a"/><polygon points="91,28 106,33 91,38" fill="#ff5d8f"/><text x="118" y="50" font-size="15">⭐</text><text x="40" y="60" font-size="13">✨</text></g>`);
   return `<svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg">${L.join('')}</svg>`;
 }
+
+/* ---- 方塊地形 ---- */
+function renderBlockTerrain(childId){
+  const dirt='#b07d4e', grass='#7bc86b';
+  let blocks='';
+  let i=0;
+  for(let x=-6;x<330;x+=30){
+    const hi=(i%3===0)?4:0;               // 輕微高低差
+    const y=22-hi;
+    blocks+='<g stroke="#6b4f33" stroke-width="0.7">'
+      +'<polygon points="'+x+','+y+' '+(x+30)+','+y+' '+(x+36)+','+(y-6)+' '+(x+6)+','+(y-6)+'" fill="'+shadeHex(grass,0.16)+'"/>' // 草地頂面 grassTop
+      +'<polygon points="'+(x+30)+','+y+' '+(x+36)+','+(y-6)+' '+(x+36)+','+(y-6+46)+' '+(x+30)+','+(y+46)+'" fill="'+shadeHex(dirt,-0.22)+'"/>' // 泥土側面 dirtSide
+      +'<rect x="'+x+'" y="'+y+'" width="30" height="6" fill="'+grass+'"/>'       // 草地正面 lip
+      +'<rect x="'+x+'" y="'+(y+6)+'" width="30" height="40" fill="'+dirt+'"/>'    // 泥土正面 dirtFront
+      +'</g>';
+    // 在草地上放一些方塊裝飾
+    if(i%4===1) blocks+=voxel(x+8,y-6,12,8,5,'#9aa0a8');      // 石頭方塊
+    if(i%5===2) blocks+='<rect x="'+(x+10)+'" y="'+(y-10)+'" width="8" height="8" fill="#ff9ec4"/><rect x="'+(x+12)+'" y="'+(y-4)+'" width="4" height="6" fill="#4f9e3a"/>'; // 花朵方塊
+    if(i%6===4) blocks+=voxel(x+6,y-5,16,5,4,'#c9b08a');      // 小路方塊
+    i++;
+  }
+  return '<svg viewBox="0 0 320 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+blocks+'</svg>';
+}
+/* ---- 方塊遊戲 HUD（資源欄＋方塊大按鈕）---- */
+function renderBlockHUD(childId){
+  const k=state.kids[childId]||{}, m=materialsOf(childId), homeLv=getHomeLevel(childId);
+  const chip=(ic,val,label)=>'<div class="bw-chip"><span class="ic">'+ic+'</span><b>'+val+'</b><span style="font-size:10px;color:#8a7a92;">'+label+'</span></div>';
+  const res='<div class="bw-res">'
+    +chip('⭐',k.xp||0,'XP')+chip('🪙',k.coins||0,'金幣')
+    +chip('🟫',m.wood,'木')+chip('⬜',m.stone,'石')+chip('🔷',m.glass,'玻璃')
+    +chip('🏠','Lv.'+homeLv,'家園')+'</div>';
+  const chest=checkDailyChest(childId);
+  const canBuild=canBuildNextLevel(childId).ok;
+  const btn=(fn,e,l,cls)=>'<button class="bw-btn '+(cls||'')+'" onclick="'+fn+'"><span class="be">'+e+'</span><span class="bl">'+l+'</span></button>';
+  const acts='<div class="bw-actions">'
+    +btn("switchTab('home')",'📋','今日任務')
+    +btn("switchTab('rewards')",'🛍️','商店')
+    +btn("openBuildPanel('"+childId+"')",'🧱','建造家園',canBuild?'alert':'')
+    +btn("dressUp('avatarItem')",'🎒','背包')
+    +btn("scrollToChest()",'🎁','寶箱',(chest.small.ready||chest.big.ready||chest.streakChest.ready)?'alert':'')
+    +'</div>';
+  return res+acts;
+}
+function scrollToChest(){ const el=document.getElementById('blockChest'); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'center'}); }
+/* ---- 材料庫 ---- */
+function renderMaterialsPanel(childId){
+  const m=materialsOf(childId), chk=canBuildNextLevel(childId);
+  const cells=MATERIAL_DEFS.map(d=>'<div class="mat-cell"><div class="me">'+d.e+'</div><b>'+(m[d.id]||0)+'</b><small>'+d.name.replace('方塊','')+'</small></div>').join('');
+  let hint='';
+  if(chk.maxed) hint='夢想屋已完成 🎉';
+  else{
+    const parts=[];
+    if(chk.missing.xp) parts.push('XP '+chk.missing.xp);
+    MATERIAL_DEFS.forEach(d=>{ if(chk.missing[d.id]) parts.push(d.e+(d.name.replace('方塊',''))+' '+chk.missing[d.id]); });
+    hint=chk.ok?('材料齊全！可以蓋「'+HOME_STAGE_NAMES[chk.level-1]+'」🔨'):('蓋「'+HOME_STAGE_NAMES[chk.level-1]+'」還需要：'+parts.join('、'));
+  }
+  return '<div class="card sw-panel"><div class="sw-dresshead"><b>🧰 材料庫</b>'
+    +(chk.maxed?'':'<button class="chip '+(chk.ok?'ok':'')+'" style="border:none;cursor:pointer;" onclick="openBuildPanel(\''+childId+'\')">🧱 建造家園</button>')
+    +'</div><p class="sw-hint">'+hint+'</p><div class="mat-grid">'+cells+'</div></div>';
+}
+/* ---- 命名 API（方塊世界）---- */
+function renderBlockWorld(childId){ return renderSisterWorld(childId); }
+function renderBlockHome(childId){ return buildHouseSvg(getHomeLevel(childId), 0); }
 
 /* ---- 主畫面 ---- */
 function renderSisterWorld(childId){
@@ -4298,20 +4499,17 @@ function renderSisterWorld(childId){
     <div class="sw-herotop">
       <div class="sw-pin" style="background:linear-gradient(135deg,${info.c1},${info.c2})">${info.emoji}</div>
       <div>
-        <div class="sw-htitle">${escHtml(info.name)}的世界</div>
+        <div class="sw-htitle">${escHtml(info.name)}的方塊世界</div>
         <div class="sw-hsub">Lv.${lv} ${escHtml(levelOf(legacy.lifetime||0).cur.name)}・家園 Lv.${homeLv} ${HOME_STAGE_NAMES[homeLv-1]}</div>
       </div>
-      <div class="sw-stats">
-        <div class="sw-stat"><b>${legacy.xp||0}</b><span>XP</span></div>
-        <div class="sw-stat"><b>${legacy.coins||0}</b><span>金幣</span></div>
-        <div class="sw-stat"><b>${homeLv}</b><span>家園</span></div>
-      </div>
     </div>
+    ${renderBlockHUD(childId)}
     <div class="sw-stage">
       ${fxHtml}
-      <div class="sw-ground" onclick="worldGroundClick(event,'${childId}')" title="點草地，我會走過去"></div>
+      <div class="sw-terrain">${renderBlockTerrain(childId)}</div>
+      <div class="sw-ground block" onclick="worldGroundClick(event,'${childId}')" title="點草地，我會走過去"></div>
       ${gardenHtml}
-      <div class="sw-house-wrap" onclick="houseTap('${childId}')" title="點我看家園">${buildHouseSvg(homeLv,newStage)}</div>
+      <div class="sw-house-wrap" onclick="openBuildPanel('${childId}')" title="點房子看建造需求">${buildHouseSvg(homeLv,newStage)}</div>
       ${decoHtml}
       <div class="sw-avatar-wrap">${buildAvatarHtml(childId)}</div>
       <div class="sw-pet-wrap">${buildSwPetHtml(childId)}</div>
@@ -4323,15 +4521,10 @@ function renderSisterWorld(childId){
       <div class="progress" style="margin-bottom:6px;"><i style="width:${goal.pct||0}%;background:linear-gradient(90deg,${info.c1},${info.c2})"></i></div>
       <span class="g-txt" style="margin:0;">🐾 ${petMoodMessage(childId)}</span>
       <span class="g-txt" style="margin:4px 0 0;">${streakInfo(childId).text}</span>
-      <div class="sw-mini">
-        <span class="chip unlock" onclick="switchTab('home')">📋 去任務</span>
-        <span class="chip ok" onclick="switchTab('rewards')">🛍️ 商店</span>
-        <span class="chip" onclick="dressUp('avatarItem')">🎒 背包/裝扮</span>
-        <span class="chip" onclick="switchTab('achieve')">🏆 成就</span>
-      </div>
     </div>
   </div>
-  ${renderChestPanel(childId)}
+  ${renderMaterialsPanel(childId)}
+  <div id="blockChest">${renderChestPanel(childId)}</div>
   ${renderDressUp(childId)}
   ${renderChildReport(childId)}`;
 }
@@ -4487,6 +4680,53 @@ function triggerHomeBuildAnimation(oldLevel,newLevel){
   triggerHomeUpgrade(oldLevel,newLevel);
   applyPendingWorldFx(activeChildId());
 }
+// 命名 API：方塊建造動畫（一顆一顆蓋＋星星＋慶祝）
+function triggerBlockBuildAnimation(childId,oldLevel,newLevel){ return triggerHomeBuildAnimation(oldLevel,newLevel); }
+/* ---- 材料驅動建造 ---- */
+function buildNextHomeLevel(childId){
+  const chk=canBuildNextLevel(childId);
+  if(chk.maxed){ toast('夢想屋已經完成囉 🎉'); return; }
+  if(!chk.ok){
+    const parts=[];
+    if(chk.missing.xp) parts.push('XP '+chk.missing.xp);
+    MATERIAL_DEFS.forEach(d=>{ if(chk.missing[d.id]) parts.push(d.name+' '+chk.missing[d.id]); });
+    toast('還缺：'+parts.join('、'));
+    return;
+  }
+  const w=worldOf(childId), old=builtLevelOf(childId), nl=old+1;
+  // 扣材料
+  const m=materialsOf(childId);
+  Object.keys(chk.req.mats).forEach(k=>{ m[k]=Math.max(0,(m[k]||0)-chk.req.mats[k]); });
+  w.builtLevel=nl; w.lastHomeLevel=nl;
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'家園建造',task:'蓋好「'+HOME_STAGE_NAMES[nl-1]+'」',xp:0,coins:0,note:'方塊建造',status:'done',type:'build'});
+  save();
+  renderAll();
+  triggerHomeBuildAnimation(old,nl);
+  triggerWorldCelebration(childId);
+}
+function openBuildPanel(childId){
+  const chk=canBuildNextLevel(childId);
+  if(chk.maxed){ celebrate('🏠','夢想屋完成！','你已經蓋好整座方塊家園 🎉'); return; }
+  const lvLabel=HOME_STAGE_NAMES[chk.level-1];
+  const m=materialsOf(childId);
+  const lines=[];
+  const lt=(state.kids[childId]&&state.kids[childId].lifetime)||0;
+  lines.push((lt>=chk.req.xp?'✅':'❌')+' XP '+lt+' / '+chk.req.xp);
+  Object.keys(chk.req.mats).forEach(k=>{
+    const def=MATERIAL_DEFS.find(d=>d.id===k)||{e:'🔲',name:k};
+    const have=m[k]||0, need=chk.req.mats[k];
+    lines.push((have>=need?'✅':'❌')+' '+def.e+' '+def.name+' '+have+' / '+need);
+  });
+  const old=document.querySelector('.reward-pop'); if(old&&old.remove) old.remove();
+  const el=document.createElement('div'); el.className='reward-pop';
+  el.style.opacity='1'; el.style.transform='translate(-50%,-50%) scale(1)'; el.style.animation='none'; el.style.pointerEvents='auto';
+  el.innerHTML='<div class="rp-emoji">🧱</div><h3>建造「'+lvLabel+'」</h3>'+
+    lines.map(l=>'<div class="rp-line" style="font-size:13px;">'+l+'</div>').join('')+
+    '<div style="margin-top:12px;display:flex;gap:8px;">'+
+    (chk.ok?'<button class="btn mint" style="flex:1;" onclick="buildNextHomeLevel(\''+childId+'\');this.closest(\'.reward-pop\').remove();">🔨 開始建造</button>':'<button class="btn gray" style="flex:1;" disabled>材料不足</button>')+
+    '<button class="btn gray" style="flex:0 0 auto;" onclick="this.closest(\'.reward-pop\').remove();">關閉</button></div>';
+  document.body.appendChild(el);
+}
 function applyPendingWorldFx(childId){
   const fx=worldFx[childId]; if(!fx) return;
   const live=Date.now()<(fx.until||0);
@@ -4525,7 +4765,7 @@ function updateWorldAfterReward(childId,rewardData){
     w.lastHomeLevel=Math.max(prev,nowLv);
   }
   updateStreak(childId);
-  if((rewardData.xp||0)>0){ setTimeout(()=>triggerRewardAnimation(childId,{xp:rewardData.xp,coins:rewardData.coins}),120); }
+  if((rewardData.xp||0)>0){ setTimeout(()=>triggerRewardAnimation(childId,{xp:rewardData.xp,coins:rewardData.coins,mats:rewardData.mats}),120); }
   save(true);
 }
 
@@ -5122,9 +5362,10 @@ function quickScore(cat,n,x,btn){
   addXp(sel.scoreKid, x, true);
   state.records.unshift({time:Date.now(),kid:sel.scoreKid,parent:sel.scoreParent,
     cat,task:n,xp:x,note:'',status:'approved',type:'score'});
+  const _mats=calculateMaterialRewards(cat); addMaterials(sel.scoreKid,_mats);
   save();
   checkLevelUp(sel.scoreKid);
-  updateWorldAfterReward(sel.scoreKid,{reason:'score',xp:x});
+  updateWorldAfterReward(sel.scoreKid,{reason:'score',xp:x,mats:_mats});
   if(btn){ btn.classList.remove('flash'); void btn.offsetWidth; btn.classList.add('flash'); }
   flyXp(x,btn);
   toast(`✅ ${sel.scoreParent}幫${KIDS[sel.scoreKid].name}加了 +${x} XP（${n}）`);
@@ -5255,9 +5496,10 @@ function approveApply(idx){
     const defaultCoins=Math.round((r.xp||0)*0.6), coinDiff=r.coins-defaultCoins;
     if(coinDiff){ state.kids[r.kid].coins=Math.max(0,(state.kids[r.kid].coins||0)+coinDiff); childStats(r.kid).coins=state.kids[r.kid].coins; }
   }
+  const _mats=calculateMaterialRewards(r.cat); addMaterials(r.kid,_mats);
   save();
   checkLevelUp(r.kid);
-  updateWorldAfterReward(r.kid,{reason:'approve',xp:r.xp});
+  updateWorldAfterReward(r.kid,{reason:'approve',xp:r.xp,mats:_mats});
   toast(`✅ 已核准 ${KIDS[r.kid].name} +${r.xp} XP`);
   renderAll();
 }
