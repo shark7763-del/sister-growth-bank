@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sister-growth-bank-v14';
+const CACHE_NAME = 'sister-growth-bank-v15';
 const CORE_ASSETS = [
   './',
   './index.html',
