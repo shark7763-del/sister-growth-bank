@@ -658,6 +658,51 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 .mat-cell small{font-size:10px;color:var(--ink2);}
 @media(max-width:360px){ .mat-grid{grid-template-columns:repeat(3,1fr);} }
 
+/* ---- 孩子端：獎勵商店 / 兌換 / 背包 ---- */
+.kidcoins{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#fff7e0,#ffe9c2);
+  border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 4px 0 #f0d28a;}
+.kidcoins .big{font-size:34px;font-weight:900;color:#c8890a;}
+.kidcoins .lbl{font-size:14px;font-weight:800;color:#9a7a3a;}
+.shop2-sec{font-size:14px;font-weight:900;color:#5a4a66;margin:12px 2px 6px;display:flex;align-items:center;gap:6px;}
+.shop2-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.shop2-item{background:#fff;border-radius:16px;padding:12px 8px;text-align:center;border:2px solid #eee;
+  box-shadow:0 3px 0 rgba(150,140,160,.18);display:flex;flex-direction:column;align-items:center;gap:4px;}
+.shop2-item.can{border-color:#7bd88f;}
+.shop2-item.cant{opacity:.92;border-color:#f0d28a;}
+.shop2-item .si{font-size:34px;line-height:1.1;}
+.shop2-item .sn{font-size:13px;font-weight:900;color:#3a3a44;}
+.shop2-item .sc{font-size:12px;font-weight:800;color:#c8890a;}
+.shop2-item .sbtn{border:none;border-radius:12px;padding:9px 0;width:100%;font-family:inherit;font-weight:900;font-size:13px;cursor:pointer;margin-top:2px;}
+.shop2-item .sbtn.go{background:linear-gradient(180deg,#8fe0a4,#5cc878);color:#0a5a2a;box-shadow:0 3px 0 #3ba85a;}
+.shop2-item .sbtn.go:active{transform:translateY(2px);box-shadow:0 1px 0 #3ba85a;}
+.shop2-item .sbtn.no{background:#f0eef3;color:#a08aa8;}
+.shop2-item .miss{font-size:11px;color:#b06a2a;font-weight:800;}
+/* 兌換確認 / 成功 視窗 */
+.kid-mask{position:fixed;inset:0;z-index:1380;background:rgba(60,40,70,.4);display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .25s;padding:20px;}
+.kid-mask.on{opacity:1;}
+.kid-modal{background:linear-gradient(160deg,#fff,#fef3fa);border-radius:24px;padding:24px 22px;text-align:center;
+  width:320px;max-width:88vw;box-shadow:0 18px 50px rgba(120,80,140,.4);transform:scale(.8);transition:transform .25s;}
+.kid-mask.on .kid-modal{transform:scale(1);}
+.kid-modal .km-emoji{font-size:50px;line-height:1;}
+.kid-modal h3{margin:8px 0 4px;font-size:20px;color:#6a3d7a;}
+.kid-modal p{margin:6px 0 14px;font-size:15px;color:#5a4a62;font-weight:700;}
+.kid-modal .km-btns{display:flex;flex-direction:column;gap:9px;}
+.kid-modal .km-btns button{border:none;border-radius:14px;padding:13px;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;}
+.kid-modal .km-yes{background:linear-gradient(180deg,#8fe0a4,#5cc878);color:#0a5a2a;box-shadow:0 4px 0 #3ba85a;}
+.kid-modal .km-no{background:#f0eef3;color:#7a6a82;}
+.kid-modal .km-yes:active{transform:translateY(2px);box-shadow:0 2px 0 #3ba85a;}
+/* 簡化背包 */
+.kbag-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+.kbag-item{background:#fff;border-radius:16px;padding:12px 8px;text-align:center;box-shadow:0 3px 0 rgba(150,140,160,.18);}
+.kbag-item .ki{font-size:32px;}
+.kbag-item .kn{font-size:13px;font-weight:900;color:#3a3a44;}
+.kbag-item .kx{font-size:11px;color:#8a7a92;}
+.kbag-item .kbtn{border:none;border-radius:12px;padding:8px 0;width:100%;margin-top:6px;font-family:inherit;font-weight:900;font-size:12.5px;
+  background:linear-gradient(180deg,#bfe0ff,#8fc4f0);color:#1a4a72;box-shadow:0 3px 0 #5a9ad0;cursor:pointer;}
+.kbag-item .kbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #5a9ad0;}
+.kbag-empty{text-align:center;color:var(--ink2);font-size:14px;padding:24px;}
+
 @media (prefers-reduced-motion: reduce){
   .sw-avatar,.sw-pet,.sw-cloud,.sw-sun,.av-eye,.av-arm-r,.av-arm-l,.av-leg-l,.av-leg-r,
   .sw-pet-heart,.hl,.hl-new,
@@ -990,6 +1035,10 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
 
   <!-- ========== 分頁二：獎勵中心 ========== -->
   <div class="page" id="page-rewards">
+    <!-- 孩子簡化版「獎勵商店」 -->
+    <div id="childRewardShop"></div>
+    <!-- 爸媽完整版（孩子端會隱藏）-->
+    <div id="parentRewardArea">
     <div class="card" style="text-align:center;">
       <div class="muted">姊妹合作 XP 池 🤝</div>
       <div style="font-size:34px;font-weight:900;color:var(--mint);" id="coopXpHome">0</div>
@@ -1034,6 +1083,13 @@ nav.tabbar button.on .ic{transform:scale(1.15);}
       <p class="subnote" style="text-align:center;">兩姊妹一起完成任務累積，兌換全家共同的大獎勵 💖</p>
       <div id="coopList" style="margin-top:8px;"></div>
     </div>
+    </div><!-- /parentRewardArea -->
+  </div>
+
+  <!-- ========== 我的背包（孩子端）========== -->
+  <div class="page" id="page-backpack">
+    <h2 class="sec"><span class="ic">🎒</span>我的背包</h2>
+    <div id="childBackpack"></div>
   </div>
 
   <!-- ========== 分頁三：成就徽章 ========== -->
@@ -3469,11 +3525,139 @@ function pickCoinShopCategory(category){
   sel.coinShopCat=category;
   renderCoinShop();
 }
+
+/* =======================================================================
+   孩子端：獎勵商店（金幣優先）＋ 三步驟兌換 ＋ 簡化背包
+   ===================================================================== */
+function allShopItems(){
+  const out=[];
+  Object.keys(SHOP_CATALOG).forEach(cat=>{ (SHOP_CATALOG[cat]||[]).forEach(it=>{ if(it.cost>0) out.push({category:cat,item:it}); }); });
+  return out;
+}
+function findShopItem(itemId,category){
+  if(category){ const it=(SHOP_CATALOG[category]||[]).find(x=>x.id===itemId); if(it) return {category,item:it}; }
+  for(const cat of Object.keys(SHOP_CATALOG)){ const it=(SHOP_CATALOG[cat]||[]).find(x=>x.id===itemId); if(it) return {category:cat,item:it}; }
+  return null;
+}
+function getMissingCoins(childId,itemId,category){
+  const f=findShopItem(itemId,category); if(!f) return 0;
+  return Math.max(0, f.item.cost-coinBalanceOf(childId));
+}
+function renderRedeemableItems(childId){
+  const bal=coinBalanceOf(childId);
+  const items=allShopItems().sort((a,b)=>a.item.cost-b.item.cost);
+  const can=items.filter(f=>bal>=f.item.cost), cant=items.filter(f=>bal<f.item.cost);
+  const card=(f)=>{
+    const afford=bal>=f.item.cost, miss=f.item.cost-bal;
+    return '<div class="shop2-item '+(afford?'can':'cant')+'">'
+      +'<div class="si">'+(f.item.e||'🎁')+'</div><div class="sn">'+escHtml(f.item.name)+'</div>'
+      +'<div class="sc">'+f.item.cost+' 🪙</div>'
+      +(afford?'<button class="sbtn go" onclick="openRedeemConfirm(\''+childId+'\',\''+f.item.id+'\',\''+f.category+'\')">我要換</button>'
+              :'<button class="sbtn no" onclick="showEarnCoinsHint(\''+childId+'\',\''+f.item.id+'\',\''+f.category+'\')">還差 '+miss+' 枚</button>')
+      +'</div>';
+  };
+  if(!items.length) return '<div class="sw-empty">商店準備中…</div>';
+  let html='';
+  if(can.length) html+='<div class="shop2-grid">'+can.map(card).join('')+'</div>';
+  else html+='<div class="sw-empty" style="padding:12px;">金幣還不夠換東西，先去做任務賺金幣吧！</div>';
+  if(cant.length) html+='<div class="shop2-sec" style="color:#b06a2a;">還差一點點 ✨</div><div class="shop2-grid">'+cant.slice(0,6).map(card).join('')+'</div>';
+  return html;
+}
+function renderXpRewardSection(childId){
+  const shop=getShop(); const xp=(state.kids[childId]&&state.kids[childId].xp)||0;
+  let cards='';
+  Object.keys(shop).forEach(tier=>{ (shop[tier]||[]).slice(0,4).forEach(it=>{
+    const afford=xp>=it.x;
+    cards+='<div class="shop2-item '+(afford?'can':'cant')+'"><div class="si">'+(it.e||'🎁')+'</div><div class="sn">'+escHtml(it.n)+'</div>'
+      +'<div class="sc" style="color:#7a4dba;">'+it.x+' XP</div>'
+      +(afford?'<button class="sbtn go" onclick="redeem(\''+esc(it.n)+'\','+it.x+')">用 XP 換</button>':'<button class="sbtn no" disabled>還差 '+(it.x-xp)+' XP</button>')
+      +'</div>';
+  }); });
+  if(!cards) return '';
+  return '<div class="shop2-sec">⭐ XP 也可以換（願望獎勵）</div><div class="shop2-grid">'+cards+'</div>';
+}
+function renderRewardShop(childId){
+  const box=document.getElementById('childRewardShop'); if(!box) return;
+  if(!childId){ box.innerHTML=''; return; }
+  const bal=coinBalanceOf(childId);
+  box.innerHTML=
+    '<div class="kidcoins"><span style="font-size:30px;">🪙</span><div><div class="big">'+bal+'</div><div class="lbl">你有 '+bal+' 枚金幣</div></div></div>'
+    +'<div class="shop2-sec">🪙 金幣可以換</div>'
+    +renderRedeemableItems(childId)
+    +renderXpRewardSection(childId);
+}
+// 三步驟兌換
+function showKidModal(emoji,title,descHtml,buttons){
+  closeKidModal();
+  const mask=document.createElement('div'); mask.className='kid-mask'; mask.id='kidMask';
+  mask.innerHTML='<div class="kid-modal"><div class="km-emoji">'+emoji+'</div><h3>'+escHtml(title)+'</h3><p>'+descHtml+'</p><div class="km-btns">'
+    +buttons.map(b=>'<button class="'+b.cls+'" onclick="'+b.fn+'">'+escHtml(b.t)+'</button>').join('')+'</div></div>';
+  document.body.appendChild(mask);
+  try{ requestAnimationFrame(()=>mask.classList.add('on')); }catch(e){ mask.classList.add('on'); }
+  mask.addEventListener('click',function(e){ if(e.target===mask) closeKidModal(); });
+}
+function closeKidModal(){ const m=document.getElementById('kidMask'); if(m&&m.remove) m.remove(); }
+function openRedeemConfirm(childId,itemId,category){
+  const f=findShopItem(itemId,category); if(!f){ toast('找不到商品'); return; }
+  if(coinBalanceOf(childId)<f.item.cost){ showEarnCoinsHint(childId,itemId,category); return; }
+  showKidModal('🪙','要兌換嗎？','要用 <b>'+f.item.cost+'</b> 枚金幣換「'+escHtml(f.item.name)+'」嗎？',
+    [{t:'確認兌換',cls:'km-yes',fn:"confirmCoinRedeem('"+childId+"','"+itemId+"','"+f.category+"')"},
+     {t:'再想想',cls:'km-no',fn:'closeKidModal()'}]);
+}
+function addItemToInventory(childId,item,category){ addInventoryItem(childId,category||'rareItems',item); }
+function confirmCoinRedeem(childId,itemId,category){
+  const f=findShopItem(itemId,category); if(!f) return;
+  if(!coinSpend(childId,f.item.cost,'兌換 '+f.item.name,f.item.id)){ closeKidModal(); toast('金幣不足'); return; }
+  addItemToInventory(childId,f.item,f.category);
+  state.records.unshift({time:Date.now(),kid:childId,parent:'',cat:'金幣兌換',task:f.item.name,xp:0,coins:-f.item.cost,note:'已放進背包',status:'done',type:'shop',shopCategory:f.category,shopItemId:f.item.id});
+  save();
+  renderAll();
+  showKidModal('🎉','兌換成功！','「'+escHtml(f.item.name)+'」已放進你的背包 🎒',
+    [{t:'去背包看看',cls:'km-yes',fn:"closeKidModal();switchTab('backpack')"},
+     {t:'繼續逛商店',cls:'km-no',fn:'closeKidModal()'}]);
+}
+function showEarnCoinsHint(childId,itemId,category){
+  const miss=getMissingCoins(childId,itemId,category), f=findShopItem(itemId,category);
+  showKidModal('🪙','還差一點點','再賺 <b>'+miss+'</b> 枚金幣就能換「'+escHtml(f?f.item.name:'')+'」了！<br>完成今天的任務就有金幣喔～',
+    [{t:'去做任務賺金幣',cls:'km-yes',fn:"closeKidModal();switchTab('home')"},
+     {t:'再想想',cls:'km-no',fn:'closeKidModal()'}]);
+}
+// 簡化背包
+function renderChildInventory(childId){
+  const box=document.getElementById('childBackpack'); if(!box) return;
+  if(!childId){ box.innerHTML='<div class="card"><div class="kbag-empty">請先選擇孩子</div></div>'; return; }
+  const items=inventoryListOf(childId);
+  if(!items.length){ box.innerHTML='<div class="card"><div class="kbag-empty">背包還是空的～<br>去獎勵商店用金幣換東西吧！<br><button class="kbtn" style="max-width:220px;margin:14px auto 0;" onclick="switchTab(\'rewards\')">🪙 去獎勵商店</button></div></div>'; return; }
+  const card=(it)=>{
+    const def=it.def||{}, cat=it.category;
+    let label,fn;
+    if(cat==='homeDecoration'||cat==='gardenItem'){ label='🏠 放到家園'; fn="placeHomeDecoration('"+childId+"','"+it.id+"')"; }
+    else if(['avatarItem','petAccessory','themeSkin','specialEffect'].includes(cat)){ label='✨ 裝備'; fn="equipInventoryItem('"+childId+"','"+it.id+"')"; }
+    else { label='使用'; fn="useInventoryItem('"+childId+"','"+cat+"','"+it.id+"')"; }
+    return '<div class="kbag-item"><div class="ki">'+(def.e||'🎁')+'</div><div class="kn">'+escHtml(def.name||it.id)+'</div><div class="kx">x'+it.count+'</div><button class="kbtn" onclick="'+fn+'">'+label+'</button></div>';
+  };
+  box.innerHTML='<div class="card"><div class="kbag-grid">'+items.map(card).join('')+'</div></div>';
+}
+function renderBackpackTab(){ renderChildInventory(activeChildId()); updateParentUI(); }
+// 命名 API（孩子端首頁）
+function renderChildHome(childId){ return renderChildDashboard(); }
+function renderChildQuickActions(childId){ return renderBlockHUD(childId); }
+function renderChildTodayTasks(childId){ renderAdventurePanel(); renderHome(); }
+// 同步孩子/爸媽 獎勵頁顯示
+function syncRewardView(){
+  const childView=currentRole()==='child';
+  const cra=document.getElementById('childRewardShop'), pra=document.getElementById('parentRewardArea');
+  if(cra) cra.style.display=childView?'':'none';
+  if(pra) pra.style.display=childView?'none':'';
+  if(childView){ renderRewardShop(activeChildId()); renderChildInventory(activeChildId()); }
+}
+
 function renderCoinShopTabs(){
   const box=document.getElementById('coinShopTabs'); if(!box) return;
   box.innerHTML=SHOP_CATEGORIES.map(c=>`<button class="pill ${sel.coinShopCat===c.id?'on cat':''}" onclick="pickCoinShopCategory('${esc(c.id)}')">${c.e} ${c.label}</button>`).join('');
 }
-function renderCoinShop(){
+function renderCoinShop(childId){
+  if(childId){ return renderRewardShop(childId); }   // 命名 API：孩子端走獎勵商店
   const child=sel.shopKid;
   const k=state.kids[child];
   const balance=coinBalanceOf(child);
@@ -4430,10 +4614,10 @@ function renderBlockHUD(childId){
   const canBuild=canBuildNextLevel(childId).ok;
   const btn=(fn,e,l,cls)=>'<button class="bw-btn '+(cls||'')+'" onclick="'+fn+'"><span class="be">'+e+'</span><span class="bl">'+l+'</span></button>';
   const acts='<div class="bw-actions">'
-    +btn("switchTab('home')",'📋','今日任務')
-    +btn("switchTab('rewards')",'🛍️','商店')
-    +btn("openBuildPanel('"+childId+"')",'🧱','建造家園',canBuild?'alert':'')
-    +btn("dressUp('avatarItem')",'🎒','背包')
+    +btn("switchTab('home')",'✅','今日任務')
+    +btn("switchTab('rewards')",'🪙','獎勵商店')
+    +btn("switchTab('backpack')",'🎒','我的背包')
+    +btn("openBuildPanel('"+childId+"')",'🏠','建造家園',canBuild?'alert':'')
     +btn("scrollToChest()",'🎁','寶箱',(chest.small.ready||chest.big.ready||chest.streakChest.ready)?'alert':'')
     +'</div>';
   return res+acts;
@@ -6626,7 +6810,7 @@ function readUrlEntry(){
 
 /* ============ 家長密碼鎖（改為登入身分制）============ */
 const PARENT_TABS=['parent','report','setting'];     // 僅爸媽身分可見的分頁
-const CHILD_TAB_IDS=['child','home','rewards','learning','achieve'];  // 孩子只看到自己的世界
+const CHILD_TAB_IDS=['child','home','rewards','backpack'];  // 孩子端只留 5 個入口（建造家園為世界內按鈕）
 let sessionUnlocked=false;
 let currentTab='child';
 function getPin(){ return state.parentPin||''; }
@@ -6707,7 +6891,7 @@ function renderAdminSettings(){ refreshAdminUI(); }
 function renderChildTab(){ renderChildDashboard(); updateParentUI(); }
 function renderHomeTab(){ renderAdventurePanel(); renderHome(); renderScore(); renderApply(); updateParentUI(); }
 function renderParentTab(){ renderParentDashboard(); updateParentUI(); }
-function renderRewardsTab(){ renderShop(); renderCoinShop(); renderInventoryPanel(); renderTablet(); updateParentUI(); }
+function renderRewardsTab(){ renderShop(); renderCoinShop(); renderInventoryPanel(); renderTablet(); syncRewardView(); updateParentUI(); }
 function renderLearningPageTab(){ renderLearningTab(); updateParentUI(); }
 function renderAchieveTab(){ renderSpecial(); renderRank(); renderTitles(); updateParentUI(); }
 function renderReportTab(){ renderSettlement(); renderReport(); renderRecord(); }
@@ -6717,7 +6901,8 @@ const TABS=[
   {id:'home',l:'今日任務',ic:'📋',render:renderHomeTab},
   {id:'notice',l:'家庭公告',ic:'🔔',render:renderNoticeTab},
   {id:'parent',l:'家長後台',ic:'👪',render:renderParentTab},
-  {id:'rewards',l:'獎勵中心',ic:'🎁',render:renderRewardsTab},
+  {id:'rewards',l:'獎勵商店',ic:'🪙',render:renderRewardsTab},
+  {id:'backpack',l:'我的背包',ic:'🎒',render:renderBackpackTab},
   {id:'learning',l:'學習中心',ic:'🎓',render:renderLearningPageTab},
   {id:'achieve',l:'成就徽章',ic:'🏆',render:renderAchieveTab},
   {id:'report',l:'成長報告',ic:'📊',render:renderReportTab},
@@ -6755,7 +6940,7 @@ function renderAll(){
   renderAdventurePanel();
   renderHome();renderScore();renderApply();
   renderNoticeCards(isUnlocked()?'parent':'child', activeChildId()||sel.reportKid||Object.keys(KIDS)[0]);
-  renderShop();renderCoinShop();renderInventoryPanel();renderLearningHomePanel();renderLearningTab();renderTablet();
+  renderShop();renderCoinShop();renderInventoryPanel();renderLearningHomePanel();renderLearningTab();renderTablet();syncRewardView();renderChildInventory(activeChildId());
   renderSpecial();renderRank();renderTitles();
   renderSettlement();renderReport();renderRecord();
   updateParentUI();
